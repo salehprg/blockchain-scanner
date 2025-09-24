@@ -13,7 +13,7 @@ export async function listOwners(req: Request, res: Response, next: NextFunction
 export async function getByContract(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = req.app.locals.container;
-    res.json(await repos.ownerRepo.findByContract(req.params.contractId));
+    res.json(await repos.ownerRepo.findByContractAddress(req.params.contractAddress));
   } catch (e) { next(e); }
 }
 

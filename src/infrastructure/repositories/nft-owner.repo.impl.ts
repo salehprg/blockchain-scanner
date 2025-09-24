@@ -34,8 +34,8 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
     const e = await this.ormRepo.findOne({ where: { ownerAddress: owner, nftContractAddress, nftItemId } });
     return e ? NFTOwnerMapper.toDomain(e) : null;
   }
-  async findByContract(contractId: string): Promise<NFTOwner[]> {
-    const list = await this.ormRepo.find({ where: { contractId } });
+  async findByContractAddress(contractAddress: string): Promise<NFTOwner[]> {
+    const list = await this.ormRepo.find({ where: { nftContractAddress: contractAddress } });
     return list.map(NFTOwnerMapper.toDomain);
   }
 }
