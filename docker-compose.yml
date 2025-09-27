@@ -12,7 +12,7 @@ services:
     networks:
       - "neurobackend_neurobackend_neuro-network"
     ports:
-      - "3000:3000"
+      - "3005:3000"
 
 volumes:
   pgdata:
