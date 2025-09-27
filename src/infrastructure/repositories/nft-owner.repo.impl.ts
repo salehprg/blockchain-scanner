@@ -31,11 +31,11 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
     await this.ormRepo.delete(id);
   }
   async findByOwnerAndItem(owner: string, nftContractAddress: string, nftItemId: string): Promise<NFTOwner | null> {
-    const e = await this.ormRepo.findOne({ where: { ownerAddress: owner, nftContractAddress, nftItemId } });
+    const e = await this.ormRepo.findOne({ where: { ownerAddress: owner.toLowerCase(), nftContractAddress: nftContractAddress.toLowerCase(), nftItemId: nftItemId.toLowerCase() } });
     return e ? NFTOwnerMapper.toDomain(e) : null;
   }
   async findByContractAddress(contractAddress: string): Promise<NFTOwner[]> {
-    const list = await this.ormRepo.find({ where: { nftContractAddress: contractAddress } });
+    const list = await this.ormRepo.find({ where: { nftContractAddress: contractAddress.toLowerCase() } });
     return list.map(NFTOwnerMapper.toDomain);
   }
 }

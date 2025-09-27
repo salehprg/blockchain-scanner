@@ -13,7 +13,7 @@ export async function listOwners(req: Request, res: Response, next: NextFunction
 export async function getByContract(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = req.app.locals.container;
-    res.json(await repos.ownerRepo.findByContractAddress(req.params.contractAddress));
+    res.json(await repos.ownerRepo.findByContractAddress(req.params.contractAddress.toLowerCase()));
   } catch (e) { next(e); }
 }
 
@@ -21,7 +21,7 @@ export async function getByOwnerAndItem(req: Request, res: Response, next: NextF
   try {
     const { owner, nftContractAddress, nftItemId } = req.query as Record<string, string>;
     const { repos } = req.app.locals.container;
-    const found = await repos.ownerRepo.findByOwnerAndItem(owner, nftContractAddress, nftItemId);
+    const found = await repos.ownerRepo.findByOwnerAndItem(owner.toLowerCase(), nftContractAddress.toLowerCase(), nftItemId.toLowerCase());
     if (!found) return res.status(404).json({ error: "Not found" });
     res.json(found);
   } catch (e) { next(e); }

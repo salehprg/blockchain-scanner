@@ -31,7 +31,7 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     await this.ormRepo.delete(id);
   }
   async findByAddress(address: string): Promise<BlockchainContract | null> {
-    const e = await this.ormRepo.findOne({ where: { contractAddress: address } });
+    const e = await this.ormRepo.findOne({ where: { contractAddress: address.toLowerCase() } });
     return e ? BlockchainContractMapper.toDomain(e) : null;
   }
   async findByChainId(chainId: number): Promise<BlockchainContract[]> {

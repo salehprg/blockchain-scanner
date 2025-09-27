@@ -1,14 +1,24 @@
 import { IBlockchainReader } from "@/domain/ports/blockchain-reader";
 import { Address, Abi, Chain, Transport, createPublicClient, http } from "viem";
 import * as ViemChains from "viem/chains";
+import { somnia } from "./custom-blockchains/somnia";
 
 type ChainResolver = (chainId: number) => Chain | undefined;
 type RpcUrlResolver = (chainId: number) => Promise<string>; // from envs or DB
 
-const defaultChainResolver: ChainResolver = (chainId) =>
-  Object.values(ViemChains).find(
+const defaultChainResolver: ChainResolver = (chainId) => {
+  var viemChain = Object.values(ViemChains).find(
     (c: any) => typeof c === "object" && "id" in c && c.id === chainId
   ) as Chain | undefined;
+  
+  if(!viemChain)
+  {
+    const customChains = [somnia]
+    viemChain = customChains.find(element => element.id == chainId);
+  }
+
+  return viemChain
+}
 
 export class ViemPublicClientProvider implements IBlockchainReader {
   private cache = new Map<number, ReturnType<typeof createPublicClient>>();

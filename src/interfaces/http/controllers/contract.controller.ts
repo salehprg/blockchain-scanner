@@ -14,7 +14,7 @@ export async function listContracts(req: Request, res: Response, next: NextFunct
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = req.app.locals.container;
-    const data = await repos.contractRepo.findById(req.params.id);
+    const data = await repos.contractRepo.findById(req.params.id.toLowerCase());
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
@@ -23,7 +23,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 export async function getByAddress(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = req.app.locals.container;
-    const data = await repos.contractRepo.findByAddress(req.params.address);
+    const data = await repos.contractRepo.findByAddress(req.params.address.toLowerCase());
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
