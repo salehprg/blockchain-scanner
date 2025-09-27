@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: blockchain_app
+    restart: always
     env_file:
       - .env
     environment:
