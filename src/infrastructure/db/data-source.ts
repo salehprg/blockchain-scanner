@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 import { BlockchainConfigEntity } from "./entities/blockchain-config.entity";
 import { BlockchainContractEntity } from "./entities/blockchain-contract.entity";
 import { NFTOwnerEntity } from "./entities/nft-owner.entity";
+import { ContractLogEntity } from "./entities/contract-log.entity";
 import { envs } from "@/env";
 
 export const AppDataSource = new DataSource({
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
     username: envs.DB_USER,
     password: envs.DB_PASS,
     database: envs.DB_NAME,
-    entities: [BlockchainConfigEntity, BlockchainContractEntity, NFTOwnerEntity],
+    entities: [BlockchainConfigEntity, BlockchainContractEntity, NFTOwnerEntity, ContractLogEntity],
     synchronize: true, // DEV ONLY. Use migrations in production.
     logging: false
 });

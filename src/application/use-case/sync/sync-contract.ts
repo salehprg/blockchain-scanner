@@ -5,19 +5,24 @@ import { Address } from "viem";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { QueryRunner } from "typeorm";
+import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
+import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
 
 export class SyncContracts {
   private readonly updater: OwnershipUpdater;
+  private readonly logRecorder: ContractLogRecorder;
 
   constructor(
     private readonly contractRepo: IBlockchainContractRepository,
     ownerRepo: INFTOwnerRepository,
-    private readonly logReader: BlockchainLogReader
+    private readonly logReader: BlockchainLogReader,
+    logRepo: IContractLogRepository
   ) {
     this.updater = new OwnershipUpdater(ownerRepo);
+    this.logRecorder = new ContractLogRecorder(logRepo);
   }
 
   async execute(): Promise<void> {
@@ -99,6 +104,52 @@ export class SyncContracts {
     await qr.startTransaction();
 
     try {
+      // Persist raw logs batch first (best-effort, ignores duplicates)
+      await this.logRecorder.recordBatch({
+        contractId,
+        chainId,
+        nftContractAddress: contractAddress,
+        logs: logs.map(l => {
+          if (contractType === "ERC721" && "args" in l && "tokenId" in l.args) {
+            return {
+              transactionHash: l.blockHash,
+              logIndex: l.logIndex,
+              blockNumber: l.blockNumber,
+              type: "ERC721.Transfer" as const,
+              from: l.args.from,
+              to: l.args.to,
+              operator: null,
+              tokenId: l.args.tokenId,
+              value: null
+            };
+          }
+          if (contractType === "ERC1155" && "args" in l && "id" in l.args) {
+            return {
+              transactionHash: l.blockHash,
+              logIndex: l.logIndex,
+              blockNumber: l.blockNumber,
+              type: "ERC1155.TransferSingle" as const,
+              from: l.args.from,
+              to: l.args.to,
+              operator: l.args.operator,
+              tokenId: l.args.id,
+              value: l.args.value
+            };
+          }
+          return {
+            transactionHash: l.blockHash,
+            logIndex: l.logIndex,
+            blockNumber: l.blockNumber,
+            type: (contractType === "ERC721" ? "ERC721.Transfer" : "ERC1155.TransferSingle") as any,
+            from: null,
+            to: null,
+            operator: null,
+            tokenId: null,
+            value: null
+          };
+        })
+      });
+
       for (const log of logs) {
         if (contractType === "ERC721" && "args" in log && "tokenId" in log.args) {
           await this.updater.applyTransfer721({

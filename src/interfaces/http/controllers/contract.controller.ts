@@ -56,3 +56,20 @@ export async function deleteContract(req: Request, res: Response, next: NextFunc
     res.status(204).send();
   } catch (e) { next(e); }
 }
+
+export async function getContractLogs(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { repos } = req.app.locals.container;
+    const { contractAddress } = req.params;
+    const { fromDate, toDate, limit, offset } = req.query as Record<string, string>;
+
+    const options: any = {};
+    if (fromDate) options.fromDate = new Date(fromDate);
+    if (toDate) options.toDate = new Date(toDate);
+    if (limit) options.limit = Number(limit);
+    if (offset) options.offset = Number(offset);
+
+    const logs = await repos.contractLogRepo.findByContractAddress(contractAddress.toLowerCase(), options);
+    res.json(logs);
+  } catch (e) { next(e); }
+}

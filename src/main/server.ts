@@ -25,7 +25,8 @@ const PORT = parseInt(envs.PORT);
   const syncUseCase = new SyncContracts(
     container.repos.contractRepo,
     container.repos.ownerRepo,
-    logReader
+    logReader,
+    container.repos.contractLogRepo
   );
   const job = new ContractSyncJob(syncUseCase, 10_000);
   job.start();

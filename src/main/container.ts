@@ -3,9 +3,11 @@ import { Repository } from "typeorm";
 import { BlockchainConfigEntity } from "@/infrastructure/db/entities/blockchain-config.entity";
 import { BlockchainContractEntity } from "@/infrastructure/db/entities/blockchain-contract.entity";
 import { NFTOwnerEntity } from "@/infrastructure/db/entities/nft-owner.entity";
+import { ContractLogEntity } from "@/infrastructure/db/entities/contract-log.entity";
 import { BlockchainConfigRepository } from "@/infrastructure/repositories/blockchain-config.repo.impl";
 import { BlockchainContractRepository } from "@/infrastructure/repositories/blockchain-contract.repo.impl";
 import { NFTOwnerRepository } from "@/infrastructure/repositories/nft-owner.repo.impl";
+import { ContractLogRepository } from "@/infrastructure/repositories/contract-log.repo.impl";
 import { ViemPublicClientProvider } from "@/infrastructure/blockchain/BlochchainClient";
 
 export async function buildContainer() {
@@ -14,6 +16,7 @@ export async function buildContainer() {
   const configRepo = new BlockchainConfigRepository(ds.getRepository(BlockchainConfigEntity));
   const contractRepo = new BlockchainContractRepository(ds.getRepository(BlockchainContractEntity));
   const ownerRepo = new NFTOwnerRepository(ds.getRepository(NFTOwnerEntity));
+  const contractLogRepo = new ContractLogRepository(ds.getRepository(ContractLogEntity));
 
   // rpc url resolver → prefer DB config, fallback to ENV
   const rpcUrlResolver = async (chainId: number) => {
@@ -31,7 +34,7 @@ export async function buildContainer() {
 
   return {
     dataSource: ds,
-    repos: { configRepo, contractRepo, ownerRepo },
+    repos: { configRepo, contractRepo, ownerRepo, contractLogRepo },
     services: { blockchainReader }
   };
 }
