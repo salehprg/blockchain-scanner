@@ -12,9 +12,7 @@
         "-r",
         "tsconfig-paths/register",
         "-r",
-        "dotenv/config",
-        "-r",
-        "reflect-metadata"
+        "dotenv/config"
       ],
       "program": "${workspaceFolder}/src/main/server.ts",
       "cwd": "${workspaceFolder}",

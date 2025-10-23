@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateBlockchainConfig, UpdateBlockchainConfig} from "@/application/use-case/blockchain-config/blockchain-config";
+import type { AppContainer } from "@/main/container";
+import { CreateBlockchainConfig, UpdateBlockchainConfig } from "@/application/use-case/blockchain-config/blockchain-config";
 import { BlockchainConfig } from "@/domain/entities/blockchain-config";
 
 export async function listConfigs(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const all = await repos.configRepo.findAll();
     res.json(all);
   } catch (e) { next(e); }
@@ -13,8 +14,8 @@ export async function listConfigs(req: Request, res: Response, next: NextFunctio
 export async function getByChainId(req: Request, res: Response, next: NextFunction) {
   try {
     const chainId = Number(req.params.chainId);
-    const { repos } = req.app.locals.container;
-    const found = await repos.configRepo.findByChainId(chainId);
+    const { repos } = (req.app.locals.container as AppContainer);
+    const found = await repos.configRepo.filterConfigs({ chainId });
     if (!found) return res.status(404).json({ error: "Not found" });
     res.json(found);
   } catch (e) { next(e); }
@@ -23,7 +24,7 @@ export async function getByChainId(req: Request, res: Response, next: NextFuncti
 export async function createConfig(req: Request, res: Response, next: NextFunction) {
   try {
     const { chainId, rpcUrlBase, rpcUrlAlter } = req.body;
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const useCase = new CreateBlockchainConfig(repos.configRepo);
     const created = await useCase.execute({ chainId, rpcUrlBase, rpcUrlAlter });
     res.status(201).json(created);
@@ -32,7 +33,7 @@ export async function createConfig(req: Request, res: Response, next: NextFuncti
 
 export async function updateConfig(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const { id } = req.params;
     const existing = await repos.configRepo.findById(id);
     if (!existing) return res.status(404).json({ error: "Not found" });

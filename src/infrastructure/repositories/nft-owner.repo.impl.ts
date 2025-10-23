@@ -1,41 +1,85 @@
-import { Repository } from "typeorm";
 import { NFTOwner } from "@/domain/entities/nft-owner";
-import { NFTOwnerMapper } from "../mapper/nft-owner.mapper";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
-import { NFTOwnerEntity } from "../db/entities/nft-owner.entity";
+import { Prisma } from "@/generated/client";
+import { prisma } from "@/infrastructure/db/prisma";
 
 export class NFTOwnerRepository implements INFTOwnerRepository {
-  constructor(private readonly ormRepo: Repository<NFTOwnerEntity>) {}
+  constructor() { }
 
   async create(entity: NFTOwner): Promise<NFTOwner> {
-    const saved = await this.ormRepo.save(NFTOwnerMapper.toEntity(entity));
-    return NFTOwnerMapper.toDomain(saved);
+    const saved = await prisma.nFTOwners.create({
+      data: {
+        id: entity.id,
+        contractId: entity.contractId,
+        ownerAddress: entity.ownerAddress.toLowerCase(),
+        nftContractAddress: entity.nftContractAddress.toLowerCase(),
+        nftItemId: entity.nftItemId.toLowerCase(),
+        count: entity.count,
+        lastTransactionHash: entity.lastTransactionHash,
+        lastSyncTime: entity.lastSyncTime,
+      },
+    });
+    return new NFTOwner(saved.id, saved.contractId, saved.ownerAddress, saved.nftContractAddress, saved.nftItemId, saved.count, saved.lastTransactionHash, saved.lastSyncTime);
   }
   async upsert(entity: NFTOwner): Promise<NFTOwner> {
-    const saved = await this.ormRepo.save(NFTOwnerMapper.toEntity(entity));
-    return NFTOwnerMapper.toDomain(saved);
+    const saved = await prisma.nFTOwners.upsert({
+      where: { id: entity.id },
+      create: {
+        id: entity.id,
+        contractId: entity.contractId,
+        ownerAddress: entity.ownerAddress.toLowerCase(),
+        nftContractAddress: entity.nftContractAddress.toLowerCase(),
+        nftItemId: entity.nftItemId.toLowerCase(),
+        count: entity.count,
+        lastTransactionHash: entity.lastTransactionHash,
+        lastSyncTime: entity.lastSyncTime,
+      },
+      update: {
+        contractId: entity.contractId,
+        ownerAddress: entity.ownerAddress.toLowerCase(),
+        nftContractAddress: entity.nftContractAddress.toLowerCase(),
+        nftItemId: entity.nftItemId.toLowerCase(),
+        count: entity.count,
+        lastTransactionHash: entity.lastTransactionHash,
+        lastSyncTime: entity.lastSyncTime,
+      },
+    });
+    return new NFTOwner(saved.id, saved.contractId, saved.ownerAddress, saved.nftContractAddress, saved.nftItemId, saved.count, saved.lastTransactionHash, saved.lastSyncTime);
   }
   async findById(id: string): Promise<NFTOwner | null> {
-    const e = await this.ormRepo.findOne({ where: { id } });
-    return e ? NFTOwnerMapper.toDomain(e) : null;
+    const e = await prisma.nFTOwners.findUnique({ where: { id } });
+    return e ? new NFTOwner(e.id, e.contractId, e.ownerAddress, e.nftContractAddress, e.nftItemId, e.count, e.lastTransactionHash, e.lastSyncTime) : null;
   }
   async findAll(): Promise<NFTOwner[]> {
-    const list = await this.ormRepo.find();
-    return list.map(NFTOwnerMapper.toDomain);
+    const list = await prisma.nFTOwners.findMany();
+    return list.map(e => new NFTOwner(e.id, e.contractId, e.ownerAddress, e.nftContractAddress, e.nftItemId, e.count, e.lastTransactionHash, e.lastSyncTime));
   }
   async update(entity: NFTOwner): Promise<NFTOwner> {
-    const saved = await this.ormRepo.save(NFTOwnerMapper.toEntity(entity));
-    return NFTOwnerMapper.toDomain(saved);
+    const saved = await prisma.nFTOwners.update({
+      where: { id: entity.id },
+      data: {
+        contractId: entity.contractId,
+        ownerAddress: entity.ownerAddress.toLowerCase(),
+        nftContractAddress: entity.nftContractAddress.toLowerCase(),
+        nftItemId: entity.nftItemId.toLowerCase(),
+        count: entity.count,
+        lastTransactionHash: entity.lastTransactionHash,
+        lastSyncTime: entity.lastSyncTime,
+      },
+    });
+    return new NFTOwner(saved.id, saved.contractId, saved.ownerAddress, saved.nftContractAddress, saved.nftItemId, saved.count, saved.lastTransactionHash, saved.lastSyncTime);
   }
   async delete(id: string): Promise<void> {
-    await this.ormRepo.delete(id);
+    await prisma.nFTOwners.delete({ where: { id } });
   }
-  async findByOwnerAndItem(owner: string, nftContractAddress: string, nftItemId: string): Promise<NFTOwner | null> {
-    const e = await this.ormRepo.findOne({ where: { ownerAddress: owner.toLowerCase(), nftContractAddress: nftContractAddress.toLowerCase(), nftItemId: nftItemId.toLowerCase() } });
-    return e ? NFTOwnerMapper.toDomain(e) : null;
-  }
-  async findByContractAddress(contractAddress: string): Promise<NFTOwner[]> {
-    const list = await this.ormRepo.find({ where: { nftContractAddress: contractAddress.toLowerCase() } });
-    return list.map(NFTOwnerMapper.toDomain);
+  
+  async filterOwners(params: { contractAddress?: string; ownerAddress?: string; tokenId?: string }): Promise<NFTOwner[]> {
+    const where: Prisma.NFTOwnersWhereInput = {};
+    if (params.contractAddress) where.nftContractAddress = params.contractAddress.toLowerCase();
+    if (params.ownerAddress) where.ownerAddress = params.ownerAddress.toLowerCase();
+    if (params.tokenId) where.nftItemId = params.tokenId.toLowerCase();
+
+    const list = await prisma.nFTOwners.findMany({ where });
+    return list.map(e => new NFTOwner(e.id, e.contractId, e.ownerAddress, e.nftContractAddress, e.nftItemId, e.count, e.lastTransactionHash, e.lastSyncTime));
   }
 }

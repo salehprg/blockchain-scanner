@@ -24,31 +24,31 @@ export class OwnershipUpdater {
 
     if (isZero(to)) {
       // burn
-      const rec = await this.ownerRepo.findByOwnerAndItem(from, params.nftContractAddress, tokenIdStr);
-      if (rec) {
-        rec.count = Math.max(0, rec.count - 1);
-        if (rec.count === 0) await this.ownerRepo.delete(rec.id);
-        else await this.ownerRepo.update(rec);
+      const rec = await this.ownerRepo.filterOwners({ ownerAddress: from, contractAddress: params.nftContractAddress, tokenId: tokenIdStr });
+      if (rec.length != 0) {
+        await this.ownerRepo.delete(rec[0].id);
       }
+      else
+        this.ownerRepo.update(rec[0]);
+
       return;
     }
 
     // remove from old owner (if any)
     if (!isZero(from)) {
-      const prev = await this.ownerRepo.findByOwnerAndItem(from, params.nftContractAddress, tokenIdStr);
-      if (prev) {
-        prev.count = Math.max(0, prev.count - 1);
-        if (prev.count === 0) await this.ownerRepo.delete(prev.id);
-        else await this.ownerRepo.update(prev);
+      const prev = await this.ownerRepo.filterOwners({ ownerAddress: from, contractAddress: params.nftContractAddress, tokenId: tokenIdStr });
+
+      if (prev.length != 0) {
+        await this.ownerRepo.delete(prev[0].id);
       }
     }
 
     // add to new owner
-    const existing = await this.ownerRepo.findByOwnerAndItem(to, params.nftContractAddress, tokenIdStr);
+    const existing = (await this.ownerRepo.filterOwners({ ownerAddress: to, contractAddress: params.nftContractAddress, tokenId: tokenIdStr }))[0];
     if (existing) {
       existing.count = existing.count + 1; // should be 1 for ERC721, but idempotent
       existing.lastTransactionHash = params.transactionHash;
-      
+
       await this.ownerRepo.update(existing);
     } else {
       await this.ownerRepo.create(new NFTOwner(
@@ -81,18 +81,18 @@ export class OwnershipUpdater {
     // decrement from "from"
     if (!isZero(params.from)) {
       const from = getAddress(params.from);
-      const prev = await this.ownerRepo.findByOwnerAndItem(from, params.nftContractAddress, tokenIdStr);
-      if (prev) {
-        prev.count = Math.max(0, prev.count - amount);
-        if (prev.count === 0) await this.ownerRepo.delete(prev.id);
-        else await this.ownerRepo.update(prev);
+      const prev = await this.ownerRepo.filterOwners({ ownerAddress: from, contractAddress: params.nftContractAddress, tokenId: tokenIdStr });
+
+      if (prev.length != 0) {
+        await this.ownerRepo.delete(prev[0].id);
       }
+      else await this.ownerRepo.update(prev[0]);
     }
 
     // increment to "to"
     if (!isZero(params.to)) {
       const to = getAddress(params.to);
-      const ex = await this.ownerRepo.findByOwnerAndItem(to, params.nftContractAddress, tokenIdStr);
+      const ex = (await this.ownerRepo.filterOwners({ ownerAddress: to, contractAddress: params.nftContractAddress, tokenId: tokenIdStr }))[0];
       if (ex) {
         ex.count = ex.count + amount;
         ex.lastTransactionHash = params.transactionHash

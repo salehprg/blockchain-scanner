@@ -28,5 +28,5 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 
-# Start with path alias + env + decorators
-CMD ["node", "-r", "tsconfig-paths/register", "-r", "dotenv/config", "-r", "reflect-metadata", "dist/main/server.js"]
+# Start with path alias + env
+CMD ["node", "-r", "tsconfig-paths/register", "-r", "dotenv/config", "dist/main/server.js"]

@@ -1,12 +1,11 @@
 import { BlockchainLogReader } from "@/infrastructure/blockchain/log-reader";
 import { OwnershipUpdater } from "@/application/services/ownership-updater";
-import { AppDataSource } from "@/infrastructure/db/data-source"; // for transactions
 import { Address } from "viem";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
-import { QueryRunner } from "typeorm";
 import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
+import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
@@ -14,6 +13,7 @@ const CONF = 5n;          // confirmations before considering final (tune)
 export class SyncContracts {
   private readonly updater: OwnershipUpdater;
   private readonly logRecorder: ContractLogRecorder;
+  private readonly metadataSyncer: NFTMetadataSyncer;
 
   constructor(
     private readonly contractRepo: IBlockchainContractRepository,
@@ -23,6 +23,9 @@ export class SyncContracts {
   ) {
     this.updater = new OwnershipUpdater(ownerRepo);
     this.logRecorder = new ContractLogRecorder(logRepo);
+    // metadata syncer will be created later where needed with DI; here we lazily get via reader from logReader
+    // @ts-ignore
+    this.metadataSyncer = new NFTMetadataSyncer((this.logReader as any)["reader"], (global as any)?.container?.repos?.nftRepo, (global as any)?.container?.repos?.nftMetadataRepo);
   }
 
   async execute(): Promise<void> {
@@ -30,6 +33,15 @@ export class SyncContracts {
     for (const c of contracts) {
       try {
         await this.syncOne(c.id, c.contractAddress as Address, c.contractType, c.chainId, c.lastSyncBlock);
+        // After ownership sync, try metadata if ERC1155/721
+        if (c.contractType !== "OTHER" && (global as any)?.container?.repos?.nftRepo) {
+          await this.metadataSyncer.syncContract({
+            chainId: c.chainId,
+            contractId: c.id,
+            contractAddress: c.contractAddress as Address,
+            contractType: c.contractType as any
+          }).catch(() => {});
+        }
       } catch (e) {
         console.warn(`[sync] contract ${c.contractAddress} failed: ${(e as Error).message}`);
       }
@@ -55,22 +67,19 @@ export class SyncContracts {
       const from = cursor + 1n;
       const to = from + CHUNK - 1n <= safeTo ? from + CHUNK - 1n : safeTo;
 
-      const qr = AppDataSource.createQueryRunner();
       try {
 
         console.log(`Start Chain ${chainId} scan blocks ${from}-${to} Until: ${safeTo}`)
-        await this.scanWindow(qr, contractId, contractAddress, contractType, chainId, from, to);
+        await this.scanWindow(contractId, contractAddress, contractType, chainId, from, to);
         cursor = to;
 
       } catch (err) {
-        await qr.rollbackTransaction();
-
         const msg = String((err as Error)?.message ?? err);
         if (/block range|too many|range|timeout|429|exceeded/i.test(msg)) {
           // halve window (simple backoff): split and keep progress
           const mid = from + (to - from) / 2n;
-          await this.scanWindow(qr, contractId, contractAddress, contractType, chainId, from, mid);
-          await this.scanWindow(qr, contractId, contractAddress, contractType, chainId, mid + 1n, to);
+          await this.scanWindow(contractId, contractAddress, contractType, chainId, from, mid);
+          await this.scanWindow(contractId, contractAddress, contractType, chainId, mid + 1n, to);
 
           cursor = to;
 
@@ -79,14 +88,11 @@ export class SyncContracts {
           // brief pause to avoid hot loop
           await new Promise(r => setTimeout(r, 2_000));
         }
-      } finally {
-        await qr.release();
       }
     }
   }
 
   private async scanWindow(
-    qr: QueryRunner,
     contractId: string,
     contractAddress: Address,
     contractType: "ERC721" | "ERC1155" | "OTHER",
@@ -100,9 +106,6 @@ export class SyncContracts {
     const logs = await this.logReader.getTransferLogs({
       chainId, contractType: contractType as any, contractAddress, fromBlock: from, toBlock: to
     });
-    await qr.connect();
-    await qr.startTransaction();
-
     try {
       // Persist raw logs batch first (best-effort, ignores duplicates)
       await this.logRecorder.recordBatch({
@@ -181,13 +184,8 @@ export class SyncContracts {
         lastSyncBlock: to.toString(),
         lastSyncTime: new Date()
       } as any);
-
-      await qr.commitTransaction();
     } catch (e) {
-      await qr.rollbackTransaction();
       throw e;
-    } finally {
-      await qr.release();
     }
   }
 }

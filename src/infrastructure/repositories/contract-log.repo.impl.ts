@@ -1,75 +1,171 @@
-import { Repository } from "typeorm";
 import { ContractLog } from "@/domain/entities/contract-log";
 import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
-import { ContractLogEntity } from "@/infrastructure/db/entities/contract-log.entity";
-import { ContractLogMapper } from "@/infrastructure/mapper/contract-log.mapper";
+import { Prisma } from "@/generated/client";
+import { prisma } from "@/infrastructure/db/prisma";
 
 export class ContractLogRepository implements IContractLogRepository {
-  constructor(private readonly ormRepo: Repository<ContractLogEntity>) {}
+  constructor() { }
 
   async create(entity: ContractLog): Promise<ContractLog> {
-    const saved = await this.ormRepo.save(ContractLogMapper.toEntity(entity));
-    return ContractLogMapper.toDomain(saved);
+    const saved = await prisma.contractLogs.create({
+      data: {
+        id: entity.id,
+        contractId: entity.contractId,
+        chainId: entity.chainId,
+        nftContractAddress: entity.nftContractAddress,
+        blockNumber: entity.blockNumber,
+        transactionHash: entity.transactionHash,
+        logIndex: entity.logIndex,
+        eventType: entity.eventType,
+        fromAddress: entity.fromAddress,
+        toAddress: entity.toAddress,
+        operatorAddress: entity.operatorAddress,
+        tokenId: entity.tokenId,
+        value: entity.value,
+        loggedAt: entity.loggedAt,
+      },
+    });
+    return new ContractLog(
+      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.blockNumber, saved.transactionHash, saved.logIndex,
+      saved.eventType as any, saved.fromAddress, saved.toAddress,
+      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+    );
   }
   async upsert(entity: ContractLog): Promise<ContractLog> {
-    const saved = await this.ormRepo.save(ContractLogMapper.toEntity(entity));
-    return ContractLogMapper.toDomain(saved);
+    const saved = await prisma.contractLogs.upsert({
+      where: { id: entity.id },
+      create: {
+        id: entity.id,
+        contractId: entity.contractId,
+        chainId: entity.chainId,
+        nftContractAddress: entity.nftContractAddress,
+        blockNumber: entity.blockNumber,
+        transactionHash: entity.transactionHash,
+        logIndex: entity.logIndex,
+        eventType: entity.eventType,
+        fromAddress: entity.fromAddress,
+        toAddress: entity.toAddress,
+        operatorAddress: entity.operatorAddress,
+        tokenId: entity.tokenId,
+        value: entity.value,
+        loggedAt: entity.loggedAt,
+      },
+      update: {
+        contractId: entity.contractId,
+        chainId: entity.chainId,
+        nftContractAddress: entity.nftContractAddress,
+        blockNumber: entity.blockNumber,
+        transactionHash: entity.transactionHash,
+        logIndex: entity.logIndex,
+        eventType: entity.eventType,
+        fromAddress: entity.fromAddress,
+        toAddress: entity.toAddress,
+        operatorAddress: entity.operatorAddress,
+        tokenId: entity.tokenId,
+        value: entity.value,
+        loggedAt: entity.loggedAt,
+      },
+    });
+    return new ContractLog(
+      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.blockNumber, saved.transactionHash, saved.logIndex,
+      saved.eventType as any, saved.fromAddress, saved.toAddress,
+      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+    );
   }
   async findById(id: string): Promise<ContractLog | null> {
-    const e = await this.ormRepo.findOne({ where: { id } });
-    return e ? ContractLogMapper.toDomain(e) : null;
+    const e = await prisma.contractLogs.findUnique({ where: { id } });
+    return e ? new ContractLog(
+      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.blockNumber, e.transactionHash, e.logIndex,
+      e.eventType as any, e.fromAddress, e.toAddress,
+      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+    ) : null;
   }
   async findAll(): Promise<ContractLog[]> {
-    const list = await this.ormRepo.find({ order: { loggedAt: "DESC" } });
-    return list.map(ContractLogMapper.toDomain);
+    const list = await prisma.contractLogs.findMany({ orderBy: { loggedAt: "desc" } });
+    return list.map(e => new ContractLog(
+      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.blockNumber, e.transactionHash, e.logIndex,
+      e.eventType as any, e.fromAddress, e.toAddress,
+      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+    ));
+  }
+  async filterLogs(params: { contractId?: string; contractAddress?: string; fromDate?: Date; toDate?: Date; limit?: number; offset?: number }): Promise<ContractLog[]> {
+
+    const where: Prisma.ContractLogsWhereInput = {};
+    if (params.contractId) where.contractId = params.contractId.toLowerCase();
+    if (params.contractAddress) where.nftContractAddress = params.contractAddress.toLowerCase();
+    where.loggedAt = { gte: params.fromDate, lte: params.toDate }
+
+    const list = await prisma.contractLogs.findMany({
+      where,
+      orderBy: { loggedAt: "desc" },
+      take: params.limit,
+      skip: params.offset,
+    });
+    return list.map(e => new ContractLog(
+      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.blockNumber, e.transactionHash, e.logIndex,
+      e.eventType as any, e.fromAddress, e.toAddress,
+      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+    ));
   }
   async update(entity: ContractLog): Promise<ContractLog> {
-    const saved = await this.ormRepo.save(ContractLogMapper.toEntity(entity));
-    return ContractLogMapper.toDomain(saved);
+    const saved = await prisma.contractLogs.update({
+      where: { id: entity.id },
+      data: {
+        contractId: entity.contractId,
+        chainId: entity.chainId,
+        nftContractAddress: entity.nftContractAddress,
+        blockNumber: entity.blockNumber,
+        transactionHash: entity.transactionHash,
+        logIndex: entity.logIndex,
+        eventType: entity.eventType,
+        fromAddress: entity.fromAddress,
+        toAddress: entity.toAddress,
+        operatorAddress: entity.operatorAddress,
+        tokenId: entity.tokenId,
+        value: entity.value,
+        loggedAt: entity.loggedAt,
+      },
+    });
+    return new ContractLog(
+      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.blockNumber, saved.transactionHash, saved.logIndex,
+      saved.eventType as any, saved.fromAddress, saved.toAddress,
+      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+    );
   }
   async delete(id: string): Promise<void> {
-    await this.ormRepo.delete(id);
+    await prisma.contractLogs.delete({ where: { id } });
   }
 
   async bulkInsert(logs: ContractLog[]): Promise<void> {
     if (logs.length === 0) return;
-    const entities = logs.map(ContractLogMapper.toEntity);
-    await this.ormRepo
-      .createQueryBuilder()
-      .insert()
-      .into(ContractLogEntity)
-      .values(entities as any)
-      .orIgnore() // rely on unique (txHash, logIndex)
-      .execute();
+    await prisma.contractLogs.createMany({
+      data: logs.map(l => ({
+        id: l.id,
+        contractId: l.contractId,
+        chainId: l.chainId,
+        nftContractAddress: l.nftContractAddress,
+        blockNumber: l.blockNumber,
+        transactionHash: l.transactionHash,
+        logIndex: l.logIndex,
+        eventType: l.eventType,
+        fromAddress: l.fromAddress,
+        toAddress: l.toAddress,
+        operatorAddress: l.operatorAddress,
+        tokenId: l.tokenId,
+        value: l.value,
+        loggedAt: l.loggedAt,
+      })),
+      skipDuplicates: true,
+    });
   }
 
-  async findByContractAddress(
-    contractAddress: string,
-    options?: { fromDate?: Date; toDate?: Date; limit?: number; offset?: number }
-  ): Promise<ContractLog[]> {
-    const qb = this.ormRepo.createQueryBuilder("log").where("log.nftContractAddress = :contractAddress", { contractAddress });
-    if (options?.fromDate) qb.andWhere("log.loggedAt >= :from", { from: options.fromDate });
-    if (options?.toDate) qb.andWhere("log.loggedAt <= :to", { to: options.toDate });
-    qb.orderBy("log.loggedAt", "DESC");
-    if (options?.limit) qb.limit(options.limit);
-    if (options?.offset) qb.offset(options.offset);
-    const list = await qb.getMany();
-    return list.map(ContractLogMapper.toDomain);
-  }
-
-  async findByContractId(
-    contractId: string,
-    options?: { fromDate?: Date; toDate?: Date; limit?: number; offset?: number }
-  ): Promise<ContractLog[]> {
-    const qb = this.ormRepo.createQueryBuilder("log").where("log.contractId = :contractId", { contractId });
-    if (options?.fromDate) qb.andWhere("log.loggedAt >= :from", { from: options.fromDate });
-    if (options?.toDate) qb.andWhere("log.loggedAt <= :to", { to: options.toDate });
-    qb.orderBy("log.loggedAt", "DESC");
-    if (options?.limit) qb.limit(options.limit);
-    if (options?.offset) qb.offset(options.offset);
-    const list = await qb.getMany();
-    return list.map(ContractLogMapper.toDomain);
-  }
+  // deprecated specific filters replaced by filterLogs()
 }
 
 

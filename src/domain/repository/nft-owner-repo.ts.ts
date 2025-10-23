@@ -2,6 +2,5 @@ import { IBaseRepository } from "./base-repository";
 import { NFTOwner } from "../entities/nft-owner";
 
 export interface INFTOwnerRepository extends IBaseRepository<NFTOwner> {
-  findByOwnerAndItem(owner: string, nftContractAddress: string, nftItemId: string): Promise<NFTOwner | null>;
-  findByContractAddress(contractAddress: string): Promise<NFTOwner[]>;
+  filterOwners(params: { contractAddress?: string; ownerAddress?: string; tokenId?: string }): Promise<NFTOwner[]>;
 }

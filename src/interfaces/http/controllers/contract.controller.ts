@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import type { AppContainer } from "@/main/container";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
 import { randomUUID } from "crypto";
 import { DeleteBlockchainContract} from "@/application/use-case/blockchain-config/blockchain-contract-config"
@@ -6,14 +7,14 @@ import { DeleteBlockchainContract} from "@/application/use-case/blockchain-confi
 
 export async function listContracts(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     res.json(await repos.contractRepo.findAll());
   } catch (e) { next(e); }
 }
 
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const data = await repos.contractRepo.findById(req.params.id.toLowerCase());
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
@@ -22,7 +23,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 
 export async function getByAddress(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const data = await repos.contractRepo.findByAddress(req.params.address.toLowerCase());
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
@@ -31,7 +32,7 @@ export async function getByAddress(req: Request, res: Response, next: NextFuncti
 
 export async function upsertContract(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const body = req.body as Partial<BlockchainContract>;
 
     const model = new BlockchainContract(
@@ -50,7 +51,7 @@ export async function upsertContract(req: Request, res: Response, next: NextFunc
 
 export async function deleteContract(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const useCase = new DeleteBlockchainContract(repos.contractRepo);
     await useCase.execute(req.params.id);
     res.status(204).send();

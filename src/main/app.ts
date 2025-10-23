@@ -1,9 +1,9 @@
-import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import routes from "@/interfaces/http/routes/index"
+import type { AppContainer } from "@/main/container";
 
 export function createApp() {
   const app = express();
@@ -23,5 +23,5 @@ export function createApp() {
     res.status(err?.status || 500).json({ error: err?.message || "Internal Server Error" });
   });
 
-  return app;
+  return app as express.Express & { locals: { container: AppContainer } };
 }

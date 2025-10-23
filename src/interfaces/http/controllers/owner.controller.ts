@@ -1,27 +1,26 @@
 import { Request, Response, NextFunction } from "express";
+import type { AppContainer } from "@/main/container";
 import { NFTOwner } from "@/domain/entities/nft-owner";
 import { randomUUID } from "crypto";
 import { Address } from "viem";
 
 export async function listOwners(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     res.json(await repos.ownerRepo.findAll());
   } catch (e) { next(e); }
 }
 
-export async function getByContract(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { repos } = req.app.locals.container;
-    res.json(await repos.ownerRepo.findByContractAddress(req.params.contractAddress.toLowerCase()));
-  } catch (e) { next(e); }
-}
 
-export async function getByOwnerAndItem(req: Request, res: Response, next: NextFunction) {
+export async function filterOwners(req: Request, res: Response, next: NextFunction) {
   try {
-    const { owner, nftContractAddress, nftItemId } = req.query as Record<string, string>;
-    const { repos } = req.app.locals.container;
-    const found = await repos.ownerRepo.findByOwnerAndItem(owner.toLowerCase(), nftContractAddress.toLowerCase(), nftItemId.toLowerCase());
+    const { ownerAddress, contractAddress, tokenId } = req.query as Record<string, string>;
+    const { repos } = (req.app.locals.container as AppContainer);
+    if (!ownerAddress && !contractAddress && !tokenId) {
+      return res.status(400).json({ error: "owner, contractAddress and tokenId are required" });
+    }
+
+    const found = await repos.ownerRepo.filterOwners({ contractAddress: contractAddress, ownerAddress: ownerAddress, tokenId: tokenId });
     if (!found) return res.status(404).json({ error: "Not found" });
     res.json(found);
   } catch (e) { next(e); }
@@ -29,7 +28,7 @@ export async function getByOwnerAndItem(req: Request, res: Response, next: NextF
 
 export async function upsertOwner(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const body = req.body as Partial<NFTOwner>;
 
     const model = new NFTOwner(
@@ -50,7 +49,7 @@ export async function upsertOwner(req: Request, res: Response, next: NextFunctio
 
 export async function deleteOwner(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     await repos.ownerRepo.delete(req.params.id);
     res.status(204).send();
   } catch (e) { next(e); }
