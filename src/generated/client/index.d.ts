@@ -38,11 +38,6 @@ export type ContractLogs = $Result.DefaultSelection<Prisma.$ContractLogsPayload>
  * 
  */
 export type NFTs = $Result.DefaultSelection<Prisma.$NFTsPayload>
-/**
- * Model NFTMetadata
- * 
- */
-export type NFTMetadata = $Result.DefaultSelection<Prisma.$NFTMetadataPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -211,16 +206,6 @@ export class PrismaClient<
     * ```
     */
   get nFTs(): Prisma.NFTsDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.nFTMetadata`: Exposes CRUD operations for the **NFTMetadata** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more NFTMetadata
-    * const nFTMetadata = await prisma.nFTMetadata.findMany()
-    * ```
-    */
-  get nFTMetadata(): Prisma.NFTMetadataDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -666,8 +651,7 @@ export namespace Prisma {
     BlockchainContracts: 'BlockchainContracts',
     NFTOwners: 'NFTOwners',
     ContractLogs: 'ContractLogs',
-    NFTs: 'NFTs',
-    NFTMetadata: 'NFTMetadata'
+    NFTs: 'NFTs'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -686,7 +670,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "blockchainConfigs" | "blockchainContracts" | "nFTOwners" | "contractLogs" | "nFTs" | "nFTMetadata"
+      modelProps: "blockchainConfigs" | "blockchainContracts" | "nFTOwners" | "contractLogs" | "nFTs"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1060,80 +1044,6 @@ export namespace Prisma {
           }
         }
       }
-      NFTMetadata: {
-        payload: Prisma.$NFTMetadataPayload<ExtArgs>
-        fields: Prisma.NFTMetadataFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.NFTMetadataFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.NFTMetadataFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          findFirst: {
-            args: Prisma.NFTMetadataFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.NFTMetadataFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          findMany: {
-            args: Prisma.NFTMetadataFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>[]
-          }
-          create: {
-            args: Prisma.NFTMetadataCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          createMany: {
-            args: Prisma.NFTMetadataCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.NFTMetadataCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>[]
-          }
-          delete: {
-            args: Prisma.NFTMetadataDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          update: {
-            args: Prisma.NFTMetadataUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          deleteMany: {
-            args: Prisma.NFTMetadataDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.NFTMetadataUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.NFTMetadataUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>[]
-          }
-          upsert: {
-            args: Prisma.NFTMetadataUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NFTMetadataPayload>
-          }
-          aggregate: {
-            args: Prisma.NFTMetadataAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateNFTMetadata>
-          }
-          groupBy: {
-            args: Prisma.NFTMetadataGroupByArgs<ExtArgs>
-            result: $Utils.Optional<NFTMetadataGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.NFTMetadataCountArgs<ExtArgs>
-            result: $Utils.Optional<NFTMetadataCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1235,7 +1145,6 @@ export namespace Prisma {
     nFTOwners?: NFTOwnersOmit
     contractLogs?: ContractLogsOmit
     nFTs?: NFTsOmit
-    nFTMetadata?: NFTMetadataOmit
   }
 
   /* Types for Logging */
@@ -1310,6 +1219,36 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type NFTsCountOutputType
+   */
+
+  export type NFTsCountOutputType = {
+    NFTOwners: number
+  }
+
+  export type NFTsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    NFTOwners?: boolean | NFTsCountOutputTypeCountNFTOwnersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * NFTsCountOutputType without action
+   */
+  export type NFTsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NFTsCountOutputType
+     */
+    select?: NFTsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * NFTsCountOutputType without action
+   */
+  export type NFTsCountOutputTypeCountNFTOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NFTOwnersWhereInput
+  }
 
 
   /**
@@ -3398,8 +3337,8 @@ export namespace Prisma {
     id: string | null
     contractId: string | null
     ownerAddress: string | null
-    nftContractAddress: string | null
-    nftItemId: string | null
+    contractAddress: string | null
+    tokenId: string | null
     count: number | null
     lastTransactionHash: string | null
     lastSyncTime: Date | null
@@ -3409,8 +3348,8 @@ export namespace Prisma {
     id: string | null
     contractId: string | null
     ownerAddress: string | null
-    nftContractAddress: string | null
-    nftItemId: string | null
+    contractAddress: string | null
+    tokenId: string | null
     count: number | null
     lastTransactionHash: string | null
     lastSyncTime: Date | null
@@ -3420,8 +3359,8 @@ export namespace Prisma {
     id: number
     contractId: number
     ownerAddress: number
-    nftContractAddress: number
-    nftItemId: number
+    contractAddress: number
+    tokenId: number
     count: number
     lastTransactionHash: number
     lastSyncTime: number
@@ -3441,8 +3380,8 @@ export namespace Prisma {
     id?: true
     contractId?: true
     ownerAddress?: true
-    nftContractAddress?: true
-    nftItemId?: true
+    contractAddress?: true
+    tokenId?: true
     count?: true
     lastTransactionHash?: true
     lastSyncTime?: true
@@ -3452,8 +3391,8 @@ export namespace Prisma {
     id?: true
     contractId?: true
     ownerAddress?: true
-    nftContractAddress?: true
-    nftItemId?: true
+    contractAddress?: true
+    tokenId?: true
     count?: true
     lastTransactionHash?: true
     lastSyncTime?: true
@@ -3463,8 +3402,8 @@ export namespace Prisma {
     id?: true
     contractId?: true
     ownerAddress?: true
-    nftContractAddress?: true
-    nftItemId?: true
+    contractAddress?: true
+    tokenId?: true
     count?: true
     lastTransactionHash?: true
     lastSyncTime?: true
@@ -3561,8 +3500,8 @@ export namespace Prisma {
     id: string
     contractId: string
     ownerAddress: string
-    nftContractAddress: string
-    nftItemId: string
+    contractAddress: string
+    tokenId: string
     count: number
     lastTransactionHash: string | null
     lastSyncTime: Date | null
@@ -3591,57 +3530,71 @@ export namespace Prisma {
     id?: boolean
     contractId?: boolean
     ownerAddress?: boolean
-    nftContractAddress?: boolean
-    nftItemId?: boolean
+    contractAddress?: boolean
+    tokenId?: boolean
     count?: boolean
     lastTransactionHash?: boolean
     lastSyncTime?: boolean
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
   }, ExtArgs["result"]["nFTOwners"]>
 
   export type NFTOwnersSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contractId?: boolean
     ownerAddress?: boolean
-    nftContractAddress?: boolean
-    nftItemId?: boolean
+    contractAddress?: boolean
+    tokenId?: boolean
     count?: boolean
     lastTransactionHash?: boolean
     lastSyncTime?: boolean
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
   }, ExtArgs["result"]["nFTOwners"]>
 
   export type NFTOwnersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contractId?: boolean
     ownerAddress?: boolean
-    nftContractAddress?: boolean
-    nftItemId?: boolean
+    contractAddress?: boolean
+    tokenId?: boolean
     count?: boolean
     lastTransactionHash?: boolean
     lastSyncTime?: boolean
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
   }, ExtArgs["result"]["nFTOwners"]>
 
   export type NFTOwnersSelectScalar = {
     id?: boolean
     contractId?: boolean
     ownerAddress?: boolean
-    nftContractAddress?: boolean
-    nftItemId?: boolean
+    contractAddress?: boolean
+    tokenId?: boolean
     count?: boolean
     lastTransactionHash?: boolean
     lastSyncTime?: boolean
   }
 
-  export type NFTOwnersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "ownerAddress" | "nftContractAddress" | "nftItemId" | "count" | "lastTransactionHash" | "lastSyncTime", ExtArgs["result"]["nFTOwners"]>
+  export type NFTOwnersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "ownerAddress" | "contractAddress" | "tokenId" | "count" | "lastTransactionHash" | "lastSyncTime", ExtArgs["result"]["nFTOwners"]>
+  export type NFTOwnersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
+  }
+  export type NFTOwnersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
+  }
+  export type NFTOwnersIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    nft?: boolean | NFTOwners$nftArgs<ExtArgs>
+  }
 
   export type $NFTOwnersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "NFTOwners"
-    objects: {}
+    objects: {
+      nft: Prisma.$NFTsPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       contractId: string
       ownerAddress: string
-      nftContractAddress: string
-      nftItemId: string
+      contractAddress: string
+      tokenId: string
       count: number
       lastTransactionHash: string | null
       lastSyncTime: Date | null
@@ -4039,6 +3992,7 @@ export namespace Prisma {
    */
   export interface Prisma__NFTOwnersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    nft<T extends NFTOwners$nftArgs<ExtArgs> = {}>(args?: Subset<T, NFTOwners$nftArgs<ExtArgs>>): Prisma__NFTsClient<$Result.GetResult<Prisma.$NFTsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4071,8 +4025,8 @@ export namespace Prisma {
     readonly id: FieldRef<"NFTOwners", 'String'>
     readonly contractId: FieldRef<"NFTOwners", 'String'>
     readonly ownerAddress: FieldRef<"NFTOwners", 'String'>
-    readonly nftContractAddress: FieldRef<"NFTOwners", 'String'>
-    readonly nftItemId: FieldRef<"NFTOwners", 'String'>
+    readonly contractAddress: FieldRef<"NFTOwners", 'String'>
+    readonly tokenId: FieldRef<"NFTOwners", 'String'>
     readonly count: FieldRef<"NFTOwners", 'Int'>
     readonly lastTransactionHash: FieldRef<"NFTOwners", 'String'>
     readonly lastSyncTime: FieldRef<"NFTOwners", 'DateTime'>
@@ -4093,6 +4047,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * Filter, which NFTOwners to fetch.
      */
     where: NFTOwnersWhereUniqueInput
@@ -4111,6 +4069,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * Filter, which NFTOwners to fetch.
      */
     where: NFTOwnersWhereUniqueInput
@@ -4128,6 +4090,10 @@ export namespace Prisma {
      * Omit specific fields from the NFTOwners
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
     /**
      * Filter, which NFTOwners to fetch.
      */
@@ -4177,6 +4143,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * Filter, which NFTOwners to fetch.
      */
     where?: NFTOwnersWhereInput
@@ -4225,6 +4195,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * Filter, which NFTOwners to fetch.
      */
     where?: NFTOwnersWhereInput
@@ -4268,6 +4242,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * The data needed to create a NFTOwners.
      */
     data: XOR<NFTOwnersCreateInput, NFTOwnersUncheckedCreateInput>
@@ -4301,6 +4279,10 @@ export namespace Prisma {
      */
     data: NFTOwnersCreateManyInput | NFTOwnersCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4315,6 +4297,10 @@ export namespace Prisma {
      * Omit specific fields from the NFTOwners
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
     /**
      * The data needed to update a NFTOwners.
      */
@@ -4367,6 +4353,10 @@ export namespace Prisma {
      * Limit how many NFTOwners to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4381,6 +4371,10 @@ export namespace Prisma {
      * Omit specific fields from the NFTOwners
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
     /**
      * The filter to search for the NFTOwners to update in case it exists.
      */
@@ -4408,6 +4402,10 @@ export namespace Prisma {
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
+    /**
      * Filter which NFTOwners to delete.
      */
     where: NFTOwnersWhereUniqueInput
@@ -4428,6 +4426,25 @@ export namespace Prisma {
   }
 
   /**
+   * NFTOwners.nft
+   */
+  export type NFTOwners$nftArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NFTs
+     */
+    select?: NFTsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NFTs
+     */
+    omit?: NFTsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTsInclude<ExtArgs> | null
+    where?: NFTsWhereInput
+  }
+
+  /**
    * NFTOwners without action
    */
   export type NFTOwnersDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4439,6 +4456,10 @@ export namespace Prisma {
      * Omit specific fields from the NFTOwners
      */
     omit?: NFTOwnersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NFTOwnersInclude<ExtArgs> | null
   }
 
 
@@ -4468,7 +4489,7 @@ export namespace Prisma {
     id: string | null
     contractId: string | null
     chainId: number | null
-    nftContractAddress: string | null
+    contractAddress: string | null
     blockNumber: string | null
     transactionHash: string | null
     logIndex: number | null
@@ -4485,7 +4506,7 @@ export namespace Prisma {
     id: string | null
     contractId: string | null
     chainId: number | null
-    nftContractAddress: string | null
+    contractAddress: string | null
     blockNumber: string | null
     transactionHash: string | null
     logIndex: number | null
@@ -4502,7 +4523,7 @@ export namespace Prisma {
     id: number
     contractId: number
     chainId: number
-    nftContractAddress: number
+    contractAddress: number
     blockNumber: number
     transactionHash: number
     logIndex: number
@@ -4531,7 +4552,7 @@ export namespace Prisma {
     id?: true
     contractId?: true
     chainId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     blockNumber?: true
     transactionHash?: true
     logIndex?: true
@@ -4548,7 +4569,7 @@ export namespace Prisma {
     id?: true
     contractId?: true
     chainId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     blockNumber?: true
     transactionHash?: true
     logIndex?: true
@@ -4565,7 +4586,7 @@ export namespace Prisma {
     id?: true
     contractId?: true
     chainId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     blockNumber?: true
     transactionHash?: true
     logIndex?: true
@@ -4669,7 +4690,7 @@ export namespace Prisma {
     id: string
     contractId: string
     chainId: number
-    nftContractAddress: string
+    contractAddress: string
     blockNumber: string
     transactionHash: string
     logIndex: number
@@ -4705,7 +4726,7 @@ export namespace Prisma {
     id?: boolean
     contractId?: boolean
     chainId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     blockNumber?: boolean
     transactionHash?: boolean
     logIndex?: boolean
@@ -4722,7 +4743,7 @@ export namespace Prisma {
     id?: boolean
     contractId?: boolean
     chainId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     blockNumber?: boolean
     transactionHash?: boolean
     logIndex?: boolean
@@ -4739,7 +4760,7 @@ export namespace Prisma {
     id?: boolean
     contractId?: boolean
     chainId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     blockNumber?: boolean
     transactionHash?: boolean
     logIndex?: boolean
@@ -4756,7 +4777,7 @@ export namespace Prisma {
     id?: boolean
     contractId?: boolean
     chainId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     blockNumber?: boolean
     transactionHash?: boolean
     logIndex?: boolean
@@ -4769,7 +4790,7 @@ export namespace Prisma {
     loggedAt?: boolean
   }
 
-  export type ContractLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "chainId" | "nftContractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "loggedAt", ExtArgs["result"]["contractLogs"]>
+  export type ContractLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "loggedAt", ExtArgs["result"]["contractLogs"]>
 
   export type $ContractLogsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContractLogs"
@@ -4778,7 +4799,7 @@ export namespace Prisma {
       id: string
       contractId: string
       chainId: number
-      nftContractAddress: string
+      contractAddress: string
       blockNumber: string
       transactionHash: string
       logIndex: number
@@ -5215,7 +5236,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ContractLogs", 'String'>
     readonly contractId: FieldRef<"ContractLogs", 'String'>
     readonly chainId: FieldRef<"ContractLogs", 'Int'>
-    readonly nftContractAddress: FieldRef<"ContractLogs", 'String'>
+    readonly contractAddress: FieldRef<"ContractLogs", 'String'>
     readonly blockNumber: FieldRef<"ContractLogs", 'String'>
     readonly transactionHash: FieldRef<"ContractLogs", 'String'>
     readonly logIndex: FieldRef<"ContractLogs", 'Int'>
@@ -5605,31 +5626,45 @@ export namespace Prisma {
   export type NFTsMinAggregateOutputType = {
     id: string | null
     contractId: string | null
-    nftContractAddress: string | null
+    contractAddress: string | null
     tokenId: string | null
     tokenUri: string | null
     metadataUpdated: boolean | null
     lastMetadataSyncTime: Date | null
+    name: string | null
+    description: string | null
+    image: string | null
+    externalUrl: string | null
   }
 
   export type NFTsMaxAggregateOutputType = {
     id: string | null
     contractId: string | null
-    nftContractAddress: string | null
+    contractAddress: string | null
     tokenId: string | null
     tokenUri: string | null
     metadataUpdated: boolean | null
     lastMetadataSyncTime: Date | null
+    name: string | null
+    description: string | null
+    image: string | null
+    externalUrl: string | null
   }
 
   export type NFTsCountAggregateOutputType = {
     id: number
     contractId: number
-    nftContractAddress: number
+    contractAddress: number
     tokenId: number
     tokenUri: number
     metadataUpdated: number
     lastMetadataSyncTime: number
+    name: number
+    description: number
+    image: number
+    externalUrl: number
+    attributes: number
+    raw: number
     _all: number
   }
 
@@ -5637,31 +5672,45 @@ export namespace Prisma {
   export type NFTsMinAggregateInputType = {
     id?: true
     contractId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     tokenId?: true
     tokenUri?: true
     metadataUpdated?: true
     lastMetadataSyncTime?: true
+    name?: true
+    description?: true
+    image?: true
+    externalUrl?: true
   }
 
   export type NFTsMaxAggregateInputType = {
     id?: true
     contractId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     tokenId?: true
     tokenUri?: true
     metadataUpdated?: true
     lastMetadataSyncTime?: true
+    name?: true
+    description?: true
+    image?: true
+    externalUrl?: true
   }
 
   export type NFTsCountAggregateInputType = {
     id?: true
     contractId?: true
-    nftContractAddress?: true
+    contractAddress?: true
     tokenId?: true
     tokenUri?: true
     metadataUpdated?: true
     lastMetadataSyncTime?: true
+    name?: true
+    description?: true
+    image?: true
+    externalUrl?: true
+    attributes?: true
+    raw?: true
     _all?: true
   }
 
@@ -5740,11 +5789,17 @@ export namespace Prisma {
   export type NFTsGroupByOutputType = {
     id: string
     contractId: string
-    nftContractAddress: string
+    contractAddress: string
     tokenId: string
     tokenUri: string | null
     metadataUpdated: boolean
     lastMetadataSyncTime: Date | null
+    name: string | null
+    description: string | null
+    image: string | null
+    externalUrl: string | null
+    attributes: JsonValue | null
+    raw: JsonValue | null
     _count: NFTsCountAggregateOutputType | null
     _min: NFTsMinAggregateOutputType | null
     _max: NFTsMaxAggregateOutputType | null
@@ -5767,47 +5822,73 @@ export namespace Prisma {
   export type NFTsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contractId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     tokenId?: boolean
     tokenUri?: boolean
     metadataUpdated?: boolean
     lastMetadataSyncTime?: boolean
-    metadata?: boolean | NFTs$metadataArgs<ExtArgs>
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    externalUrl?: boolean
+    attributes?: boolean
+    raw?: boolean
+    NFTOwners?: boolean | NFTs$NFTOwnersArgs<ExtArgs>
+    _count?: boolean | NFTsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["nFTs"]>
 
   export type NFTsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contractId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     tokenId?: boolean
     tokenUri?: boolean
     metadataUpdated?: boolean
     lastMetadataSyncTime?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    externalUrl?: boolean
+    attributes?: boolean
+    raw?: boolean
   }, ExtArgs["result"]["nFTs"]>
 
   export type NFTsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contractId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     tokenId?: boolean
     tokenUri?: boolean
     metadataUpdated?: boolean
     lastMetadataSyncTime?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    externalUrl?: boolean
+    attributes?: boolean
+    raw?: boolean
   }, ExtArgs["result"]["nFTs"]>
 
   export type NFTsSelectScalar = {
     id?: boolean
     contractId?: boolean
-    nftContractAddress?: boolean
+    contractAddress?: boolean
     tokenId?: boolean
     tokenUri?: boolean
     metadataUpdated?: boolean
     lastMetadataSyncTime?: boolean
+    name?: boolean
+    description?: boolean
+    image?: boolean
+    externalUrl?: boolean
+    attributes?: boolean
+    raw?: boolean
   }
 
-  export type NFTsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "nftContractAddress" | "tokenId" | "tokenUri" | "metadataUpdated" | "lastMetadataSyncTime", ExtArgs["result"]["nFTs"]>
+  export type NFTsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "contractAddress" | "tokenId" | "tokenUri" | "metadataUpdated" | "lastMetadataSyncTime" | "name" | "description" | "image" | "externalUrl" | "attributes" | "raw", ExtArgs["result"]["nFTs"]>
   export type NFTsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    metadata?: boolean | NFTs$metadataArgs<ExtArgs>
+    NFTOwners?: boolean | NFTs$NFTOwnersArgs<ExtArgs>
+    _count?: boolean | NFTsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type NFTsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
   export type NFTsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5815,16 +5896,22 @@ export namespace Prisma {
   export type $NFTsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "NFTs"
     objects: {
-      metadata: Prisma.$NFTMetadataPayload<ExtArgs> | null
+      NFTOwners: Prisma.$NFTOwnersPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       contractId: string
-      nftContractAddress: string
+      contractAddress: string
       tokenId: string
       tokenUri: string | null
       metadataUpdated: boolean
       lastMetadataSyncTime: Date | null
+      name: string | null
+      description: string | null
+      image: string | null
+      externalUrl: string | null
+      attributes: Prisma.JsonValue | null
+      raw: Prisma.JsonValue | null
     }, ExtArgs["result"]["nFTs"]>
     composites: {}
   }
@@ -6219,7 +6306,7 @@ export namespace Prisma {
    */
   export interface Prisma__NFTsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    metadata<T extends NFTs$metadataArgs<ExtArgs> = {}>(args?: Subset<T, NFTs$metadataArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    NFTOwners<T extends NFTs$NFTOwnersArgs<ExtArgs> = {}>(args?: Subset<T, NFTs$NFTOwnersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NFTOwnersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6251,11 +6338,17 @@ export namespace Prisma {
   interface NFTsFieldRefs {
     readonly id: FieldRef<"NFTs", 'String'>
     readonly contractId: FieldRef<"NFTs", 'String'>
-    readonly nftContractAddress: FieldRef<"NFTs", 'String'>
+    readonly contractAddress: FieldRef<"NFTs", 'String'>
     readonly tokenId: FieldRef<"NFTs", 'String'>
     readonly tokenUri: FieldRef<"NFTs", 'String'>
     readonly metadataUpdated: FieldRef<"NFTs", 'Boolean'>
     readonly lastMetadataSyncTime: FieldRef<"NFTs", 'DateTime'>
+    readonly name: FieldRef<"NFTs", 'String'>
+    readonly description: FieldRef<"NFTs", 'String'>
+    readonly image: FieldRef<"NFTs", 'String'>
+    readonly externalUrl: FieldRef<"NFTs", 'String'>
+    readonly attributes: FieldRef<"NFTs", 'Json'>
+    readonly raw: FieldRef<"NFTs", 'Json'>
   }
     
 
@@ -6644,22 +6737,27 @@ export namespace Prisma {
   }
 
   /**
-   * NFTs.metadata
+   * NFTs.NFTOwners
    */
-  export type NFTs$metadataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type NFTs$NFTOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the NFTMetadata
+     * Select specific fields to fetch from the NFTOwners
      */
-    select?: NFTMetadataSelect<ExtArgs> | null
+    select?: NFTOwnersSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the NFTMetadata
+     * Omit specific fields from the NFTOwners
      */
-    omit?: NFTMetadataOmit<ExtArgs> | null
+    omit?: NFTOwnersOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    where?: NFTMetadataWhereInput
+    include?: NFTOwnersInclude<ExtArgs> | null
+    where?: NFTOwnersWhereInput
+    orderBy?: NFTOwnersOrderByWithRelationInput | NFTOwnersOrderByWithRelationInput[]
+    cursor?: NFTOwnersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NFTOwnersScalarFieldEnum | NFTOwnersScalarFieldEnum[]
   }
 
   /**
@@ -6678,1095 +6776,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: NFTsInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model NFTMetadata
-   */
-
-  export type AggregateNFTMetadata = {
-    _count: NFTMetadataCountAggregateOutputType | null
-    _min: NFTMetadataMinAggregateOutputType | null
-    _max: NFTMetadataMaxAggregateOutputType | null
-  }
-
-  export type NFTMetadataMinAggregateOutputType = {
-    id: string | null
-    nftId: string | null
-    name: string | null
-    description: string | null
-    image: string | null
-    externalUrl: string | null
-  }
-
-  export type NFTMetadataMaxAggregateOutputType = {
-    id: string | null
-    nftId: string | null
-    name: string | null
-    description: string | null
-    image: string | null
-    externalUrl: string | null
-  }
-
-  export type NFTMetadataCountAggregateOutputType = {
-    id: number
-    nftId: number
-    name: number
-    description: number
-    image: number
-    externalUrl: number
-    attributes: number
-    raw: number
-    _all: number
-  }
-
-
-  export type NFTMetadataMinAggregateInputType = {
-    id?: true
-    nftId?: true
-    name?: true
-    description?: true
-    image?: true
-    externalUrl?: true
-  }
-
-  export type NFTMetadataMaxAggregateInputType = {
-    id?: true
-    nftId?: true
-    name?: true
-    description?: true
-    image?: true
-    externalUrl?: true
-  }
-
-  export type NFTMetadataCountAggregateInputType = {
-    id?: true
-    nftId?: true
-    name?: true
-    description?: true
-    image?: true
-    externalUrl?: true
-    attributes?: true
-    raw?: true
-    _all?: true
-  }
-
-  export type NFTMetadataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which NFTMetadata to aggregate.
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of NFTMetadata to fetch.
-     */
-    orderBy?: NFTMetadataOrderByWithRelationInput | NFTMetadataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: NFTMetadataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` NFTMetadata from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` NFTMetadata.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned NFTMetadata
-    **/
-    _count?: true | NFTMetadataCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: NFTMetadataMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: NFTMetadataMaxAggregateInputType
-  }
-
-  export type GetNFTMetadataAggregateType<T extends NFTMetadataAggregateArgs> = {
-        [P in keyof T & keyof AggregateNFTMetadata]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateNFTMetadata[P]>
-      : GetScalarType<T[P], AggregateNFTMetadata[P]>
-  }
-
-
-
-
-  export type NFTMetadataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NFTMetadataWhereInput
-    orderBy?: NFTMetadataOrderByWithAggregationInput | NFTMetadataOrderByWithAggregationInput[]
-    by: NFTMetadataScalarFieldEnum[] | NFTMetadataScalarFieldEnum
-    having?: NFTMetadataScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: NFTMetadataCountAggregateInputType | true
-    _min?: NFTMetadataMinAggregateInputType
-    _max?: NFTMetadataMaxAggregateInputType
-  }
-
-  export type NFTMetadataGroupByOutputType = {
-    id: string
-    nftId: string
-    name: string | null
-    description: string | null
-    image: string | null
-    externalUrl: string | null
-    attributes: JsonValue | null
-    raw: JsonValue | null
-    _count: NFTMetadataCountAggregateOutputType | null
-    _min: NFTMetadataMinAggregateOutputType | null
-    _max: NFTMetadataMaxAggregateOutputType | null
-  }
-
-  type GetNFTMetadataGroupByPayload<T extends NFTMetadataGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<NFTMetadataGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof NFTMetadataGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], NFTMetadataGroupByOutputType[P]>
-            : GetScalarType<T[P], NFTMetadataGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type NFTMetadataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nftId?: boolean
-    name?: boolean
-    description?: boolean
-    image?: boolean
-    externalUrl?: boolean
-    attributes?: boolean
-    raw?: boolean
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nFTMetadata"]>
-
-  export type NFTMetadataSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nftId?: boolean
-    name?: boolean
-    description?: boolean
-    image?: boolean
-    externalUrl?: boolean
-    attributes?: boolean
-    raw?: boolean
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nFTMetadata"]>
-
-  export type NFTMetadataSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nftId?: boolean
-    name?: boolean
-    description?: boolean
-    image?: boolean
-    externalUrl?: boolean
-    attributes?: boolean
-    raw?: boolean
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["nFTMetadata"]>
-
-  export type NFTMetadataSelectScalar = {
-    id?: boolean
-    nftId?: boolean
-    name?: boolean
-    description?: boolean
-    image?: boolean
-    externalUrl?: boolean
-    attributes?: boolean
-    raw?: boolean
-  }
-
-  export type NFTMetadataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nftId" | "name" | "description" | "image" | "externalUrl" | "attributes" | "raw", ExtArgs["result"]["nFTMetadata"]>
-  export type NFTMetadataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }
-  export type NFTMetadataIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }
-  export type NFTMetadataIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nft?: boolean | NFTsDefaultArgs<ExtArgs>
-  }
-
-  export type $NFTMetadataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "NFTMetadata"
-    objects: {
-      nft: Prisma.$NFTsPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      nftId: string
-      name: string | null
-      description: string | null
-      image: string | null
-      externalUrl: string | null
-      attributes: Prisma.JsonValue | null
-      raw: Prisma.JsonValue | null
-    }, ExtArgs["result"]["nFTMetadata"]>
-    composites: {}
-  }
-
-  type NFTMetadataGetPayload<S extends boolean | null | undefined | NFTMetadataDefaultArgs> = $Result.GetResult<Prisma.$NFTMetadataPayload, S>
-
-  type NFTMetadataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<NFTMetadataFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: NFTMetadataCountAggregateInputType | true
-    }
-
-  export interface NFTMetadataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NFTMetadata'], meta: { name: 'NFTMetadata' } }
-    /**
-     * Find zero or one NFTMetadata that matches the filter.
-     * @param {NFTMetadataFindUniqueArgs} args - Arguments to find a NFTMetadata
-     * @example
-     * // Get one NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends NFTMetadataFindUniqueArgs>(args: SelectSubset<T, NFTMetadataFindUniqueArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one NFTMetadata that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {NFTMetadataFindUniqueOrThrowArgs} args - Arguments to find a NFTMetadata
-     * @example
-     * // Get one NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends NFTMetadataFindUniqueOrThrowArgs>(args: SelectSubset<T, NFTMetadataFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first NFTMetadata that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataFindFirstArgs} args - Arguments to find a NFTMetadata
-     * @example
-     * // Get one NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends NFTMetadataFindFirstArgs>(args?: SelectSubset<T, NFTMetadataFindFirstArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first NFTMetadata that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataFindFirstOrThrowArgs} args - Arguments to find a NFTMetadata
-     * @example
-     * // Get one NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends NFTMetadataFindFirstOrThrowArgs>(args?: SelectSubset<T, NFTMetadataFindFirstOrThrowArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more NFTMetadata that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findMany()
-     * 
-     * // Get first 10 NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const nFTMetadataWithIdOnly = await prisma.nFTMetadata.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends NFTMetadataFindManyArgs>(args?: SelectSubset<T, NFTMetadataFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a NFTMetadata.
-     * @param {NFTMetadataCreateArgs} args - Arguments to create a NFTMetadata.
-     * @example
-     * // Create one NFTMetadata
-     * const NFTMetadata = await prisma.nFTMetadata.create({
-     *   data: {
-     *     // ... data to create a NFTMetadata
-     *   }
-     * })
-     * 
-     */
-    create<T extends NFTMetadataCreateArgs>(args: SelectSubset<T, NFTMetadataCreateArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many NFTMetadata.
-     * @param {NFTMetadataCreateManyArgs} args - Arguments to create many NFTMetadata.
-     * @example
-     * // Create many NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends NFTMetadataCreateManyArgs>(args?: SelectSubset<T, NFTMetadataCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many NFTMetadata and returns the data saved in the database.
-     * @param {NFTMetadataCreateManyAndReturnArgs} args - Arguments to create many NFTMetadata.
-     * @example
-     * // Create many NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many NFTMetadata and only return the `id`
-     * const nFTMetadataWithIdOnly = await prisma.nFTMetadata.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends NFTMetadataCreateManyAndReturnArgs>(args?: SelectSubset<T, NFTMetadataCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a NFTMetadata.
-     * @param {NFTMetadataDeleteArgs} args - Arguments to delete one NFTMetadata.
-     * @example
-     * // Delete one NFTMetadata
-     * const NFTMetadata = await prisma.nFTMetadata.delete({
-     *   where: {
-     *     // ... filter to delete one NFTMetadata
-     *   }
-     * })
-     * 
-     */
-    delete<T extends NFTMetadataDeleteArgs>(args: SelectSubset<T, NFTMetadataDeleteArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one NFTMetadata.
-     * @param {NFTMetadataUpdateArgs} args - Arguments to update one NFTMetadata.
-     * @example
-     * // Update one NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends NFTMetadataUpdateArgs>(args: SelectSubset<T, NFTMetadataUpdateArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more NFTMetadata.
-     * @param {NFTMetadataDeleteManyArgs} args - Arguments to filter NFTMetadata to delete.
-     * @example
-     * // Delete a few NFTMetadata
-     * const { count } = await prisma.nFTMetadata.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends NFTMetadataDeleteManyArgs>(args?: SelectSubset<T, NFTMetadataDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more NFTMetadata.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends NFTMetadataUpdateManyArgs>(args: SelectSubset<T, NFTMetadataUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more NFTMetadata and returns the data updated in the database.
-     * @param {NFTMetadataUpdateManyAndReturnArgs} args - Arguments to update many NFTMetadata.
-     * @example
-     * // Update many NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more NFTMetadata and only return the `id`
-     * const nFTMetadataWithIdOnly = await prisma.nFTMetadata.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends NFTMetadataUpdateManyAndReturnArgs>(args: SelectSubset<T, NFTMetadataUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one NFTMetadata.
-     * @param {NFTMetadataUpsertArgs} args - Arguments to update or create a NFTMetadata.
-     * @example
-     * // Update or create a NFTMetadata
-     * const nFTMetadata = await prisma.nFTMetadata.upsert({
-     *   create: {
-     *     // ... data to create a NFTMetadata
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the NFTMetadata we want to update
-     *   }
-     * })
-     */
-    upsert<T extends NFTMetadataUpsertArgs>(args: SelectSubset<T, NFTMetadataUpsertArgs<ExtArgs>>): Prisma__NFTMetadataClient<$Result.GetResult<Prisma.$NFTMetadataPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of NFTMetadata.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataCountArgs} args - Arguments to filter NFTMetadata to count.
-     * @example
-     * // Count the number of NFTMetadata
-     * const count = await prisma.nFTMetadata.count({
-     *   where: {
-     *     // ... the filter for the NFTMetadata we want to count
-     *   }
-     * })
-    **/
-    count<T extends NFTMetadataCountArgs>(
-      args?: Subset<T, NFTMetadataCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], NFTMetadataCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a NFTMetadata.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends NFTMetadataAggregateArgs>(args: Subset<T, NFTMetadataAggregateArgs>): Prisma.PrismaPromise<GetNFTMetadataAggregateType<T>>
-
-    /**
-     * Group by NFTMetadata.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NFTMetadataGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends NFTMetadataGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: NFTMetadataGroupByArgs['orderBy'] }
-        : { orderBy?: NFTMetadataGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, NFTMetadataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNFTMetadataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the NFTMetadata model
-   */
-  readonly fields: NFTMetadataFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for NFTMetadata.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__NFTMetadataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    nft<T extends NFTsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NFTsDefaultArgs<ExtArgs>>): Prisma__NFTsClient<$Result.GetResult<Prisma.$NFTsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the NFTMetadata model
-   */
-  interface NFTMetadataFieldRefs {
-    readonly id: FieldRef<"NFTMetadata", 'String'>
-    readonly nftId: FieldRef<"NFTMetadata", 'String'>
-    readonly name: FieldRef<"NFTMetadata", 'String'>
-    readonly description: FieldRef<"NFTMetadata", 'String'>
-    readonly image: FieldRef<"NFTMetadata", 'String'>
-    readonly externalUrl: FieldRef<"NFTMetadata", 'String'>
-    readonly attributes: FieldRef<"NFTMetadata", 'Json'>
-    readonly raw: FieldRef<"NFTMetadata", 'Json'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * NFTMetadata findUnique
-   */
-  export type NFTMetadataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter, which NFTMetadata to fetch.
-     */
-    where: NFTMetadataWhereUniqueInput
-  }
-
-  /**
-   * NFTMetadata findUniqueOrThrow
-   */
-  export type NFTMetadataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter, which NFTMetadata to fetch.
-     */
-    where: NFTMetadataWhereUniqueInput
-  }
-
-  /**
-   * NFTMetadata findFirst
-   */
-  export type NFTMetadataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter, which NFTMetadata to fetch.
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of NFTMetadata to fetch.
-     */
-    orderBy?: NFTMetadataOrderByWithRelationInput | NFTMetadataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for NFTMetadata.
-     */
-    cursor?: NFTMetadataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` NFTMetadata from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` NFTMetadata.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of NFTMetadata.
-     */
-    distinct?: NFTMetadataScalarFieldEnum | NFTMetadataScalarFieldEnum[]
-  }
-
-  /**
-   * NFTMetadata findFirstOrThrow
-   */
-  export type NFTMetadataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter, which NFTMetadata to fetch.
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of NFTMetadata to fetch.
-     */
-    orderBy?: NFTMetadataOrderByWithRelationInput | NFTMetadataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for NFTMetadata.
-     */
-    cursor?: NFTMetadataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` NFTMetadata from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` NFTMetadata.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of NFTMetadata.
-     */
-    distinct?: NFTMetadataScalarFieldEnum | NFTMetadataScalarFieldEnum[]
-  }
-
-  /**
-   * NFTMetadata findMany
-   */
-  export type NFTMetadataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter, which NFTMetadata to fetch.
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of NFTMetadata to fetch.
-     */
-    orderBy?: NFTMetadataOrderByWithRelationInput | NFTMetadataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing NFTMetadata.
-     */
-    cursor?: NFTMetadataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` NFTMetadata from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` NFTMetadata.
-     */
-    skip?: number
-    distinct?: NFTMetadataScalarFieldEnum | NFTMetadataScalarFieldEnum[]
-  }
-
-  /**
-   * NFTMetadata create
-   */
-  export type NFTMetadataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * The data needed to create a NFTMetadata.
-     */
-    data: XOR<NFTMetadataCreateInput, NFTMetadataUncheckedCreateInput>
-  }
-
-  /**
-   * NFTMetadata createMany
-   */
-  export type NFTMetadataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many NFTMetadata.
-     */
-    data: NFTMetadataCreateManyInput | NFTMetadataCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * NFTMetadata createManyAndReturn
-   */
-  export type NFTMetadataCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * The data used to create many NFTMetadata.
-     */
-    data: NFTMetadataCreateManyInput | NFTMetadataCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * NFTMetadata update
-   */
-  export type NFTMetadataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * The data needed to update a NFTMetadata.
-     */
-    data: XOR<NFTMetadataUpdateInput, NFTMetadataUncheckedUpdateInput>
-    /**
-     * Choose, which NFTMetadata to update.
-     */
-    where: NFTMetadataWhereUniqueInput
-  }
-
-  /**
-   * NFTMetadata updateMany
-   */
-  export type NFTMetadataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update NFTMetadata.
-     */
-    data: XOR<NFTMetadataUpdateManyMutationInput, NFTMetadataUncheckedUpdateManyInput>
-    /**
-     * Filter which NFTMetadata to update
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * Limit how many NFTMetadata to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * NFTMetadata updateManyAndReturn
-   */
-  export type NFTMetadataUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * The data used to update NFTMetadata.
-     */
-    data: XOR<NFTMetadataUpdateManyMutationInput, NFTMetadataUncheckedUpdateManyInput>
-    /**
-     * Filter which NFTMetadata to update
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * Limit how many NFTMetadata to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * NFTMetadata upsert
-   */
-  export type NFTMetadataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * The filter to search for the NFTMetadata to update in case it exists.
-     */
-    where: NFTMetadataWhereUniqueInput
-    /**
-     * In case the NFTMetadata found by the `where` argument doesn't exist, create a new NFTMetadata with this data.
-     */
-    create: XOR<NFTMetadataCreateInput, NFTMetadataUncheckedCreateInput>
-    /**
-     * In case the NFTMetadata was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<NFTMetadataUpdateInput, NFTMetadataUncheckedUpdateInput>
-  }
-
-  /**
-   * NFTMetadata delete
-   */
-  export type NFTMetadataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
-    /**
-     * Filter which NFTMetadata to delete.
-     */
-    where: NFTMetadataWhereUniqueInput
-  }
-
-  /**
-   * NFTMetadata deleteMany
-   */
-  export type NFTMetadataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which NFTMetadata to delete
-     */
-    where?: NFTMetadataWhereInput
-    /**
-     * Limit how many NFTMetadata to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * NFTMetadata without action
-   */
-  export type NFTMetadataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NFTMetadata
-     */
-    select?: NFTMetadataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the NFTMetadata
-     */
-    omit?: NFTMetadataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NFTMetadataInclude<ExtArgs> | null
   }
 
 
@@ -7810,8 +6819,8 @@ export namespace Prisma {
     id: 'id',
     contractId: 'contractId',
     ownerAddress: 'ownerAddress',
-    nftContractAddress: 'nftContractAddress',
-    nftItemId: 'nftItemId',
+    contractAddress: 'contractAddress',
+    tokenId: 'tokenId',
     count: 'count',
     lastTransactionHash: 'lastTransactionHash',
     lastSyncTime: 'lastSyncTime'
@@ -7824,7 +6833,7 @@ export namespace Prisma {
     id: 'id',
     contractId: 'contractId',
     chainId: 'chainId',
-    nftContractAddress: 'nftContractAddress',
+    contractAddress: 'contractAddress',
     blockNumber: 'blockNumber',
     transactionHash: 'transactionHash',
     logIndex: 'logIndex',
@@ -7843,19 +6852,11 @@ export namespace Prisma {
   export const NFTsScalarFieldEnum: {
     id: 'id',
     contractId: 'contractId',
-    nftContractAddress: 'nftContractAddress',
+    contractAddress: 'contractAddress',
     tokenId: 'tokenId',
     tokenUri: 'tokenUri',
     metadataUpdated: 'metadataUpdated',
-    lastMetadataSyncTime: 'lastMetadataSyncTime'
-  };
-
-  export type NFTsScalarFieldEnum = (typeof NFTsScalarFieldEnum)[keyof typeof NFTsScalarFieldEnum]
-
-
-  export const NFTMetadataScalarFieldEnum: {
-    id: 'id',
-    nftId: 'nftId',
+    lastMetadataSyncTime: 'lastMetadataSyncTime',
     name: 'name',
     description: 'description',
     image: 'image',
@@ -7864,7 +6865,7 @@ export namespace Prisma {
     raw: 'raw'
   };
 
-  export type NFTMetadataScalarFieldEnum = (typeof NFTMetadataScalarFieldEnum)[keyof typeof NFTMetadataScalarFieldEnum]
+  export type NFTsScalarFieldEnum = (typeof NFTsScalarFieldEnum)[keyof typeof NFTsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8108,22 +7109,24 @@ export namespace Prisma {
     id?: UuidFilter<"NFTOwners"> | string
     contractId?: UuidFilter<"NFTOwners"> | string
     ownerAddress?: StringFilter<"NFTOwners"> | string
-    nftContractAddress?: StringFilter<"NFTOwners"> | string
-    nftItemId?: StringFilter<"NFTOwners"> | string
+    contractAddress?: StringFilter<"NFTOwners"> | string
+    tokenId?: StringFilter<"NFTOwners"> | string
     count?: IntFilter<"NFTOwners"> | number
     lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+    nft?: XOR<NFTsNullableScalarRelationFilter, NFTsWhereInput> | null
   }
 
   export type NFTOwnersOrderByWithRelationInput = {
     id?: SortOrder
     contractId?: SortOrder
     ownerAddress?: SortOrder
-    nftContractAddress?: SortOrder
-    nftItemId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
     count?: SortOrder
     lastTransactionHash?: SortOrderInput | SortOrder
     lastSyncTime?: SortOrderInput | SortOrder
+    nft?: NFTsOrderByWithRelationInput
   }
 
   export type NFTOwnersWhereUniqueInput = Prisma.AtLeast<{
@@ -8133,19 +7136,20 @@ export namespace Prisma {
     NOT?: NFTOwnersWhereInput | NFTOwnersWhereInput[]
     contractId?: UuidFilter<"NFTOwners"> | string
     ownerAddress?: StringFilter<"NFTOwners"> | string
-    nftContractAddress?: StringFilter<"NFTOwners"> | string
-    nftItemId?: StringFilter<"NFTOwners"> | string
+    contractAddress?: StringFilter<"NFTOwners"> | string
+    tokenId?: StringFilter<"NFTOwners"> | string
     count?: IntFilter<"NFTOwners"> | number
     lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+    nft?: XOR<NFTsNullableScalarRelationFilter, NFTsWhereInput> | null
   }, "id">
 
   export type NFTOwnersOrderByWithAggregationInput = {
     id?: SortOrder
     contractId?: SortOrder
     ownerAddress?: SortOrder
-    nftContractAddress?: SortOrder
-    nftItemId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
     count?: SortOrder
     lastTransactionHash?: SortOrderInput | SortOrder
     lastSyncTime?: SortOrderInput | SortOrder
@@ -8163,8 +7167,8 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"NFTOwners"> | string
     contractId?: UuidWithAggregatesFilter<"NFTOwners"> | string
     ownerAddress?: StringWithAggregatesFilter<"NFTOwners"> | string
-    nftContractAddress?: StringWithAggregatesFilter<"NFTOwners"> | string
-    nftItemId?: StringWithAggregatesFilter<"NFTOwners"> | string
+    contractAddress?: StringWithAggregatesFilter<"NFTOwners"> | string
+    tokenId?: StringWithAggregatesFilter<"NFTOwners"> | string
     count?: IntWithAggregatesFilter<"NFTOwners"> | number
     lastTransactionHash?: StringNullableWithAggregatesFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableWithAggregatesFilter<"NFTOwners"> | Date | string | null
@@ -8177,7 +7181,7 @@ export namespace Prisma {
     id?: UuidFilter<"ContractLogs"> | string
     contractId?: UuidFilter<"ContractLogs"> | string
     chainId?: IntFilter<"ContractLogs"> | number
-    nftContractAddress?: StringFilter<"ContractLogs"> | string
+    contractAddress?: StringFilter<"ContractLogs"> | string
     blockNumber?: StringFilter<"ContractLogs"> | string
     transactionHash?: StringFilter<"ContractLogs"> | string
     logIndex?: IntFilter<"ContractLogs"> | number
@@ -8194,7 +7198,7 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     chainId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     blockNumber?: SortOrder
     transactionHash?: SortOrder
     logIndex?: SortOrder
@@ -8215,7 +7219,7 @@ export namespace Prisma {
     NOT?: ContractLogsWhereInput | ContractLogsWhereInput[]
     contractId?: UuidFilter<"ContractLogs"> | string
     chainId?: IntFilter<"ContractLogs"> | number
-    nftContractAddress?: StringFilter<"ContractLogs"> | string
+    contractAddress?: StringFilter<"ContractLogs"> | string
     blockNumber?: StringFilter<"ContractLogs"> | string
     transactionHash?: StringFilter<"ContractLogs"> | string
     logIndex?: IntFilter<"ContractLogs"> | number
@@ -8232,7 +7236,7 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     chainId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     blockNumber?: SortOrder
     transactionHash?: SortOrder
     logIndex?: SortOrder
@@ -8257,7 +7261,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"ContractLogs"> | string
     contractId?: UuidWithAggregatesFilter<"ContractLogs"> | string
     chainId?: IntWithAggregatesFilter<"ContractLogs"> | number
-    nftContractAddress?: StringWithAggregatesFilter<"ContractLogs"> | string
+    contractAddress?: StringWithAggregatesFilter<"ContractLogs"> | string
     blockNumber?: StringWithAggregatesFilter<"ContractLogs"> | string
     transactionHash?: StringWithAggregatesFilter<"ContractLogs"> | string
     logIndex?: IntWithAggregatesFilter<"ContractLogs"> | number
@@ -8276,48 +7280,72 @@ export namespace Prisma {
     NOT?: NFTsWhereInput | NFTsWhereInput[]
     id?: UuidFilter<"NFTs"> | string
     contractId?: UuidFilter<"NFTs"> | string
-    nftContractAddress?: StringFilter<"NFTs"> | string
+    contractAddress?: StringFilter<"NFTs"> | string
     tokenId?: StringFilter<"NFTs"> | string
     tokenUri?: StringNullableFilter<"NFTs"> | string | null
     metadataUpdated?: BoolFilter<"NFTs"> | boolean
     lastMetadataSyncTime?: DateTimeNullableFilter<"NFTs"> | Date | string | null
-    metadata?: XOR<NFTMetadataNullableScalarRelationFilter, NFTMetadataWhereInput> | null
+    name?: StringNullableFilter<"NFTs"> | string | null
+    description?: StringNullableFilter<"NFTs"> | string | null
+    image?: StringNullableFilter<"NFTs"> | string | null
+    externalUrl?: StringNullableFilter<"NFTs"> | string | null
+    attributes?: JsonNullableFilter<"NFTs">
+    raw?: JsonNullableFilter<"NFTs">
+    NFTOwners?: NFTOwnersListRelationFilter
   }
 
   export type NFTsOrderByWithRelationInput = {
     id?: SortOrder
     contractId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     tokenId?: SortOrder
     tokenUri?: SortOrderInput | SortOrder
     metadataUpdated?: SortOrder
     lastMetadataSyncTime?: SortOrderInput | SortOrder
-    metadata?: NFTMetadataOrderByWithRelationInput
+    name?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    externalUrl?: SortOrderInput | SortOrder
+    attributes?: SortOrderInput | SortOrder
+    raw?: SortOrderInput | SortOrder
+    NFTOwners?: NFTOwnersOrderByRelationAggregateInput
   }
 
   export type NFTsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    nftContractAddress_tokenId?: NFTsNftContractAddressTokenIdCompoundUniqueInput
+    contractAddress_tokenId?: NFTsContractAddressTokenIdCompoundUniqueInput
     AND?: NFTsWhereInput | NFTsWhereInput[]
     OR?: NFTsWhereInput[]
     NOT?: NFTsWhereInput | NFTsWhereInput[]
     contractId?: UuidFilter<"NFTs"> | string
-    nftContractAddress?: StringFilter<"NFTs"> | string
+    contractAddress?: StringFilter<"NFTs"> | string
     tokenId?: StringFilter<"NFTs"> | string
     tokenUri?: StringNullableFilter<"NFTs"> | string | null
     metadataUpdated?: BoolFilter<"NFTs"> | boolean
     lastMetadataSyncTime?: DateTimeNullableFilter<"NFTs"> | Date | string | null
-    metadata?: XOR<NFTMetadataNullableScalarRelationFilter, NFTMetadataWhereInput> | null
-  }, "id" | "nftContractAddress_tokenId">
+    name?: StringNullableFilter<"NFTs"> | string | null
+    description?: StringNullableFilter<"NFTs"> | string | null
+    image?: StringNullableFilter<"NFTs"> | string | null
+    externalUrl?: StringNullableFilter<"NFTs"> | string | null
+    attributes?: JsonNullableFilter<"NFTs">
+    raw?: JsonNullableFilter<"NFTs">
+    NFTOwners?: NFTOwnersListRelationFilter
+  }, "id" | "contractAddress_tokenId">
 
   export type NFTsOrderByWithAggregationInput = {
     id?: SortOrder
     contractId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     tokenId?: SortOrder
     tokenUri?: SortOrderInput | SortOrder
     metadataUpdated?: SortOrder
     lastMetadataSyncTime?: SortOrderInput | SortOrder
+    name?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    externalUrl?: SortOrderInput | SortOrder
+    attributes?: SortOrderInput | SortOrder
+    raw?: SortOrderInput | SortOrder
     _count?: NFTsCountOrderByAggregateInput
     _max?: NFTsMaxOrderByAggregateInput
     _min?: NFTsMinOrderByAggregateInput
@@ -8329,81 +7357,17 @@ export namespace Prisma {
     NOT?: NFTsScalarWhereWithAggregatesInput | NFTsScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"NFTs"> | string
     contractId?: UuidWithAggregatesFilter<"NFTs"> | string
-    nftContractAddress?: StringWithAggregatesFilter<"NFTs"> | string
+    contractAddress?: StringWithAggregatesFilter<"NFTs"> | string
     tokenId?: StringWithAggregatesFilter<"NFTs"> | string
     tokenUri?: StringNullableWithAggregatesFilter<"NFTs"> | string | null
     metadataUpdated?: BoolWithAggregatesFilter<"NFTs"> | boolean
     lastMetadataSyncTime?: DateTimeNullableWithAggregatesFilter<"NFTs"> | Date | string | null
-  }
-
-  export type NFTMetadataWhereInput = {
-    AND?: NFTMetadataWhereInput | NFTMetadataWhereInput[]
-    OR?: NFTMetadataWhereInput[]
-    NOT?: NFTMetadataWhereInput | NFTMetadataWhereInput[]
-    id?: UuidFilter<"NFTMetadata"> | string
-    nftId?: UuidFilter<"NFTMetadata"> | string
-    name?: StringNullableFilter<"NFTMetadata"> | string | null
-    description?: StringNullableFilter<"NFTMetadata"> | string | null
-    image?: StringNullableFilter<"NFTMetadata"> | string | null
-    externalUrl?: StringNullableFilter<"NFTMetadata"> | string | null
-    attributes?: JsonNullableFilter<"NFTMetadata">
-    raw?: JsonNullableFilter<"NFTMetadata">
-    nft?: XOR<NFTsScalarRelationFilter, NFTsWhereInput>
-  }
-
-  export type NFTMetadataOrderByWithRelationInput = {
-    id?: SortOrder
-    nftId?: SortOrder
-    name?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
-    externalUrl?: SortOrderInput | SortOrder
-    attributes?: SortOrderInput | SortOrder
-    raw?: SortOrderInput | SortOrder
-    nft?: NFTsOrderByWithRelationInput
-  }
-
-  export type NFTMetadataWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    nftId?: string
-    AND?: NFTMetadataWhereInput | NFTMetadataWhereInput[]
-    OR?: NFTMetadataWhereInput[]
-    NOT?: NFTMetadataWhereInput | NFTMetadataWhereInput[]
-    name?: StringNullableFilter<"NFTMetadata"> | string | null
-    description?: StringNullableFilter<"NFTMetadata"> | string | null
-    image?: StringNullableFilter<"NFTMetadata"> | string | null
-    externalUrl?: StringNullableFilter<"NFTMetadata"> | string | null
-    attributes?: JsonNullableFilter<"NFTMetadata">
-    raw?: JsonNullableFilter<"NFTMetadata">
-    nft?: XOR<NFTsScalarRelationFilter, NFTsWhereInput>
-  }, "id" | "nftId">
-
-  export type NFTMetadataOrderByWithAggregationInput = {
-    id?: SortOrder
-    nftId?: SortOrder
-    name?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
-    externalUrl?: SortOrderInput | SortOrder
-    attributes?: SortOrderInput | SortOrder
-    raw?: SortOrderInput | SortOrder
-    _count?: NFTMetadataCountOrderByAggregateInput
-    _max?: NFTMetadataMaxOrderByAggregateInput
-    _min?: NFTMetadataMinOrderByAggregateInput
-  }
-
-  export type NFTMetadataScalarWhereWithAggregatesInput = {
-    AND?: NFTMetadataScalarWhereWithAggregatesInput | NFTMetadataScalarWhereWithAggregatesInput[]
-    OR?: NFTMetadataScalarWhereWithAggregatesInput[]
-    NOT?: NFTMetadataScalarWhereWithAggregatesInput | NFTMetadataScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"NFTMetadata"> | string
-    nftId?: UuidWithAggregatesFilter<"NFTMetadata"> | string
-    name?: StringNullableWithAggregatesFilter<"NFTMetadata"> | string | null
-    description?: StringNullableWithAggregatesFilter<"NFTMetadata"> | string | null
-    image?: StringNullableWithAggregatesFilter<"NFTMetadata"> | string | null
-    externalUrl?: StringNullableWithAggregatesFilter<"NFTMetadata"> | string | null
-    attributes?: JsonNullableWithAggregatesFilter<"NFTMetadata">
-    raw?: JsonNullableWithAggregatesFilter<"NFTMetadata">
+    name?: StringNullableWithAggregatesFilter<"NFTs"> | string | null
+    description?: StringNullableWithAggregatesFilter<"NFTs"> | string | null
+    image?: StringNullableWithAggregatesFilter<"NFTs"> | string | null
+    externalUrl?: StringNullableWithAggregatesFilter<"NFTs"> | string | null
+    attributes?: JsonNullableWithAggregatesFilter<"NFTs">
+    raw?: JsonNullableWithAggregatesFilter<"NFTs">
   }
 
   export type BlockchainConfigsCreateInput = {
@@ -8522,19 +7486,18 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    nftContractAddress: string
-    nftItemId: string
     count: number
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
+    nft?: NFTsCreateNestedOneWithoutNFTOwnersInput
   }
 
   export type NFTOwnersUncheckedCreateInput = {
     id?: string
     contractId: string
     ownerAddress: string
-    nftContractAddress: string
-    nftItemId: string
+    contractAddress: string
+    tokenId: string
     count: number
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
@@ -8544,19 +7507,18 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
-    nftItemId?: StringFieldUpdateOperationsInput | string
     count?: IntFieldUpdateOperationsInput | number
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nft?: NFTsUpdateOneWithoutNFTOwnersNestedInput
   }
 
   export type NFTOwnersUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
-    nftItemId?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
+    tokenId?: StringFieldUpdateOperationsInput | string
     count?: IntFieldUpdateOperationsInput | number
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8566,8 +7528,8 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    nftContractAddress: string
-    nftItemId: string
+    contractAddress: string
+    tokenId: string
     count: number
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
@@ -8577,8 +7539,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
-    nftItemId?: StringFieldUpdateOperationsInput | string
     count?: IntFieldUpdateOperationsInput | number
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8588,8 +7548,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
-    nftItemId?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
+    tokenId?: StringFieldUpdateOperationsInput | string
     count?: IntFieldUpdateOperationsInput | number
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8599,7 +7559,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     chainId: number
-    nftContractAddress: string
+    contractAddress: string
     blockNumber: string
     transactionHash: string
     logIndex: number
@@ -8616,7 +7576,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     chainId: number
-    nftContractAddress: string
+    contractAddress: string
     blockNumber: string
     transactionHash: string
     logIndex: number
@@ -8633,7 +7593,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     chainId?: IntFieldUpdateOperationsInput | number
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     blockNumber?: StringFieldUpdateOperationsInput | string
     transactionHash?: StringFieldUpdateOperationsInput | string
     logIndex?: IntFieldUpdateOperationsInput | number
@@ -8650,7 +7610,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     chainId?: IntFieldUpdateOperationsInput | number
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     blockNumber?: StringFieldUpdateOperationsInput | string
     transactionHash?: StringFieldUpdateOperationsInput | string
     logIndex?: IntFieldUpdateOperationsInput | number
@@ -8667,7 +7627,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     chainId: number
-    nftContractAddress: string
+    contractAddress: string
     blockNumber: string
     transactionHash: string
     logIndex: number
@@ -8684,7 +7644,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     chainId?: IntFieldUpdateOperationsInput | number
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     blockNumber?: StringFieldUpdateOperationsInput | string
     transactionHash?: StringFieldUpdateOperationsInput | string
     logIndex?: IntFieldUpdateOperationsInput | number
@@ -8701,7 +7661,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     chainId?: IntFieldUpdateOperationsInput | number
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     blockNumber?: StringFieldUpdateOperationsInput | string
     transactionHash?: StringFieldUpdateOperationsInput | string
     logIndex?: IntFieldUpdateOperationsInput | number
@@ -8717,145 +7677,111 @@ export namespace Prisma {
   export type NFTsCreateInput = {
     id?: string
     contractId: string
-    nftContractAddress: string
+    contractAddress: string
     tokenId: string
     tokenUri?: string | null
     metadataUpdated?: boolean
     lastMetadataSyncTime?: Date | string | null
-    metadata?: NFTMetadataCreateNestedOneWithoutNftInput
+    name?: string | null
+    description?: string | null
+    image?: string | null
+    externalUrl?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    NFTOwners?: NFTOwnersCreateNestedManyWithoutNftInput
   }
 
   export type NFTsUncheckedCreateInput = {
     id?: string
     contractId: string
-    nftContractAddress: string
+    contractAddress: string
     tokenId: string
     tokenUri?: string | null
     metadataUpdated?: boolean
     lastMetadataSyncTime?: Date | string | null
-    metadata?: NFTMetadataUncheckedCreateNestedOneWithoutNftInput
+    name?: string | null
+    description?: string | null
+    image?: string | null
+    externalUrl?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    NFTOwners?: NFTOwnersUncheckedCreateNestedManyWithoutNftInput
   }
 
   export type NFTsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    metadata?: NFTMetadataUpdateOneWithoutNftNestedInput
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    NFTOwners?: NFTOwnersUpdateManyWithoutNftNestedInput
   }
 
   export type NFTsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    metadata?: NFTMetadataUncheckedUpdateOneWithoutNftNestedInput
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
+    NFTOwners?: NFTOwnersUncheckedUpdateManyWithoutNftNestedInput
   }
 
   export type NFTsCreateManyInput = {
     id?: string
     contractId: string
-    nftContractAddress: string
+    contractAddress: string
     tokenId: string
     tokenUri?: string | null
     metadataUpdated?: boolean
     lastMetadataSyncTime?: Date | string | null
+    name?: string | null
+    description?: string | null
+    image?: string | null
+    externalUrl?: string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type NFTsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type NFTsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type NFTMetadataCreateInput = {
-    id?: string
-    name?: string | null
-    description?: string | null
-    image?: string | null
-    externalUrl?: string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-    nft: NFTsCreateNestedOneWithoutMetadataInput
-  }
-
-  export type NFTMetadataUncheckedCreateInput = {
-    id?: string
-    nftId: string
-    name?: string | null
-    description?: string | null
-    image?: string | null
-    externalUrl?: string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTMetadataUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-    nft?: NFTsUpdateOneRequiredWithoutMetadataNestedInput
-  }
-
-  export type NFTMetadataUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nftId?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTMetadataCreateManyInput = {
-    id?: string
-    nftId: string
-    name?: string | null
-    description?: string | null
-    image?: string | null
-    externalUrl?: string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTMetadataUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTMetadataUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nftId?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9078,12 +8004,17 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NFTsNullableScalarRelationFilter = {
+    is?: NFTsWhereInput | null
+    isNot?: NFTsWhereInput | null
+  }
+
   export type NFTOwnersCountOrderByAggregateInput = {
     id?: SortOrder
     contractId?: SortOrder
     ownerAddress?: SortOrder
-    nftContractAddress?: SortOrder
-    nftItemId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
     count?: SortOrder
     lastTransactionHash?: SortOrder
     lastSyncTime?: SortOrder
@@ -9097,8 +8028,8 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     ownerAddress?: SortOrder
-    nftContractAddress?: SortOrder
-    nftItemId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
     count?: SortOrder
     lastTransactionHash?: SortOrder
     lastSyncTime?: SortOrder
@@ -9108,8 +8039,8 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     ownerAddress?: SortOrder
-    nftContractAddress?: SortOrder
-    nftItemId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
     count?: SortOrder
     lastTransactionHash?: SortOrder
     lastSyncTime?: SortOrder
@@ -9139,7 +8070,7 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     chainId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     blockNumber?: SortOrder
     transactionHash?: SortOrder
     logIndex?: SortOrder
@@ -9161,7 +8092,7 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     chainId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     blockNumber?: SortOrder
     transactionHash?: SortOrder
     logIndex?: SortOrder
@@ -9178,7 +8109,7 @@ export namespace Prisma {
     id?: SortOrder
     contractId?: SortOrder
     chainId?: SortOrder
-    nftContractAddress?: SortOrder
+    contractAddress?: SortOrder
     blockNumber?: SortOrder
     transactionHash?: SortOrder
     logIndex?: SortOrder
@@ -9214,54 +8145,6 @@ export namespace Prisma {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
-
-  export type NFTMetadataNullableScalarRelationFilter = {
-    is?: NFTMetadataWhereInput | null
-    isNot?: NFTMetadataWhereInput | null
-  }
-
-  export type NFTsNftContractAddressTokenIdCompoundUniqueInput = {
-    nftContractAddress: string
-    tokenId: string
-  }
-
-  export type NFTsCountOrderByAggregateInput = {
-    id?: SortOrder
-    contractId?: SortOrder
-    nftContractAddress?: SortOrder
-    tokenId?: SortOrder
-    tokenUri?: SortOrder
-    metadataUpdated?: SortOrder
-    lastMetadataSyncTime?: SortOrder
-  }
-
-  export type NFTsMaxOrderByAggregateInput = {
-    id?: SortOrder
-    contractId?: SortOrder
-    nftContractAddress?: SortOrder
-    tokenId?: SortOrder
-    tokenUri?: SortOrder
-    metadataUpdated?: SortOrder
-    lastMetadataSyncTime?: SortOrder
-  }
-
-  export type NFTsMinOrderByAggregateInput = {
-    id?: SortOrder
-    contractId?: SortOrder
-    nftContractAddress?: SortOrder
-    tokenId?: SortOrder
-    tokenUri?: SortOrder
-    metadataUpdated?: SortOrder
-    lastMetadataSyncTime?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -9286,14 +8169,29 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NFTsScalarRelationFilter = {
-    is?: NFTsWhereInput
-    isNot?: NFTsWhereInput
+  export type NFTOwnersListRelationFilter = {
+    every?: NFTOwnersWhereInput
+    some?: NFTOwnersWhereInput
+    none?: NFTOwnersWhereInput
   }
 
-  export type NFTMetadataCountOrderByAggregateInput = {
+  export type NFTOwnersOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NFTsContractAddressTokenIdCompoundUniqueInput = {
+    contractAddress: string
+    tokenId: string
+  }
+
+  export type NFTsCountOrderByAggregateInput = {
     id?: SortOrder
-    nftId?: SortOrder
+    contractId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
+    tokenUri?: SortOrder
+    metadataUpdated?: SortOrder
+    lastMetadataSyncTime?: SortOrder
     name?: SortOrder
     description?: SortOrder
     image?: SortOrder
@@ -9302,22 +8200,40 @@ export namespace Prisma {
     raw?: SortOrder
   }
 
-  export type NFTMetadataMaxOrderByAggregateInput = {
+  export type NFTsMaxOrderByAggregateInput = {
     id?: SortOrder
-    nftId?: SortOrder
+    contractId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
+    tokenUri?: SortOrder
+    metadataUpdated?: SortOrder
+    lastMetadataSyncTime?: SortOrder
     name?: SortOrder
     description?: SortOrder
     image?: SortOrder
     externalUrl?: SortOrder
   }
 
-  export type NFTMetadataMinOrderByAggregateInput = {
+  export type NFTsMinOrderByAggregateInput = {
     id?: SortOrder
-    nftId?: SortOrder
+    contractId?: SortOrder
+    contractAddress?: SortOrder
+    tokenId?: SortOrder
+    tokenUri?: SortOrder
+    metadataUpdated?: SortOrder
+    lastMetadataSyncTime?: SortOrder
     name?: SortOrder
     description?: SortOrder
     image?: SortOrder
     externalUrl?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -9366,58 +8282,70 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type NFTsCreateNestedOneWithoutNFTOwnersInput = {
+    create?: XOR<NFTsCreateWithoutNFTOwnersInput, NFTsUncheckedCreateWithoutNFTOwnersInput>
+    connectOrCreate?: NFTsCreateOrConnectWithoutNFTOwnersInput
+    connect?: NFTsWhereUniqueInput
+  }
+
+  export type NFTsUpdateOneWithoutNFTOwnersNestedInput = {
+    create?: XOR<NFTsCreateWithoutNFTOwnersInput, NFTsUncheckedCreateWithoutNFTOwnersInput>
+    connectOrCreate?: NFTsCreateOrConnectWithoutNFTOwnersInput
+    upsert?: NFTsUpsertWithoutNFTOwnersInput
+    disconnect?: NFTsWhereInput | boolean
+    delete?: NFTsWhereInput | boolean
+    connect?: NFTsWhereUniqueInput
+    update?: XOR<XOR<NFTsUpdateToOneWithWhereWithoutNFTOwnersInput, NFTsUpdateWithoutNFTOwnersInput>, NFTsUncheckedUpdateWithoutNFTOwnersInput>
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
 
-  export type NFTMetadataCreateNestedOneWithoutNftInput = {
-    create?: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-    connectOrCreate?: NFTMetadataCreateOrConnectWithoutNftInput
-    connect?: NFTMetadataWhereUniqueInput
+  export type NFTOwnersCreateNestedManyWithoutNftInput = {
+    create?: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput> | NFTOwnersCreateWithoutNftInput[] | NFTOwnersUncheckedCreateWithoutNftInput[]
+    connectOrCreate?: NFTOwnersCreateOrConnectWithoutNftInput | NFTOwnersCreateOrConnectWithoutNftInput[]
+    createMany?: NFTOwnersCreateManyNftInputEnvelope
+    connect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
   }
 
-  export type NFTMetadataUncheckedCreateNestedOneWithoutNftInput = {
-    create?: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-    connectOrCreate?: NFTMetadataCreateOrConnectWithoutNftInput
-    connect?: NFTMetadataWhereUniqueInput
+  export type NFTOwnersUncheckedCreateNestedManyWithoutNftInput = {
+    create?: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput> | NFTOwnersCreateWithoutNftInput[] | NFTOwnersUncheckedCreateWithoutNftInput[]
+    connectOrCreate?: NFTOwnersCreateOrConnectWithoutNftInput | NFTOwnersCreateOrConnectWithoutNftInput[]
+    createMany?: NFTOwnersCreateManyNftInputEnvelope
+    connect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
 
-  export type NFTMetadataUpdateOneWithoutNftNestedInput = {
-    create?: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-    connectOrCreate?: NFTMetadataCreateOrConnectWithoutNftInput
-    upsert?: NFTMetadataUpsertWithoutNftInput
-    disconnect?: NFTMetadataWhereInput | boolean
-    delete?: NFTMetadataWhereInput | boolean
-    connect?: NFTMetadataWhereUniqueInput
-    update?: XOR<XOR<NFTMetadataUpdateToOneWithWhereWithoutNftInput, NFTMetadataUpdateWithoutNftInput>, NFTMetadataUncheckedUpdateWithoutNftInput>
+  export type NFTOwnersUpdateManyWithoutNftNestedInput = {
+    create?: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput> | NFTOwnersCreateWithoutNftInput[] | NFTOwnersUncheckedCreateWithoutNftInput[]
+    connectOrCreate?: NFTOwnersCreateOrConnectWithoutNftInput | NFTOwnersCreateOrConnectWithoutNftInput[]
+    upsert?: NFTOwnersUpsertWithWhereUniqueWithoutNftInput | NFTOwnersUpsertWithWhereUniqueWithoutNftInput[]
+    createMany?: NFTOwnersCreateManyNftInputEnvelope
+    set?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    disconnect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    delete?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    connect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    update?: NFTOwnersUpdateWithWhereUniqueWithoutNftInput | NFTOwnersUpdateWithWhereUniqueWithoutNftInput[]
+    updateMany?: NFTOwnersUpdateManyWithWhereWithoutNftInput | NFTOwnersUpdateManyWithWhereWithoutNftInput[]
+    deleteMany?: NFTOwnersScalarWhereInput | NFTOwnersScalarWhereInput[]
   }
 
-  export type NFTMetadataUncheckedUpdateOneWithoutNftNestedInput = {
-    create?: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-    connectOrCreate?: NFTMetadataCreateOrConnectWithoutNftInput
-    upsert?: NFTMetadataUpsertWithoutNftInput
-    disconnect?: NFTMetadataWhereInput | boolean
-    delete?: NFTMetadataWhereInput | boolean
-    connect?: NFTMetadataWhereUniqueInput
-    update?: XOR<XOR<NFTMetadataUpdateToOneWithWhereWithoutNftInput, NFTMetadataUpdateWithoutNftInput>, NFTMetadataUncheckedUpdateWithoutNftInput>
-  }
-
-  export type NFTsCreateNestedOneWithoutMetadataInput = {
-    create?: XOR<NFTsCreateWithoutMetadataInput, NFTsUncheckedCreateWithoutMetadataInput>
-    connectOrCreate?: NFTsCreateOrConnectWithoutMetadataInput
-    connect?: NFTsWhereUniqueInput
-  }
-
-  export type NFTsUpdateOneRequiredWithoutMetadataNestedInput = {
-    create?: XOR<NFTsCreateWithoutMetadataInput, NFTsUncheckedCreateWithoutMetadataInput>
-    connectOrCreate?: NFTsCreateOrConnectWithoutMetadataInput
-    upsert?: NFTsUpsertWithoutMetadataInput
-    connect?: NFTsWhereUniqueInput
-    update?: XOR<XOR<NFTsUpdateToOneWithWhereWithoutMetadataInput, NFTsUpdateWithoutMetadataInput>, NFTsUncheckedUpdateWithoutMetadataInput>
+  export type NFTOwnersUncheckedUpdateManyWithoutNftNestedInput = {
+    create?: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput> | NFTOwnersCreateWithoutNftInput[] | NFTOwnersUncheckedCreateWithoutNftInput[]
+    connectOrCreate?: NFTOwnersCreateOrConnectWithoutNftInput | NFTOwnersCreateOrConnectWithoutNftInput[]
+    upsert?: NFTOwnersUpsertWithWhereUniqueWithoutNftInput | NFTOwnersUpsertWithWhereUniqueWithoutNftInput[]
+    createMany?: NFTOwnersCreateManyNftInputEnvelope
+    set?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    disconnect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    delete?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    connect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
+    update?: NFTOwnersUpdateWithWhereUniqueWithoutNftInput | NFTOwnersUpdateWithWhereUniqueWithoutNftInput[]
+    updateMany?: NFTOwnersUpdateManyWithWhereWithoutNftInput | NFTOwnersUpdateManyWithWhereWithoutNftInput[]
+    deleteMany?: NFTOwnersScalarWhereInput | NFTOwnersScalarWhereInput[]
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -9642,8 +8570,14 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NFTMetadataCreateWithoutNftInput = {
+  export type NFTsCreateWithoutNFTOwnersInput = {
     id?: string
+    contractId: string
+    contractAddress: string
+    tokenId: string
+    tokenUri?: string | null
+    metadataUpdated?: boolean
+    lastMetadataSyncTime?: Date | string | null
     name?: string | null
     description?: string | null
     image?: string | null
@@ -9652,8 +8586,14 @@ export namespace Prisma {
     raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type NFTMetadataUncheckedCreateWithoutNftInput = {
+  export type NFTsUncheckedCreateWithoutNFTOwnersInput = {
     id?: string
+    contractId: string
+    contractAddress: string
+    tokenId: string
+    tokenUri?: string | null
+    metadataUpdated?: boolean
+    lastMetadataSyncTime?: Date | string | null
     name?: string | null
     description?: string | null
     image?: string | null
@@ -9662,96 +8602,146 @@ export namespace Prisma {
     raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type NFTMetadataCreateOrConnectWithoutNftInput = {
-    where: NFTMetadataWhereUniqueInput
-    create: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-  }
-
-  export type NFTMetadataUpsertWithoutNftInput = {
-    update: XOR<NFTMetadataUpdateWithoutNftInput, NFTMetadataUncheckedUpdateWithoutNftInput>
-    create: XOR<NFTMetadataCreateWithoutNftInput, NFTMetadataUncheckedCreateWithoutNftInput>
-    where?: NFTMetadataWhereInput
-  }
-
-  export type NFTMetadataUpdateToOneWithWhereWithoutNftInput = {
-    where?: NFTMetadataWhereInput
-    data: XOR<NFTMetadataUpdateWithoutNftInput, NFTMetadataUncheckedUpdateWithoutNftInput>
-  }
-
-  export type NFTMetadataUpdateWithoutNftInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTMetadataUncheckedUpdateWithoutNftInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
-    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    attributes?: NullableJsonNullValueInput | InputJsonValue
-    raw?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type NFTsCreateWithoutMetadataInput = {
-    id?: string
-    contractId: string
-    nftContractAddress: string
-    tokenId: string
-    tokenUri?: string | null
-    metadataUpdated?: boolean
-    lastMetadataSyncTime?: Date | string | null
-  }
-
-  export type NFTsUncheckedCreateWithoutMetadataInput = {
-    id?: string
-    contractId: string
-    nftContractAddress: string
-    tokenId: string
-    tokenUri?: string | null
-    metadataUpdated?: boolean
-    lastMetadataSyncTime?: Date | string | null
-  }
-
-  export type NFTsCreateOrConnectWithoutMetadataInput = {
+  export type NFTsCreateOrConnectWithoutNFTOwnersInput = {
     where: NFTsWhereUniqueInput
-    create: XOR<NFTsCreateWithoutMetadataInput, NFTsUncheckedCreateWithoutMetadataInput>
+    create: XOR<NFTsCreateWithoutNFTOwnersInput, NFTsUncheckedCreateWithoutNFTOwnersInput>
   }
 
-  export type NFTsUpsertWithoutMetadataInput = {
-    update: XOR<NFTsUpdateWithoutMetadataInput, NFTsUncheckedUpdateWithoutMetadataInput>
-    create: XOR<NFTsCreateWithoutMetadataInput, NFTsUncheckedCreateWithoutMetadataInput>
+  export type NFTsUpsertWithoutNFTOwnersInput = {
+    update: XOR<NFTsUpdateWithoutNFTOwnersInput, NFTsUncheckedUpdateWithoutNFTOwnersInput>
+    create: XOR<NFTsCreateWithoutNFTOwnersInput, NFTsUncheckedCreateWithoutNFTOwnersInput>
     where?: NFTsWhereInput
   }
 
-  export type NFTsUpdateToOneWithWhereWithoutMetadataInput = {
+  export type NFTsUpdateToOneWithWhereWithoutNFTOwnersInput = {
     where?: NFTsWhereInput
-    data: XOR<NFTsUpdateWithoutMetadataInput, NFTsUncheckedUpdateWithoutMetadataInput>
+    data: XOR<NFTsUpdateWithoutNFTOwnersInput, NFTsUncheckedUpdateWithoutNFTOwnersInput>
   }
 
-  export type NFTsUpdateWithoutMetadataInput = {
+  export type NFTsUpdateWithoutNFTOwnersInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type NFTsUncheckedUpdateWithoutMetadataInput = {
+  export type NFTsUncheckedUpdateWithoutNFTOwnersInput = {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
-    nftContractAddress?: StringFieldUpdateOperationsInput | string
+    contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
     tokenUri?: NullableStringFieldUpdateOperationsInput | string | null
     metadataUpdated?: BoolFieldUpdateOperationsInput | boolean
     lastMetadataSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    attributes?: NullableJsonNullValueInput | InputJsonValue
+    raw?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type NFTOwnersCreateWithoutNftInput = {
+    id?: string
+    contractId: string
+    ownerAddress: string
+    count: number
+    lastTransactionHash?: string | null
+    lastSyncTime?: Date | string | null
+  }
+
+  export type NFTOwnersUncheckedCreateWithoutNftInput = {
+    id?: string
+    contractId: string
+    ownerAddress: string
+    count: number
+    lastTransactionHash?: string | null
+    lastSyncTime?: Date | string | null
+  }
+
+  export type NFTOwnersCreateOrConnectWithoutNftInput = {
+    where: NFTOwnersWhereUniqueInput
+    create: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput>
+  }
+
+  export type NFTOwnersCreateManyNftInputEnvelope = {
+    data: NFTOwnersCreateManyNftInput | NFTOwnersCreateManyNftInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NFTOwnersUpsertWithWhereUniqueWithoutNftInput = {
+    where: NFTOwnersWhereUniqueInput
+    update: XOR<NFTOwnersUpdateWithoutNftInput, NFTOwnersUncheckedUpdateWithoutNftInput>
+    create: XOR<NFTOwnersCreateWithoutNftInput, NFTOwnersUncheckedCreateWithoutNftInput>
+  }
+
+  export type NFTOwnersUpdateWithWhereUniqueWithoutNftInput = {
+    where: NFTOwnersWhereUniqueInput
+    data: XOR<NFTOwnersUpdateWithoutNftInput, NFTOwnersUncheckedUpdateWithoutNftInput>
+  }
+
+  export type NFTOwnersUpdateManyWithWhereWithoutNftInput = {
+    where: NFTOwnersScalarWhereInput
+    data: XOR<NFTOwnersUpdateManyMutationInput, NFTOwnersUncheckedUpdateManyWithoutNftInput>
+  }
+
+  export type NFTOwnersScalarWhereInput = {
+    AND?: NFTOwnersScalarWhereInput | NFTOwnersScalarWhereInput[]
+    OR?: NFTOwnersScalarWhereInput[]
+    NOT?: NFTOwnersScalarWhereInput | NFTOwnersScalarWhereInput[]
+    id?: UuidFilter<"NFTOwners"> | string
+    contractId?: UuidFilter<"NFTOwners"> | string
+    ownerAddress?: StringFilter<"NFTOwners"> | string
+    contractAddress?: StringFilter<"NFTOwners"> | string
+    tokenId?: StringFilter<"NFTOwners"> | string
+    count?: IntFilter<"NFTOwners"> | number
+    lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
+    lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+  }
+
+  export type NFTOwnersCreateManyNftInput = {
+    id?: string
+    contractId: string
+    ownerAddress: string
+    count: number
+    lastTransactionHash?: string | null
+    lastSyncTime?: Date | string | null
+  }
+
+  export type NFTOwnersUpdateWithoutNftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: StringFieldUpdateOperationsInput | string
+    ownerAddress?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NFTOwnersUncheckedUpdateWithoutNftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: StringFieldUpdateOperationsInput | string
+    ownerAddress?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type NFTOwnersUncheckedUpdateManyWithoutNftInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    contractId?: StringFieldUpdateOperationsInput | string
+    ownerAddress?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

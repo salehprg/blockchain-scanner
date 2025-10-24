@@ -20,7 +20,7 @@ export class GetBlockchainConfigByChain {
     constructor(private readonly repo: IBlockchainConfigRepository) { }
 
     execute(chainId: number): Promise<BlockchainConfig | null> {
-        return this.repo.filterConfigs({chainId});
+        return this.repo.getBlockChainConfigByChainId({chainId});
     }
 }
 

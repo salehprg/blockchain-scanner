@@ -4,7 +4,6 @@ import { BlockchainContractRepository } from "@/infrastructure/repositories/bloc
 import { NFTOwnerRepository } from "@/infrastructure/repositories/nft-owner.repo.impl";
 import { ContractLogRepository } from "@/infrastructure/repositories/contract-log.repo.impl";
 import { NFTRepository } from "@/infrastructure/repositories/nft.repo.impl";
-import { NFTMetadataRepository } from "@/infrastructure/repositories/nft-metadata.repo.impl";
 import { ViemPublicClientProvider } from "@/infrastructure/blockchain/BlochchainClient";
 import { PrismaClient } from "@/generated/client";
 
@@ -16,7 +15,6 @@ export interface AppContainer {
     ownerRepo: NFTOwnerRepository;
     contractLogRepo: ContractLogRepository;
     nftRepo: NFTRepository;
-    nftMetadataRepo: NFTMetadataRepository;
   };
   services: {
     blockchainReader: ViemPublicClientProvider;
@@ -29,7 +27,6 @@ export async function buildContainer(): Promise<AppContainer> {
   const ownerRepo = new NFTOwnerRepository();
   const contractLogRepo = new ContractLogRepository();
   const nftRepo = new NFTRepository();
-  const nftMetadataRepo = new NFTMetadataRepository();
 
   // rpc url resolver → prefer DB config, fallback to ENV
   const rpcUrlResolver = async (chainId: number) => {
@@ -47,7 +44,7 @@ export async function buildContainer(): Promise<AppContainer> {
 
   return {
     dataSource: prisma,
-    repos: { configRepo, contractRepo, ownerRepo, contractLogRepo, nftRepo, nftMetadataRepo },
+    repos: { configRepo, contractRepo, ownerRepo, contractLogRepo, nftRepo },
     services: { blockchainReader }
   };
 }

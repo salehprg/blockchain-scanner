@@ -12,7 +12,7 @@ export class ContractLogRepository implements IContractLogRepository {
         id: entity.id,
         contractId: entity.contractId,
         chainId: entity.chainId,
-        nftContractAddress: entity.nftContractAddress,
+        contractAddress: entity.contractAddress,
         blockNumber: entity.blockNumber,
         transactionHash: entity.transactionHash,
         logIndex: entity.logIndex,
@@ -26,7 +26,7 @@ export class ContractLogRepository implements IContractLogRepository {
       },
     });
     return new ContractLog(
-      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
       saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
@@ -39,7 +39,7 @@ export class ContractLogRepository implements IContractLogRepository {
         id: entity.id,
         contractId: entity.contractId,
         chainId: entity.chainId,
-        nftContractAddress: entity.nftContractAddress,
+        contractAddress: entity.contractAddress,
         blockNumber: entity.blockNumber,
         transactionHash: entity.transactionHash,
         logIndex: entity.logIndex,
@@ -54,7 +54,7 @@ export class ContractLogRepository implements IContractLogRepository {
       update: {
         contractId: entity.contractId,
         chainId: entity.chainId,
-        nftContractAddress: entity.nftContractAddress,
+        contractAddress: entity.contractAddress,
         blockNumber: entity.blockNumber,
         transactionHash: entity.transactionHash,
         logIndex: entity.logIndex,
@@ -68,7 +68,7 @@ export class ContractLogRepository implements IContractLogRepository {
       },
     });
     return new ContractLog(
-      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
       saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
@@ -77,7 +77,7 @@ export class ContractLogRepository implements IContractLogRepository {
   async findById(id: string): Promise<ContractLog | null> {
     const e = await prisma.contractLogs.findUnique({ where: { id } });
     return e ? new ContractLog(
-      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
       e.operatorAddress, e.tokenId, e.value, e.loggedAt
@@ -86,7 +86,7 @@ export class ContractLogRepository implements IContractLogRepository {
   async findAll(): Promise<ContractLog[]> {
     const list = await prisma.contractLogs.findMany({ orderBy: { loggedAt: "desc" } });
     return list.map(e => new ContractLog(
-      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
       e.operatorAddress, e.tokenId, e.value, e.loggedAt
@@ -96,7 +96,7 @@ export class ContractLogRepository implements IContractLogRepository {
 
     const where: Prisma.ContractLogsWhereInput = {};
     if (params.contractId) where.contractId = params.contractId.toLowerCase();
-    if (params.contractAddress) where.nftContractAddress = params.contractAddress.toLowerCase();
+    if (params.contractAddress) where.contractAddress = params.contractAddress.toLowerCase();
     where.loggedAt = { gte: params.fromDate, lte: params.toDate }
 
     const list = await prisma.contractLogs.findMany({
@@ -106,7 +106,7 @@ export class ContractLogRepository implements IContractLogRepository {
       skip: params.offset,
     });
     return list.map(e => new ContractLog(
-      e.id, e.contractId, e.chainId, e.nftContractAddress,
+      e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
       e.operatorAddress, e.tokenId, e.value, e.loggedAt
@@ -118,7 +118,7 @@ export class ContractLogRepository implements IContractLogRepository {
       data: {
         contractId: entity.contractId,
         chainId: entity.chainId,
-        nftContractAddress: entity.nftContractAddress,
+        contractAddress: entity.contractAddress,
         blockNumber: entity.blockNumber,
         transactionHash: entity.transactionHash,
         logIndex: entity.logIndex,
@@ -132,7 +132,7 @@ export class ContractLogRepository implements IContractLogRepository {
       },
     });
     return new ContractLog(
-      saved.id, saved.contractId, saved.chainId, saved.nftContractAddress,
+      saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
       saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
@@ -149,7 +149,7 @@ export class ContractLogRepository implements IContractLogRepository {
         id: l.id,
         contractId: l.contractId,
         chainId: l.chainId,
-        nftContractAddress: l.nftContractAddress,
+        contractAddress: l.contractAddress,
         blockNumber: l.blockNumber,
         transactionHash: l.transactionHash,
         logIndex: l.logIndex,

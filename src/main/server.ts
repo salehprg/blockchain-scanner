@@ -39,7 +39,6 @@ const PORT = parseInt(envs.PORT);
   const metaSyncer = new NFTMetadataSyncer(
     container.services.blockchainReader,
     container.repos.nftRepo,
-    container.repos.nftMetadataRepo,
     container.repos.ownerRepo
   );
   const metaJob = new NFTMetadataSyncJob(

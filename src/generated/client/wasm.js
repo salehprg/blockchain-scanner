@@ -112,8 +112,8 @@ exports.Prisma.NFTOwnersScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
   ownerAddress: 'ownerAddress',
-  nftContractAddress: 'nftContractAddress',
-  nftItemId: 'nftItemId',
+  contractAddress: 'contractAddress',
+  tokenId: 'tokenId',
   count: 'count',
   lastTransactionHash: 'lastTransactionHash',
   lastSyncTime: 'lastSyncTime'
@@ -123,7 +123,7 @@ exports.Prisma.ContractLogsScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
   chainId: 'chainId',
-  nftContractAddress: 'nftContractAddress',
+  contractAddress: 'contractAddress',
   blockNumber: 'blockNumber',
   transactionHash: 'transactionHash',
   logIndex: 'logIndex',
@@ -139,16 +139,11 @@ exports.Prisma.ContractLogsScalarFieldEnum = {
 exports.Prisma.NFTsScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
-  nftContractAddress: 'nftContractAddress',
+  contractAddress: 'contractAddress',
   tokenId: 'tokenId',
   tokenUri: 'tokenUri',
   metadataUpdated: 'metadataUpdated',
-  lastMetadataSyncTime: 'lastMetadataSyncTime'
-};
-
-exports.Prisma.NFTMetadataScalarFieldEnum = {
-  id: 'id',
-  nftId: 'nftId',
+  lastMetadataSyncTime: 'lastMetadataSyncTime',
   name: 'name',
   description: 'description',
   image: 'image',
@@ -189,8 +184,7 @@ exports.Prisma.ModelName = {
   BlockchainContracts: 'BlockchainContracts',
   NFTOwners: 'NFTOwners',
   ContractLogs: 'ContractLogs',
-  NFTs: 'NFTs',
-  NFTMetadata: 'NFTMetadata'
+  NFTs: 'NFTs'
 };
 /**
  * Create the Client
@@ -221,7 +215,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -231,7 +225,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -240,13 +233,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// Prisma schema to mirror existing database tables (no migrations generated here).\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel BlockchainConfigs {\n  id          String  @id @default(uuid()) @db.Uuid\n  chainId     Int     @unique\n  rpcUrlBase  String  @db.Text\n  rpcUrlAlter String? @db.Text\n\n  @@map(\"BlockchainConfigs\")\n}\n\nmodel BlockchainContracts {\n  id              String    @id @default(uuid()) @db.Uuid\n  contractAddress String    @unique @db.VarChar(100)\n  contractType    String    @db.VarChar(20)\n  chainId         Int\n  lastSyncBlock   String?   @db.Text\n  lastSyncTime    DateTime? @db.Timestamptz\n\n  @@map(\"BlockchainContracts\")\n}\n\nmodel NFTOwners {\n  id                  String    @id @default(uuid()) @db.Uuid\n  contractId          String    @db.Uuid\n  ownerAddress        String    @db.VarChar(100)\n  nftContractAddress  String    @db.VarChar(100)\n  nftItemId           String    @db.Text\n  count               Int\n  lastTransactionHash String?   @db.VarChar(100)\n  lastSyncTime        DateTime? @db.Timestamptz\n\n  @@index([contractId])\n  @@index([ownerAddress, nftContractAddress, nftItemId])\n  @@map(\"NFTOwners\")\n}\n\nmodel ContractLogs {\n  id                 String   @id @default(uuid()) @db.Uuid\n  contractId         String   @db.Uuid\n  chainId            Int\n  nftContractAddress String   @db.VarChar(100)\n  blockNumber        String   @db.Text\n  transactionHash    String   @db.VarChar(100)\n  logIndex           Int\n  eventType          String   @db.VarChar(50)\n  fromAddress        String?  @db.VarChar(100)\n  toAddress          String?  @db.VarChar(100)\n  operatorAddress    String?  @db.VarChar(100)\n  tokenId            String?  @db.Text\n  value              String?  @db.Text\n  loggedAt           DateTime @db.Timestamptz\n\n  @@unique([transactionHash, logIndex])\n  @@index([contractId, blockNumber])\n  @@map(\"ContractLogs\")\n}\n\nmodel NFTs {\n  id                   String       @id @default(uuid()) @db.Uuid\n  contractId           String       @db.Uuid\n  nftContractAddress   String       @db.VarChar(100)\n  tokenId              String       @db.Text\n  tokenUri             String?      @db.Text\n  metadataUpdated      Boolean      @default(false)\n  lastMetadataSyncTime DateTime?    @db.Timestamptz\n  metadata             NFTMetadata?\n\n  @@unique([nftContractAddress, tokenId])\n  @@map(\"NFTs\")\n}\n\nmodel NFTMetadata {\n  id          String  @id @default(uuid()) @db.Uuid\n  nftId       String  @unique @db.Uuid\n  name        String? @db.Text\n  description String? @db.Text\n  image       String? @db.Text\n  externalUrl String? @db.Text\n  attributes  Json?\n  raw         Json?\n  nft         NFTs    @relation(fields: [nftId], references: [id], onDelete: Cascade)\n\n  @@map(\"NFTMetadata\")\n}\n",
-  "inlineSchemaHash": "64e1a1e65884d29b1da0b6ef371a9aa3cc49b7e0ece15bbc74cf888c0233de6c",
+  "inlineSchema": "// Prisma schema to mirror existing database tables (no migrations generated here).\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel BlockchainConfigs {\n  id          String  @id @default(uuid()) @db.Uuid\n  chainId     Int     @unique\n  rpcUrlBase  String  @db.Text\n  rpcUrlAlter String? @db.Text\n\n  @@map(\"BlockchainConfigs\")\n}\n\nmodel BlockchainContracts {\n  id              String    @id @default(uuid()) @db.Uuid\n  contractAddress String    @unique @db.VarChar(100)\n  contractType    String    @db.VarChar(20)\n  chainId         Int\n  lastSyncBlock   String?   @db.Text\n  lastSyncTime    DateTime? @db.Timestamptz\n\n  @@map(\"BlockchainContracts\")\n}\n\nmodel NFTOwners {\n  id                  String    @id @default(uuid()) @db.Uuid\n  contractId          String    @db.Uuid\n  ownerAddress        String    @db.VarChar(100)\n  contractAddress     String    @db.VarChar(100)\n  tokenId             String    @db.Text\n  count               Int\n  lastTransactionHash String?   @db.VarChar(100)\n  lastSyncTime        DateTime? @db.Timestamptz\n\n  // Virtual relation to NFTs via composite unique (contractAddress, tokenId)\n  nft NFTs? @relation(fields: [contractAddress, tokenId], references: [contractAddress, tokenId])\n\n  @@index([contractId])\n  @@index([ownerAddress, contractAddress, tokenId])\n  @@map(\"NFTOwners\")\n}\n\nmodel ContractLogs {\n  id              String   @id @default(uuid()) @db.Uuid\n  contractId      String   @db.Uuid\n  chainId         Int\n  contractAddress String   @db.VarChar(100)\n  blockNumber     String   @db.Text\n  transactionHash String   @db.VarChar(100)\n  logIndex        Int\n  eventType       String   @db.VarChar(50)\n  fromAddress     String?  @db.VarChar(100)\n  toAddress       String?  @db.VarChar(100)\n  operatorAddress String?  @db.VarChar(100)\n  tokenId         String?  @db.Text\n  value           String?  @db.Text\n  loggedAt        DateTime @db.Timestamptz\n\n  @@unique([transactionHash, logIndex])\n  @@index([contractId, blockNumber])\n  @@map(\"ContractLogs\")\n}\n\nmodel NFTs {\n  id                   String      @id @default(uuid()) @db.Uuid\n  contractId           String      @db.Uuid\n  contractAddress      String      @db.VarChar(100)\n  tokenId              String      @db.Text\n  tokenUri             String?     @db.Text\n  metadataUpdated      Boolean     @default(false)\n  lastMetadataSyncTime DateTime?   @db.Timestamptz\n  name                 String?     @db.Text\n  description          String?     @db.Text\n  image                String?     @db.Text\n  externalUrl          String?     @db.Text\n  attributes           Json?\n  raw                  Json?\n  NFTOwners            NFTOwners[]\n\n  @@unique([contractAddress, tokenId])\n  @@map(\"NFTs\")\n}\n",
+  "inlineSchemaHash": "89c04c29658603489a9b13c3848ac6e8927b6a0cdbd0885ebbcaaaa9c3a3f81f",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"BlockchainConfigs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"rpcUrlBase\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rpcUrlAlter\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"BlockchainConfigs\"},\"BlockchainContracts\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lastSyncBlock\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"BlockchainContracts\"},\"NFTOwners\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ownerAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nftContractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nftItemId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"count\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lastTransactionHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"NFTOwners\"},\"ContractLogs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nftContractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blockNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transactionHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logIndex\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"eventType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"toAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"operatorAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loggedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"ContractLogs\"},\"NFTs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nftContractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenUri\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"metadataUpdated\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastMetadataSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"metadata\",\"kind\":\"object\",\"type\":\"NFTMetadata\",\"relationName\":\"NFTMetadataToNFTs\"}],\"dbName\":\"NFTs\"},\"NFTMetadata\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nftId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"externalUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attributes\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"raw\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"nft\",\"kind\":\"object\",\"type\":\"NFTs\",\"relationName\":\"NFTMetadataToNFTs\"}],\"dbName\":\"NFTMetadata\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"BlockchainConfigs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"rpcUrlBase\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rpcUrlAlter\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"BlockchainConfigs\"},\"BlockchainContracts\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lastSyncBlock\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"BlockchainContracts\"},\"NFTOwners\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ownerAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"count\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"lastTransactionHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"nft\",\"kind\":\"object\",\"type\":\"NFTs\",\"relationName\":\"NFTOwnersToNFTs\"}],\"dbName\":\"NFTOwners\"},\"ContractLogs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chainId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"contractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"blockNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"transactionHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logIndex\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"eventType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fromAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"toAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"operatorAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"loggedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"ContractLogs\"},\"NFTs\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tokenUri\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"metadataUpdated\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastMetadataSyncTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"externalUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attributes\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"raw\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"NFTOwners\",\"kind\":\"object\",\"type\":\"NFTOwners\",\"relationName\":\"NFTOwnersToNFTs\"}],\"dbName\":\"NFTs\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

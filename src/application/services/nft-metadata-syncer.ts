@@ -2,9 +2,7 @@ import { Address } from "viem";
 import { randomUUID } from "crypto";
 import { IBlockchainReader } from "@/domain/ports/blockchain-reader";
 import { INFTRepository } from "@/domain/repository/nft-repo";
-import { INFTMetadataRepository } from "@/domain/repository/nft-metadata-repo";
 import { NFT } from "@/domain/entities/nft";
-import { NFTMetadata } from "@/domain/entities/nft-metadata";
 import { contract_abis as ERC1155_ABI } from "@/application/blockchain-abis/abis";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { ERC721_ABI } from "../blockchain-abis/ERC721";
@@ -15,7 +13,6 @@ export class NFTMetadataSyncer {
   constructor(
     private readonly reader: IBlockchainReader,
     private readonly nftRepo: INFTRepository,
-    private readonly metadataRepo: INFTMetadataRepository,
     private readonly ownerRepo: INFTOwnerRepository
   ) { }
 
@@ -65,52 +62,25 @@ export class NFTMetadataSyncer {
       }
     }
 
-    await this.nftRepo.upsertMany(toUpsert);
-
-    const nftByToken = new Map(toUpsert.map(n => [n.tokenId, n] as const));
-
-    for (const tokenId of tokenIds) {
-      const nft = nftByToken.get(tokenId);
+    for (const nft of toUpsert) {
       if (!nft || !nft.tokenUri) continue;
-      const meta = await this.fetchMetadataFromUri(nft.tokenUri).catch(() => null);
-      if (!meta) continue;
 
-      const oldnftmetadata = (await this.metadataRepo.filterNFTMetadata({ nftId: nft.id }))[0];
+      try {
+        const meta = await this.fetchMetadataFromUri(nft.tokenUri).catch(() => null);
+        if (!meta) continue;
 
-      if (oldnftmetadata) {
-        await this.metadataRepo.upsert(new NFTMetadata(
-          oldnftmetadata.id,
-          nft.id,
-          meta.name ?? null,
-          meta.description ?? null,
-          meta.image ?? null,
-          meta.external_url ?? null,
-          Array.isArray(meta.attributes) ? meta.attributes : null,
-          meta
-        ));
+        nft.name = meta.name ?? null;
+        nft.description = meta.description ?? null;
+        nft.image = meta.image ?? null;
+        nft.externalUrl = meta.external_url ?? null;
+        nft.attributes = Array.isArray(meta.attributes) ? meta.attributes : null
+        nft.lastMetadataSyncTime = new Date()
+        nft.metadataUpdated = true
+        nft.raw = meta
+
+        await this.nftRepo.upsert(nft);
       }
-      else {
-        await this.metadataRepo.upsert(new NFTMetadata(
-          randomUUID(),
-          nft.id,
-          meta.name ?? null,
-          meta.description ?? null,
-          meta.image ?? null,
-          meta.external_url ?? null,
-          Array.isArray(meta.attributes) ? meta.attributes : null,
-          meta
-        ));
-      }
-
-      await this.nftRepo.update(new NFT(
-        nft.id,
-        nft.contractId,
-        nft.nftContractAddress,
-        nft.tokenId,
-        nft.tokenUri,
-        true,
-        new Date()
-      ));
+      catch { }
     }
   }
 
@@ -127,7 +97,7 @@ export class NFTMetadataSyncer {
     // fallback: derive from owners table (observed transfers)
     const owners = await this.ownerRepo.filterOwners({ contractAddress: contract });
     const set = new Set<string>();
-    for (const o of owners) set.add(o.nftItemId.toLowerCase());
+    for (const o of owners) set.add(o.tokenId.toLowerCase());
     return Array.from(set.values());
   }
 

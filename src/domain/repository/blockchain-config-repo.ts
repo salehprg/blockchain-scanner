@@ -3,4 +3,5 @@ import { BlockchainConfig } from "../entities/blockchain-config";
 
 export interface IBlockchainConfigRepository extends IBaseRepository<BlockchainConfig> {
   filterConfigs(params: { id?: string; chainId?: number }): Promise<BlockchainConfig[]>;
+  getBlockChainConfigByChainId(params: { chainId?: number }): Promise<BlockchainConfig | null>;
 }

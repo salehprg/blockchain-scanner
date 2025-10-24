@@ -6,6 +6,12 @@ import { prisma } from "@/infrastructure/db/prisma";
 export class BlockchainConfigRepository implements IBlockchainConfigRepository {
   constructor() { }
 
+  async getBlockChainConfigByChainId(params: { chainId: number; }): Promise<BlockchainConfig | null> {
+    const e = await prisma.blockchainConfigs.findUnique({ where: { chainId: params.chainId} });
+
+    return e;
+  }
+
   async create(entity: BlockchainConfig): Promise<BlockchainConfig> {
     const saved = await prisma.blockchainConfigs.create({
       data: {

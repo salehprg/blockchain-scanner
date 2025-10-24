@@ -20,7 +20,7 @@ export async function filterOwners(req: Request, res: Response, next: NextFuncti
       return res.status(400).json({ error: "owner, contractAddress and tokenId are required" });
     }
 
-    const found = await repos.ownerRepo.filterOwners({ contractAddress: contractAddress, ownerAddress: ownerAddress, tokenId: tokenId });
+    const found = await repos.ownerRepo.filterOwners({ contractAddress, ownerAddress, tokenId });
     if (!found) return res.status(404).json({ error: "Not found" });
     res.json(found);
   } catch (e) { next(e); }
@@ -35,8 +35,8 @@ export async function upsertOwner(req: Request, res: Response, next: NextFunctio
       body.id ?? randomUUID(),
       String(body.contractId),
       String(body.ownerAddress),
-      String(body.nftContractAddress),
-      String(body.nftItemId),
+      String(body.contractAddress),
+      String(body.tokenId),
       Number(body.count ?? 0),
       body.lastTransactionHash ?? null,
       body.lastSyncTime ? new Date(body.lastSyncTime) : null

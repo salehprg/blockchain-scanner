@@ -34,32 +34,35 @@ model NFTOwners {
   id                  String    @id @default(uuid()) @db.Uuid
   contractId          String    @db.Uuid
   ownerAddress        String    @db.VarChar(100)
-  nftContractAddress  String    @db.VarChar(100)
-  nftItemId           String    @db.Text
+  contractAddress     String    @db.VarChar(100)
+  tokenId             String    @db.Text
   count               Int
   lastTransactionHash String?   @db.VarChar(100)
   lastSyncTime        DateTime? @db.Timestamptz
 
+  // Virtual relation to NFTs via composite unique (contractAddress, tokenId)
+  nft NFTs? @relation(fields: [contractAddress, tokenId], references: [contractAddress, tokenId])
+
   @@index([contractId])
-  @@index([ownerAddress, nftContractAddress, nftItemId])
+  @@index([ownerAddress, contractAddress, tokenId])
   @@map("NFTOwners")
 }
 
 model ContractLogs {
-  id                 String   @id @default(uuid()) @db.Uuid
-  contractId         String   @db.Uuid
-  chainId            Int
-  nftContractAddress String   @db.VarChar(100)
-  blockNumber        String   @db.Text
-  transactionHash    String   @db.VarChar(100)
-  logIndex           Int
-  eventType          String   @db.VarChar(50)
-  fromAddress        String?  @db.VarChar(100)
-  toAddress          String?  @db.VarChar(100)
-  operatorAddress    String?  @db.VarChar(100)
-  tokenId            String?  @db.Text
-  value              String?  @db.Text
-  loggedAt           DateTime @db.Timestamptz
+  id              String   @id @default(uuid()) @db.Uuid
+  contractId      String   @db.Uuid
+  chainId         Int
+  contractAddress String   @db.VarChar(100)
+  blockNumber     String   @db.Text
+  transactionHash String   @db.VarChar(100)
+  logIndex        Int
+  eventType       String   @db.VarChar(50)
+  fromAddress     String?  @db.VarChar(100)
+  toAddress       String?  @db.VarChar(100)
+  operatorAddress String?  @db.VarChar(100)
+  tokenId         String?  @db.Text
+  value           String?  @db.Text
+  loggedAt        DateTime @db.Timestamptz
 
   @@unique([transactionHash, logIndex])
   @@index([contractId, blockNumber])
@@ -67,29 +70,21 @@ model ContractLogs {
 }
 
 model NFTs {
-  id                   String       @id @default(uuid()) @db.Uuid
-  contractId           String       @db.Uuid
-  nftContractAddress   String       @db.VarChar(100)
-  tokenId              String       @db.Text
-  tokenUri             String?      @db.Text
-  metadataUpdated      Boolean      @default(false)
-  lastMetadataSyncTime DateTime?    @db.Timestamptz
-  metadata             NFTMetadata?
+  id                   String      @id @default(uuid()) @db.Uuid
+  contractId           String      @db.Uuid
+  contractAddress      String      @db.VarChar(100)
+  tokenId              String      @db.Text
+  tokenUri             String?     @db.Text
+  metadataUpdated      Boolean     @default(false)
+  lastMetadataSyncTime DateTime?   @db.Timestamptz
+  name                 String?     @db.Text
+  description          String?     @db.Text
+  image                String?     @db.Text
+  externalUrl          String?     @db.Text
+  attributes           Json?
+  raw                  Json?
+  NFTOwners            NFTOwners[]
 
-  @@unique([nftContractAddress, tokenId])
+  @@unique([contractAddress, tokenId])
   @@map("NFTs")
-}
-
-model NFTMetadata {
-  id          String  @id @default(uuid()) @db.Uuid
-  nftId       String  @unique @db.Uuid
-  name        String? @db.Text
-  description String? @db.Text
-  image       String? @db.Text
-  externalUrl String? @db.Text
-  attributes  Json?
-  raw         Json?
-  nft         NFTs    @relation(fields: [nftId], references: [id], onDelete: Cascade)
-
-  @@map("NFTMetadata")
 }

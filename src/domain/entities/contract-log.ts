@@ -5,7 +5,7 @@ export class ContractLog {
     public id: string,
     public contractId: string,
     public chainId: number,
-    public nftContractAddress: string,
+    public contractAddress: string,
     public blockNumber: string,
     public transactionHash: string,
     public logIndex: number,

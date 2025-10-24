@@ -140,8 +140,8 @@ exports.Prisma.NFTOwnersScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
   ownerAddress: 'ownerAddress',
-  nftContractAddress: 'nftContractAddress',
-  nftItemId: 'nftItemId',
+  contractAddress: 'contractAddress',
+  tokenId: 'tokenId',
   count: 'count',
   lastTransactionHash: 'lastTransactionHash',
   lastSyncTime: 'lastSyncTime'
@@ -151,7 +151,7 @@ exports.Prisma.ContractLogsScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
   chainId: 'chainId',
-  nftContractAddress: 'nftContractAddress',
+  contractAddress: 'contractAddress',
   blockNumber: 'blockNumber',
   transactionHash: 'transactionHash',
   logIndex: 'logIndex',
@@ -167,16 +167,11 @@ exports.Prisma.ContractLogsScalarFieldEnum = {
 exports.Prisma.NFTsScalarFieldEnum = {
   id: 'id',
   contractId: 'contractId',
-  nftContractAddress: 'nftContractAddress',
+  contractAddress: 'contractAddress',
   tokenId: 'tokenId',
   tokenUri: 'tokenUri',
   metadataUpdated: 'metadataUpdated',
-  lastMetadataSyncTime: 'lastMetadataSyncTime'
-};
-
-exports.Prisma.NFTMetadataScalarFieldEnum = {
-  id: 'id',
-  nftId: 'nftId',
+  lastMetadataSyncTime: 'lastMetadataSyncTime',
   name: 'name',
   description: 'description',
   image: 'image',
@@ -217,8 +212,7 @@ exports.Prisma.ModelName = {
   BlockchainContracts: 'BlockchainContracts',
   NFTOwners: 'NFTOwners',
   ContractLogs: 'ContractLogs',
-  NFTs: 'NFTs',
-  NFTMetadata: 'NFTMetadata'
+  NFTs: 'NFTs'
 };
 
 /**
