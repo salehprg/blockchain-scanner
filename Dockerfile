@@ -9,6 +9,8 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 COPY tsconfig.json ./
 COPY src ./src
+COPY prisma ./prisma
+RUN npx prisma generate
 RUN npm run build
 
 # ========= runtime =========
@@ -26,6 +28,9 @@ COPY --from=builder /app/pnpm-lock.yaml* /app/package-lock.json* ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
+# Ensure path aliases work at runtime and Prisma client is available
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/src/generated ./src/generated
 EXPOSE 3000
 
 # Start with path alias + env

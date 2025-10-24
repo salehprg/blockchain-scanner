@@ -9,14 +9,8 @@ services:
       - .env
     environment:
       NODE_ENV: production
-    networks:
-      - "neurobackend_neurobackend_neuro-network"
     ports:
       - "3005:3000"
 
 volumes:
   pgdata:
-
-networks:
-  neurobackend_neurobackend_neuro-network:
-    external: true
