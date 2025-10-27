@@ -60,7 +60,7 @@ export async function deleteContract(req: Request, res: Response, next: NextFunc
 
 export async function getContractLogs(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = req.app.locals.container;
+    const { repos } = (req.app.locals.container as AppContainer);
     const { contractAddress } = req.params;
     const { fromDate, toDate, limit, offset } = req.query as Record<string, string>;
 
@@ -70,7 +70,7 @@ export async function getContractLogs(req: Request, res: Response, next: NextFun
     if (limit) options.limit = Number(limit);
     if (offset) options.offset = Number(offset);
 
-    const logs = await repos.contractLogRepo.findByContractAddress(contractAddress.toLowerCase(), options);
+    const logs = await repos.contractLogRepo.filterLogs({...options, contractAddress: contractAddress.toLowerCase()});
     res.json(logs);
   } catch (e) { next(e); }
 }
