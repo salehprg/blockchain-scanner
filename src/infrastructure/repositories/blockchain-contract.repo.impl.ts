@@ -10,7 +10,7 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     const saved = await prisma.blockchainContracts.create({
       data: {
         id: entity.id,
-        contractAddress: entity.contractAddress.toLowerCase(),
+        contractAddress: entity.contractAddress,
         contractType: entity.contractType,
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
@@ -24,14 +24,14 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
       where: { id: entity.id },
       create: {
         id: entity.id,
-        contractAddress: entity.contractAddress.toLowerCase(),
+        contractAddress: entity.contractAddress,
         contractType: entity.contractType,
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
         lastSyncTime: entity.lastSyncTime,
       },
       update: {
-        contractAddress: entity.contractAddress.toLowerCase(),
+        contractAddress: entity.contractAddress,
         contractType: entity.contractType,
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
@@ -51,10 +51,10 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
   async filterContracts(params: { id?: string; contractAddress?: string; contractType?: 'ERC721' | 'ERC1155' | 'OTHER'; chainId?: number }): Promise<BlockchainContract[]> {
 
     const where: Prisma.BlockchainContractsWhereInput = {};
-    if (params.id) where.id = params.id.toLowerCase();
-    if (params.contractAddress) where.contractAddress = params.contractAddress.toLowerCase();
-    if (params.contractType) where.contractType = params.contractType.toLowerCase();
-    if (params.chainId) where.chainId = params.chainId;
+    if (params.id) where.id = params.id;
+    if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
+    if (params.contractType) where.contractType = { equals: params.contractType, mode: 'insensitive' };
+    if (params.chainId) where.chainId = { equals: params.chainId };
 
     const list = await prisma.blockchainContracts.findMany({
       where,
@@ -65,7 +65,7 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     const saved = await prisma.blockchainContracts.update({
       where: { id: entity.id },
       data: {
-        contractAddress: entity.contractAddress.toLowerCase(),
+        contractAddress: entity.contractType == "SOLANA" ? entity.contractAddress : entity.contractAddress,
         contractType: entity.contractType,
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
@@ -78,7 +78,7 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     await prisma.blockchainContracts.delete({ where: { id } });
   }
   async findByAddress(address: string): Promise<BlockchainContract | null> {
-    const e = await prisma.blockchainContracts.findUnique({ where: { contractAddress: address.toLowerCase() } });
+    const e = await prisma.blockchainContracts.findUnique({ where: { contractAddress: address } });
     return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime) : null;
   }
   async findByChainId(chainId: number): Promise<BlockchainContract[]> {

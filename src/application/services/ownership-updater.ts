@@ -53,12 +53,12 @@ export class OwnershipUpdater {
     } else {
       await this.ownerRepo.create(new NFTOwner(
         crypto.randomUUID(),
-        params.contractId.toLowerCase(),
-        to.toLowerCase(),
-        params.nftContractAddress.toLowerCase(),
-        tokenIdStr.toLowerCase(),
+        params.contractId,
+        to,
+        params.nftContractAddress,
+        tokenIdStr,
         1,
-        params.transactionHash.toLowerCase(),
+        params.transactionHash,
         new Date()
       ));
     }
@@ -100,12 +100,12 @@ export class OwnershipUpdater {
       } else {
         await this.ownerRepo.create(new NFTOwner(
           crypto.randomUUID(),
-          params.contractId.toLowerCase(),
-          to.toLowerCase(),
-          params.nftContractAddress.toLowerCase(),
-          tokenIdStr.toLowerCase(),
+          params.contractId,
+          to,
+          params.nftContractAddress,
+          tokenIdStr,
           amount,
-          params.transactionHash.toLowerCase(),
+          params.transactionHash,
           new Date()
         ));
       }

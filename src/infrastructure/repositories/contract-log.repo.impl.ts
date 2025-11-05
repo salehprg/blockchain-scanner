@@ -95,8 +95,8 @@ export class ContractLogRepository implements IContractLogRepository {
   async filterLogs(params: { contractId?: string; contractAddress?: string; fromDate?: Date; toDate?: Date; limit?: number; offset?: number }): Promise<ContractLog[]> {
 
     const where: Prisma.ContractLogsWhereInput = {};
-    if (params.contractId) where.contractId = params.contractId.toLowerCase();
-    if (params.contractAddress) where.contractAddress = params.contractAddress.toLowerCase();
+    if (params.contractId) where.contractId = { equals: params.contractId, mode: 'insensitive' };
+    if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
     where.loggedAt = { gte: params.fromDate, lte: params.toDate }
 
     const list = await prisma.contractLogs.findMany({

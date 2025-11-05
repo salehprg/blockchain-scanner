@@ -1,19 +1,21 @@
 import { Address } from "viem";
 import { randomUUID } from "crypto";
 import { IBlockchainReader } from "@/domain/ports/blockchain-reader";
+import { ISolanaReader } from "@/domain/ports/solana-reader";
 import { INFTRepository } from "@/domain/repository/nft-repo";
 import { NFT } from "@/domain/entities/nft";
 import { contract_abis as ERC1155_ABI } from "@/application/blockchain-abis/abis";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { ERC721_ABI } from "../blockchain-abis/ERC721";
+import { ContractType } from "@/domain/entities/blockchain-contract";
 
-type ContractType = "ERC721" | "ERC1155";
 
 export class NFTMetadataSyncer {
   constructor(
     private readonly reader: IBlockchainReader,
     private readonly nftRepo: INFTRepository,
-    private readonly ownerRepo: INFTOwnerRepository
+    private readonly ownerRepo: INFTOwnerRepository,
+    private readonly solanaReader?: ISolanaReader
   ) { }
 
   async syncContract(params: {
@@ -22,7 +24,9 @@ export class NFTMetadataSyncer {
     contractAddress: Address;
     contractType: ContractType;
   }): Promise<void> {
-    const addr = params.contractAddress.toLowerCase() as Address;
+    const addr = (params.contractType === "SOLANA"
+      ? params.contractAddress
+      : (params.contractAddress as string).toLowerCase()) as Address;
 
     const tokenIds = await this.fetchAllTokenIds(params.chainId, addr, params.contractType);
 
@@ -97,11 +101,15 @@ export class NFTMetadataSyncer {
     // fallback: derive from owners table (observed transfers)
     const owners = await this.ownerRepo.filterOwners({ contractAddress: contract });
     const set = new Set<string>();
-    for (const o of owners) set.add(o.tokenId.toLowerCase());
+    for (const o of owners) set.add(type === "SOLANA" ? o.tokenId : o.tokenId.toLowerCase());
     return Array.from(set.values());
   }
 
   private async fetchTokenUri(chainId: number, contract: Address, type: ContractType, tokenId: string): Promise<string | null> {
+    if (type === "SOLANA") {
+      if (!this.solanaReader) return null;
+      return await this.solanaReader.getMetadataUri(chainId, tokenId);
+    }
     if (type === "ERC1155") {
       try {
         const uri = await this.reader.readContract<string>({ chainId, address: contract, abi: ERC1155_ABI as any, functionName: "uri", args: [BigInt(tokenId)] });
@@ -133,6 +141,50 @@ export class NFTMetadataSyncer {
     const res = await fetch(uri);
     if (!res.ok) throw new Error(`metadata fetch failed ${res.status}`);
     return await res.json();
+  }
+
+  async syncSolanaNFT(params: { chainId: number; contractId: string; programAddress: string; mint: string }): Promise<void> {
+    const addr = params.programAddress as Address;
+    const tokenId = params.mint;
+
+    const existing = (await this.nftRepo.filterNFTs({ contractAddress: addr, tokenId }))[0];
+    if (existing && existing.metadataUpdated) return;
+
+    const tokenUri = await this.fetchTokenUri(params.chainId, addr, "SOLANA", tokenId);
+
+    if (!existing) {
+      const nft = new NFT(
+        randomUUID(),
+        params.contractId,
+        addr,
+        tokenId,
+        tokenUri ?? null,
+        false,
+        null
+      );
+      await this.nftRepo.upsert(nft);
+    }
+
+    if (tokenUri) {
+      try {
+        const meta = await this.fetchMetadataFromUri(tokenUri).catch(() => null);
+        if (!meta) return;
+
+        const toUpdate = (await this.nftRepo.filterNFTs({ contractAddress: addr, tokenId }))[0];
+        if (!toUpdate) return;
+
+        toUpdate.name = meta.name ?? null;
+        toUpdate.description = meta.description ?? null;
+        toUpdate.image = meta.image ?? null;
+        toUpdate.externalUrl = meta.external_url ?? null;
+        toUpdate.attributes = Array.isArray(meta.attributes) ? meta.attributes : null;
+        toUpdate.lastMetadataSyncTime = new Date();
+        toUpdate.metadataUpdated = true;
+        toUpdate.raw = meta;
+
+        await this.nftRepo.upsert(toUpdate);
+      } catch {}
+    }
   }
 }
 

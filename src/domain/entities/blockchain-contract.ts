@@ -1,4 +1,4 @@
-export type ContractType = 'ERC721' | 'ERC1155' | 'OTHER';
+export type ContractType = 'ERC721' | 'ERC1155' | "SOLANA" | 'OTHER';
 
 export class BlockchainContract {
   constructor(
@@ -8,5 +8,5 @@ export class BlockchainContract {
     public chainId: number,
     public lastSyncBlock: string | null,  // use string to hold bigints safely
     public lastSyncTime: Date | null
-  ) {}
+  ) { }
 }

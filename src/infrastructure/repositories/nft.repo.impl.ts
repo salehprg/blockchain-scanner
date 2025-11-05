@@ -14,8 +14,8 @@ export class NFTRepository implements INFTRepository {
     return {
       id: entity.id,
       contractId: entity.contractId,
-      contractAddress: entity.contractAddress?.toLowerCase(),
-      tokenId: entity.tokenId?.toLowerCase(),
+      contractAddress: entity.contractAddress,
+      tokenId: entity.tokenId,
       tokenUri: entity.tokenUri ?? null,
       attributes,
       description: entity.description ?? null,
@@ -33,8 +33,8 @@ export class NFTRepository implements INFTRepository {
       data: {
         id: entity.id,
         contractId: entity.contractId,
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         tokenUri: entity.tokenUri,
         metadataUpdated: entity.metadataUpdated,
         lastMetadataSyncTime: entity.lastMetadataSyncTime,
@@ -49,8 +49,8 @@ export class NFTRepository implements INFTRepository {
       create: {
         id: entity.id,
         contractId: entity.contractId,
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         tokenUri: entity.tokenUri,
         attributes: entity.attributes === null ? Prisma.DbNull : entity.attributes,
         description: entity.description,
@@ -63,8 +63,8 @@ export class NFTRepository implements INFTRepository {
       },
       update: {
         contractId: entity.contractId,
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         tokenUri: entity.tokenUri,
         attributes: entity.attributes === null ? Prisma.DbNull : entity.attributes,
         description: entity.description,
@@ -85,8 +85,8 @@ export class NFTRepository implements INFTRepository {
       data: items.map(i => ({
         id: i.id,
         contractId: i.contractId,
-        contractAddress: i.contractAddress.toLowerCase(),
-        tokenId: i.tokenId.toLowerCase(),
+        contractAddress: i.contractAddress,
+        tokenId: i.tokenId,
         tokenUri: i.tokenUri,
         metadataUpdated: i.metadataUpdated,
         lastMetadataSyncTime: i.lastMetadataSyncTime,
@@ -97,7 +97,7 @@ export class NFTRepository implements INFTRepository {
     // This keeps logic simple without DB-specific upsert updates.
     for (const i of items) {
       await prisma.nFTs.updateMany({
-        where: { contractAddress: i.contractAddress.toLowerCase(), tokenId: i.tokenId.toLowerCase() },
+        where: { contractAddress: i.contractAddress, tokenId: i.tokenId },
         data: { tokenUri: i.tokenUri, metadataUpdated: i.metadataUpdated, lastMetadataSyncTime: i.lastMetadataSyncTime },
       });
     }
@@ -117,10 +117,10 @@ export class NFTRepository implements INFTRepository {
   async filterNFTs(params: { id?: string; contractId?: string; contractAddress?: string; tokenId?: string }, options?: { limit?: number; offset?: number }): Promise<NFTDTO[]> {
 
     const where: Prisma.NFTsWhereInput = {};
-    if (params.id) where.id = params.id.toLowerCase();
-    if (params.contractId) where.contractId = params.contractId.toLowerCase();
-    if (params.contractAddress) where.contractAddress = params.contractAddress.toLowerCase();
-    if (params.tokenId) where.tokenId = params.tokenId.toLowerCase();
+    if (params.id) where.id = params.id;
+    if (params.contractId) where.contractId = params.contractId;
+    if (params.contractAddress) where.contractAddress = params.contractAddress;
+    if (params.tokenId) where.tokenId = params.tokenId;
 
     const list = await prisma.nFTs.findMany({
       where,
@@ -136,8 +136,8 @@ export class NFTRepository implements INFTRepository {
       where: { id: entity.id },
       data: {
         contractId: entity.contractId,
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         tokenUri: entity.tokenUri,
         metadataUpdated: entity.metadataUpdated,
         lastMetadataSyncTime: entity.lastMetadataSyncTime,
@@ -152,7 +152,7 @@ export class NFTRepository implements INFTRepository {
 
   async resetMetadataFlag(contractAddress: string, tokenId: string): Promise<void> {
     await prisma.nFTs.updateMany({
-      where: { contractAddress: contractAddress.toLowerCase(), tokenId: tokenId.toLowerCase() },
+      where: { contractAddress: { equals: contractAddress, mode: 'insensitive' }, tokenId: { equals: tokenId, mode: 'insensitive' } },
       data: { metadataUpdated: false },
     });
   }

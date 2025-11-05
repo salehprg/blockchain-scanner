@@ -11,6 +11,8 @@ import { ensureDatabase } from "@/infrastructure/db/ensure-db";
 import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
 import { NFTMetadataSyncJob } from "@/jobs/nft-metadata-sync.job";
 import { prisma } from "@/infrastructure/db/prisma";
+import { SyncSolanaPrograms } from "@/application/use-case/sync/sync-solana";
+import { SolanaSyncJob } from "@/jobs/solana-sync.job";
 
 const PORT = parseInt(envs.PORT);
 
@@ -35,12 +37,24 @@ const PORT = parseInt(envs.PORT);
   const job = new ContractSyncJob(syncUseCase, 10_000);
   job.start();
 
-  // start NFT metadata sync job
+  // start NFT metadata sync job (EVM + Solana support)
   const metaSyncer = new NFTMetadataSyncer(
     container.services.blockchainReader,
     container.repos.nftRepo,
-    container.repos.ownerRepo
+    container.repos.ownerRepo,
+    container.services.solanaReader
   );
+  // Start Solana program sync job (ensures NFTs exist + metadata before owners)
+  const solSyncUseCase = new SyncSolanaPrograms(
+    container.repos.contractRepo,
+    container.services.solanaReader,
+    container.repos.contractLogRepo,
+    container.repos.ownerRepo,
+    metaSyncer
+  );
+  const solJob = new SolanaSyncJob(solSyncUseCase, 15_000);
+  solJob.start();
+  
   const metaJob = new NFTMetadataSyncJob(
     metaSyncer,
     async () => (await container.repos.contractRepo.findAll()).map(c => ({ id: c.id, address: c.contractAddress as any, type: c.contractType as any, chainId: c.chainId })),

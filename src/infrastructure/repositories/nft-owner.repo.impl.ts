@@ -11,9 +11,9 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
     return new NFTOwner(
       e.id,
       e.contractId,
-      e.ownerAddress?.toLowerCase(),
-      e.contractAddress?.toLowerCase(),
-      e.tokenId?.toLowerCase(),
+      e.ownerAddress,
+      e.contractAddress,
+      e.tokenId,
       Number(e.count ?? 0),
       e.lastTransactionHash ?? null,
       e.lastSyncTime ?? null,
@@ -25,9 +25,9 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
       data: {
         id: entity.id,
         contractId: entity.contractId,
-        ownerAddress: entity.ownerAddress.toLowerCase(),
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        ownerAddress: entity.ownerAddress,
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         count: entity.count,
         lastTransactionHash: entity.lastTransactionHash,
         lastSyncTime: entity.lastSyncTime,
@@ -41,18 +41,18 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
       create: {
         id: entity.id,
         contractId: entity.contractId,
-        ownerAddress: entity.ownerAddress.toLowerCase(),
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        ownerAddress: entity.ownerAddress,
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         count: entity.count,
         lastTransactionHash: entity.lastTransactionHash,
         lastSyncTime: entity.lastSyncTime,
       },
       update: {
         contractId: entity.contractId,
-        ownerAddress: entity.ownerAddress.toLowerCase(),
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        ownerAddress: entity.ownerAddress,
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         count: entity.count,
         lastTransactionHash: entity.lastTransactionHash,
         lastSyncTime: entity.lastSyncTime,
@@ -76,9 +76,9 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
       where: { id: entity.id },
       data: {
         contractId: entity.contractId,
-        ownerAddress: entity.ownerAddress.toLowerCase(),
-        contractAddress: entity.contractAddress.toLowerCase(),
-        tokenId: entity.tokenId.toLowerCase(),
+        ownerAddress: entity.ownerAddress,
+        contractAddress: entity.contractAddress,
+        tokenId: entity.tokenId,
         count: entity.count,
         lastTransactionHash: entity.lastTransactionHash,
         lastSyncTime: entity.lastSyncTime,
@@ -92,9 +92,9 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
 
   async filterOwners(params: { contractAddress?: string; ownerAddress?: string; tokenId?: string }): Promise<NFTOwnerDTO[]> {
     const where: Prisma.NFTOwnersWhereInput = {};
-    if (params.contractAddress) where.contractAddress = params.contractAddress.toLowerCase();
-    if (params.ownerAddress) where.ownerAddress = params.ownerAddress.toLowerCase();
-    if (params.tokenId) where.tokenId = params.tokenId.toLowerCase();
+    if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
+    if (params.ownerAddress) where.ownerAddress = { equals: params.ownerAddress, mode: 'insensitive' };
+    if (params.tokenId) where.tokenId = { equals: params.tokenId, mode: 'insensitive' };
 
     const list = await prisma.nFTOwners.findMany({ where, include: { nft: true } });
     return list.map(e => mapNFTOwnerRecordToDTO(e));

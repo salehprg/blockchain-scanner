@@ -1,4 +1,4 @@
-export type ContractLogEventType = "ERC721.Transfer" | "ERC1155.TransferSingle";
+export type ContractLogEventType = "ERC721.Transfer" | "ERC1155.TransferSingle" | "SOLANA.Log" | "SOLANA.NFTTransfer";
 
 export class ContractLog {
   constructor(

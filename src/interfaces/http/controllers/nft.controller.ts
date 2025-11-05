@@ -6,7 +6,7 @@ export async function listByContract(req: Request, res: Response, next: NextFunc
   try {
     const { repos } = (req.app.locals.container as AppContainer);
     const { contractAddress } = req.params;
-    res.json(await repos.nftRepo.filterNFTs({ contractAddress: contractAddress.toLowerCase() }));
+    res.json(await repos.nftRepo.filterNFTs({ contractAddress: contractAddress }));
   } catch (e) { next(e); }
 }
 

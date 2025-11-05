@@ -15,7 +15,7 @@ export async function listContracts(req: Request, res: Response, next: NextFunct
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    const data = await repos.contractRepo.findById(req.params.id.toLowerCase());
+    const data = await repos.contractRepo.findById(req.params.id);
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
@@ -24,7 +24,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 export async function getByAddress(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    const data = await repos.contractRepo.findByAddress(req.params.address.toLowerCase());
+    const data = await repos.contractRepo.findByAddress(req.params.address);
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
@@ -70,7 +70,7 @@ export async function getContractLogs(req: Request, res: Response, next: NextFun
     if (limit) options.limit = Number(limit);
     if (offset) options.offset = Number(offset);
 
-    const logs = await repos.contractLogRepo.filterLogs({...options, contractAddress: contractAddress.toLowerCase()});
+    const logs = await repos.contractLogRepo.filterLogs({...options, contractAddress: contractAddress});
     res.json(logs);
   } catch (e) { next(e); }
 }

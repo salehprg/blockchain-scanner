@@ -6,6 +6,7 @@ import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
 import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
+import { ContractType } from "@/domain/entities/blockchain-contract";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
@@ -23,14 +24,20 @@ export class SyncContracts {
   ) {
     this.updater = new OwnershipUpdater(ownerRepo);
     this.logRecorder = new ContractLogRecorder(logRepo);
-    // metadata syncer will be created later where needed with DI; here we lazily get via reader from logReader
+    // metadata syncer for EVM; grab deps from container
     // @ts-ignore
-    this.metadataSyncer = new NFTMetadataSyncer((this.logReader as any)["reader"], (global as any)?.container?.repos?.nftRepo, (global as any)?.container?.repos?.nftMetadataRepo);
+    this.metadataSyncer = new NFTMetadataSyncer(
+      (this.logReader as any)["reader"],
+      (global as any)?.container?.repos?.nftRepo,
+      (global as any)?.container?.repos?.ownerRepo,
+      (global as any)?.container?.services?.solanaReader
+    );
   }
 
   async execute(): Promise<void> {
     const contracts = await this.contractRepo.findAll();
-    for (const c of contracts) {
+    const ethsContracts = contracts.filter(c => (c.contractType?.toUpperCase?.() ?? c.contractType) !== "SOLANA");
+    for (const c of ethsContracts) {
       try {
         await this.syncOne(c.id, c.contractAddress as Address, c.contractType, c.chainId, c.lastSyncBlock);
         // After ownership sync, try metadata if ERC1155/721
@@ -40,7 +47,9 @@ export class SyncContracts {
             contractId: c.id,
             contractAddress: c.contractAddress as Address,
             contractType: c.contractType as any
-          }).catch(() => {});
+          }).catch((e: any) => {
+            console.log(e)
+          });
         }
       } catch (e) {
         console.warn(`[sync] contract ${c.contractAddress} failed: ${(e as Error).message}`);
@@ -51,7 +60,7 @@ export class SyncContracts {
   private async syncOne(
     contractId: string,
     contractAddress: Address,
-    contractType: "ERC721" | "ERC1155" | "OTHER",
+    contractType: ContractType,
     chainId: number,
     lastSyncBlock: string | null
   ) {
@@ -95,7 +104,7 @@ export class SyncContracts {
   private async scanWindow(
     contractId: string,
     contractAddress: Address,
-    contractType: "ERC721" | "ERC1155" | "OTHER",
+    contractType: ContractType,
     chainId: number,
     from: bigint,
     to: bigint
@@ -122,7 +131,7 @@ export class SyncContracts {
               from: l.args.from,
               to: l.args.to,
               operator: null,
-              tokenId: l.args.tokenId,
+              tokenId: l.args.tokenId.toString(),
               value: null
             };
           }
@@ -135,7 +144,7 @@ export class SyncContracts {
               from: l.args.from,
               to: l.args.to,
               operator: l.args.operator,
-              tokenId: l.args.id,
+              tokenId: l.args.id.toString(),
               value: l.args.value
             };
           }
@@ -165,12 +174,12 @@ export class SyncContracts {
           });
         } else if (contractType === "ERC1155" && "args" in log && "id" in log.args) {
           await this.updater.applyTransfer1155Single({
-            contractId, 
+            contractId,
             nftContractAddress: contractAddress,
             transactionHash: log.blockHash,
-            from: log.args.from, 
-            to: log.args.to, 
-            id: log.args.id, 
+            from: log.args.from,
+            to: log.args.to,
+            id: log.args.id,
             value: log.args.value
           });
         }

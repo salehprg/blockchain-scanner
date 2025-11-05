@@ -20,8 +20,8 @@ export function mapNFTRecordToDTO(record: any): NFTDTO {
   return {
     id: record.id,
     contractId: record.contractId,
-    contractAddress: record.contractAddress?.toLowerCase(),
-    tokenId: record.tokenId?.toLowerCase(),
+    contractAddress: record.contractAddress,
+    tokenId: record.tokenId,
     tokenUri: record.tokenUri ?? null,
     metadataUpdated: !!record.metadataUpdated,
     lastMetadataSyncTime: record.lastMetadataSyncTime ?? null,

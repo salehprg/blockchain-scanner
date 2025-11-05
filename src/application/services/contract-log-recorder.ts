@@ -17,23 +17,23 @@ export class ContractLogRecorder {
       from?: Address | null;
       to?: Address | null;
       operator?: Address | null;
-      tokenId?: bigint | null;
+      tokenId?: string | null;
       value?: bigint | null;
     }>;
   }): Promise<void> {
     const now = new Date();
     const toPersist = params.logs.map(l => new ContractLog(
       crypto.randomUUID(),
-      params.contractId.toLowerCase(),
+      params.contractId,
       params.chainId,
-      params.nftContractAddress.toLowerCase(),
+      params.nftContractAddress,
       l.blockNumber.toString(),
-      l.transactionHash.toLowerCase(),
+      l.transactionHash,
       l.logIndex,
       l.type,
-      l.from ? l.from.toLowerCase() : null,
-      l.to ? l.to.toLowerCase() : null,
-      l.operator ? l.operator.toLowerCase() : null,
+      l.from ? l.from : null,
+      l.to ? l.to : null,
+      l.operator ? l.operator : null,
       l.tokenId != null ? l.tokenId.toString() : null,
       l.value != null ? l.value.toString() : null,
       now

@@ -6,6 +6,7 @@ import { ContractLogRepository } from "@/infrastructure/repositories/contract-lo
 import { NFTRepository } from "@/infrastructure/repositories/nft.repo.impl";
 import { ViemPublicClientProvider } from "@/infrastructure/blockchain/BlochchainClient";
 import { PrismaClient } from "@/generated/client";
+import { SolanaReader } from "@/infrastructure/blockchain/solana-reader";
 
 export interface AppContainer {
   dataSource: PrismaClient;
@@ -18,6 +19,7 @@ export interface AppContainer {
   };
   services: {
     blockchainReader: ViemPublicClientProvider;
+    solanaReader: SolanaReader;
   };
 }
 
@@ -41,10 +43,11 @@ export async function buildContainer(): Promise<AppContainer> {
   };
 
   const blockchainReader = new ViemPublicClientProvider(rpcUrlResolver);
+  const solanaReader = new SolanaReader(rpcUrlResolver);
 
   return {
     dataSource: prisma,
     repos: { configRepo, contractRepo, ownerRepo, contractLogRepo, nftRepo },
-    services: { blockchainReader }
+    services: { blockchainReader, solanaReader }
   };
 }
