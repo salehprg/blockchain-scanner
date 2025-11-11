@@ -49,7 +49,7 @@ export class SyncSolanaPrograms {
       let newestBlock = lastCheckSlot
       let before: string | undefined = undefined;
       while (true) {
-        const result = await this.solanaReader.getAddressActivities(params.chainId, params.programAddress, { pageSize: 1000, before });
+        const result = await this.solanaReader.getAddressActivities(params.chainId, params.programAddress, { pageSize: 500, before });
         activities = activities.concat(result.activities)
 
         if (result.firstSlotNumber > newestBlock)

@@ -121,7 +121,7 @@ export class SolanaReader implements ISolanaReader {
   }
 
   async getAddressActivities(chainId: number, address: string, opts?: { pageSize?: number; before?: string }): Promise<SolanaReaderActivityDTO> {
-    const PAGE = 1000;
+    const PAGE = opts?.pageSize ?? 1000;
     const before = opts?.before;
 
     try {
@@ -210,6 +210,8 @@ export class SolanaReader implements ISolanaReader {
           postTokenBalances: mapBalances(tx.meta?.postTokenBalances as any)
         });
       });
+      const delayMs = 300 + Math.floor(Math.random() * 500);
+      await new Promise(res => setTimeout(res, delayMs));
     }
 
     return results;
