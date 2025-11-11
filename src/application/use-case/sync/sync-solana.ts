@@ -48,9 +48,11 @@ export class SyncSolanaPrograms {
 
       let newestBlock = lastCheckSlot
       let before: string | undefined = undefined;
+      console.log(`Start Solana logs...`)
       while (true) {
         const result = await this.solanaReader.getAddressActivities(params.chainId, params.programAddress, { pageSize: 500, before });
         activities = activities.concat(result.activities)
+        console.log(`Solana from block ${result.lastSlotNumber}`)
 
         if (result.firstSlotNumber > newestBlock)
           newestBlock = BigInt(result.firstSlotNumber);
