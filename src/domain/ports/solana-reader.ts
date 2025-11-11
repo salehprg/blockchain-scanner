@@ -30,11 +30,18 @@ export interface SolanaActivityDTO {
   flow: string | null;
 }
 
+export interface SolanaReaderActivityDTO {
+  activities: SolanaActivityDTO[];
+  lastSignature: string | null;
+  lastSlotNumber: number
+  firstSlotNumber: number
+}
+
 export interface ISolanaReader {
   getSignaturesForAddress(chainId: number, address: string, opts?: { limit?: number; before?: string }): Promise<SolanaSignatureInfoDTO[]>;
   getTransaction(chainId: number, signature: string): Promise<SolanaParsedTxDTO | null>;
   getMetadataUri(chainId: number, mint: string): Promise<string | null>;
-  getAddressActivities(chainId: number, address: string, opts?: { pageSize?: number; before?: string }): Promise<SolanaActivityDTO[]>;
+  getAddressActivities(chainId: number, address: string, opts?: { pageSize?: number; before?: string }): Promise<SolanaReaderActivityDTO>;
 }
 
 
