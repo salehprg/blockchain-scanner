@@ -41,7 +41,8 @@ const PORT = parseInt(envs.PORT);
     container.repos.ownerRepo,
     logReader,
     container.repos.contractLogRepo,
-    metaSyncer
+    metaSyncer,
+    container.repos.nftRepo
   );
   const job = new ContractSyncJob(syncUseCase, 10_000);
   job.start();

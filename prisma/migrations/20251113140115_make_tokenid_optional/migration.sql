@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "NFTOwners" ALTER COLUMN "tokenId" DROP NOT NULL;
