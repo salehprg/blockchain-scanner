@@ -118,9 +118,9 @@ export class NFTRepository implements INFTRepository {
 
     const where: Prisma.NFTsWhereInput = {};
     if (params.id) where.id = params.id;
-    if (params.contractId) where.contractId = params.contractId;
-    if (params.contractAddress) where.contractAddress = params.contractAddress;
-    if (params.tokenId) where.tokenId = params.tokenId;
+    if (params.contractId) where.contractId = { equals: params.contractId, mode: 'insensitive' };
+    if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
+    if (params.tokenId) where.tokenId = { equals: params.tokenId, mode: 'insensitive' };
 
     const list = await prisma.nFTs.findMany({
       where,
