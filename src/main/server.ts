@@ -25,17 +25,6 @@ const PORT = parseInt(envs.PORT);
   // Inject container into app (via locals or a DI lib)
   const app = createApp();
   app.locals.container = container;
-  ;(global as any).container = container;
-
-  const logReader = new BlockchainLogReader(container.services.blockchainReader);
-  const syncUseCase = new SyncContracts(
-    container.repos.contractRepo,
-    container.repos.ownerRepo,
-    logReader,
-    container.repos.contractLogRepo
-  );
-  const job = new ContractSyncJob(syncUseCase, 10_000);
-  job.start();
 
   // start NFT metadata sync job (EVM + Solana support)
   const metaSyncer = new NFTMetadataSyncer(
@@ -44,6 +33,18 @@ const PORT = parseInt(envs.PORT);
     container.repos.ownerRepo,
     container.services.solanaReader
   );
+
+  const logReader = new BlockchainLogReader(container.services.blockchainReader);
+  const syncUseCase = new SyncContracts(
+    container.services.contractLister,
+    container.repos.contractRepo,
+    container.repos.ownerRepo,
+    logReader,
+    container.repos.contractLogRepo,
+    metaSyncer
+  );
+  const job = new ContractSyncJob(syncUseCase, 10_000);
+  job.start();
   // Start Solana program sync job (ensures NFTs exist + metadata before owners)
   const solSyncUseCase = new SyncSolanaPrograms(
     container.repos.contractRepo,
@@ -57,7 +58,7 @@ const PORT = parseInt(envs.PORT);
   
   const metaJob = new NFTMetadataSyncJob(
     metaSyncer,
-    async () => (await container.repos.contractRepo.findAll()).map(c => ({ id: c.id, address: c.contractAddress as any, type: c.contractType as any, chainId: c.chainId })),
+    container.services.contractLister,
     60_000
   );
   metaJob.start();

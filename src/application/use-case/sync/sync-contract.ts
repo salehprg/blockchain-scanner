@@ -7,6 +7,7 @@ import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
 import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
 import { ContractType } from "@/domain/entities/blockchain-contract";
+import { IContractLister } from "@/domain/ports/contract-lister";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
@@ -17,31 +18,26 @@ export class SyncContracts {
   private readonly metadataSyncer: NFTMetadataSyncer;
 
   constructor(
+    private readonly contractLister: IContractLister,
     private readonly contractRepo: IBlockchainContractRepository,
     ownerRepo: INFTOwnerRepository,
     private readonly logReader: BlockchainLogReader,
-    logRepo: IContractLogRepository
+    logRepo: IContractLogRepository,
+    metadataSyncer: NFTMetadataSyncer
   ) {
     this.updater = new OwnershipUpdater(ownerRepo);
     this.logRecorder = new ContractLogRecorder(logRepo);
-    // metadata syncer for EVM; grab deps from container
-    // @ts-ignore
-    this.metadataSyncer = new NFTMetadataSyncer(
-      (this.logReader as any)["reader"],
-      (global as any)?.container?.repos?.nftRepo,
-      (global as any)?.container?.repos?.ownerRepo,
-      (global as any)?.container?.services?.solanaReader
-    );
+    this.metadataSyncer = metadataSyncer;
   }
 
   async execute(): Promise<void> {
-    const contracts = await this.contractRepo.findAll();
+    const contracts = await this.contractLister.listContracts();
     const ethsContracts = contracts.filter(c => (c.contractType?.toUpperCase?.() ?? c.contractType) !== "SOLANA");
     for (const c of ethsContracts) {
       try {
         await this.syncOne(c.id, c.contractAddress as Address, c.contractType, c.chainId, c.lastSyncBlock);
         // After ownership sync, try metadata if ERC1155/721
-        if (c.contractType !== "OTHER" && (global as any)?.container?.repos?.nftRepo) {
+        if (c.contractType !== "OTHER") {
           await this.metadataSyncer.syncContract({
             chainId: c.chainId,
             contractId: c.id,

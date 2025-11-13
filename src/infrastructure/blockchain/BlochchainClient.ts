@@ -56,7 +56,7 @@ export class ViemPublicClientProvider implements IBlockchainReader {
     toBlock: bigint;
   }) {
     const client = await this.getClient(params.chainId);
-    var logs = client.getLogs({
+    var logs = await client.getLogs({
       address: params.address,
       fromBlock: params.fromBlock,
       toBlock: params.toBlock,

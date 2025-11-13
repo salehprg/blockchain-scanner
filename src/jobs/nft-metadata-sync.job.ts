@@ -1,4 +1,5 @@
 import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
+import { IContractLister } from "@/domain/ports/contract-lister";
 import { Address } from "viem";
 
 export class NFTMetadataSyncJob {
@@ -7,7 +8,7 @@ export class NFTMetadataSyncJob {
 
   constructor(
     private readonly syncer: NFTMetadataSyncer,
-    private readonly listContracts: () => Promise<Array<{ id: string; address: Address; type: "ERC721" | "ERC1155"; chainId: number }>>,
+    private readonly contractLister: IContractLister,
     private readonly intervalMs = 60_000
   ) {}
 
@@ -26,12 +27,12 @@ export class NFTMetadataSyncJob {
     if (this.lock) return;
     this.lock = true;
     try {
-      const contracts = await this.listContracts();
+      const contracts = await this.contractLister.listContracts();
       for (const c of contracts) {
         try {
-          await this.syncer.syncContract({ chainId: c.chainId, contractId: c.id, contractAddress: c.address, contractType: c.type });
+          await this.syncer.syncContract({ chainId: c.chainId, contractId: c.id, contractAddress: c.contractAddress as Address, contractType: c.contractType });
         } catch (e) {
-          console.warn(`[nft-meta-sync] ${c.address} failed: ${(e as Error).message}`);
+          console.warn(`[nft-meta-sync] ${c.contractAddress} failed: ${(e as Error).message}`);
         }
       }
     } finally {

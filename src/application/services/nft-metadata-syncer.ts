@@ -89,7 +89,7 @@ export class NFTMetadataSyncer {
   }
 
   private async fetchAllTokenIds(chainId: number, contract: Address, type: ContractType): Promise<string[]> {
-    if (type === "ERC1155") {
+    if (type === "ERC1155" || type == "ERC721") {
       // try to infer range from getBaseURICount / getBatchIdAtIndex / TokensLazyMinted pattern
       try {
         const nextId = await this.reader.readContract<bigint>({ chainId, address: contract, abi: ERC1155_ABI as any, functionName: "nextTokenIdToMint" });

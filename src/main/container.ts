@@ -7,6 +7,8 @@ import { NFTRepository } from "@/infrastructure/repositories/nft.repo.impl";
 import { ViemPublicClientProvider } from "@/infrastructure/blockchain/BlochchainClient";
 import { PrismaClient } from "@/generated/client";
 import { SolanaReader } from "@/infrastructure/blockchain/solana-reader";
+import { RpcUrlResolver } from "@/application/services/rpc-url-resolver";
+import { ContractLister } from "@/application/services/contract-lister";
 
 export interface AppContainer {
   dataSource: PrismaClient;
@@ -20,6 +22,8 @@ export interface AppContainer {
   services: {
     blockchainReader: ViemPublicClientProvider;
     solanaReader: SolanaReader;
+    rpcUrlResolver: RpcUrlResolver;
+    contractLister: ContractLister;
   };
 }
 
@@ -30,24 +34,16 @@ export async function buildContainer(): Promise<AppContainer> {
   const contractLogRepo = new ContractLogRepository();
   const nftRepo = new NFTRepository();
 
-  // rpc url resolver → prefer DB config, fallback to ENV
-  const rpcUrlResolver = async (chainId: number) => {
-    // You can block on DB lookups at startup if you prefer to warm the cache.
-    // For simplicity here: on-demand lazy fetch with a sync fallback.
-    // In production, preload a dict from DB.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    var cfg = (await configRepo.filterConfigs({ chainId }))[0]
-    if (cfg)
-      return cfg.rpcUrlBase;
-    return ""; // fallback (or throw if missing)
-  };
+  // services
+  const rpcUrlResolver = new RpcUrlResolver(configRepo);
+  const contractLister = new ContractLister(contractRepo);
 
-  const blockchainReader = new ViemPublicClientProvider(rpcUrlResolver);
-  const solanaReader = new SolanaReader(rpcUrlResolver);
+  const blockchainReader = new ViemPublicClientProvider(chainId => rpcUrlResolver.resolve(chainId));
+  const solanaReader = new SolanaReader(chainId => rpcUrlResolver.resolve(chainId));
 
   return {
     dataSource: prisma,
     repos: { configRepo, contractRepo, ownerRepo, contractLogRepo, nftRepo },
-    services: { blockchainReader, solanaReader }
+    services: { blockchainReader, solanaReader, rpcUrlResolver, contractLister }
   };
 }
