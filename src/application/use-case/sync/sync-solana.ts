@@ -52,7 +52,7 @@ export class SyncSolanaPrograms {
       while (true) {
         const result = await this.solanaReader.getAddressActivities(params.chainId, params.programAddress, { pageSize: 1000, before });
         activities = activities.concat(result.activities)
-        console.log(`Solana from block ${result.lastSlotNumber}`)
+        console.log(`Solana from block ${result.lastSlotNumber} | length: ${activities.length}`)
 
         if (result.firstSlotNumber > newestBlock)
           newestBlock = BigInt(result.firstSlotNumber);

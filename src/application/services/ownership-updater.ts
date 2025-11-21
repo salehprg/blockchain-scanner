@@ -46,7 +46,7 @@ export class OwnershipUpdater {
     // add to new owner
     const existing = (await this.ownerRepo.filterOwners({ ownerAddress: to, contractAddress: params.nftContractAddress, tokenId: tokenIdStr }))[0];
     if (existing) {
-      existing.count = existing.count + 1; // should be 1 for ERC721, but idempotent
+      existing.count = 1;
       existing.lastTransactionHash = params.transactionHash;
 
       await this.ownerRepo.update(existing);

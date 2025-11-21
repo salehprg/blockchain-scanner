@@ -97,7 +97,13 @@ export class ContractLogRepository implements IContractLogRepository {
     const where: Prisma.ContractLogsWhereInput = {};
     if (params.contractId) where.contractId = { equals: params.contractId, mode: 'insensitive' };
     if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
-    where.loggedAt = { gte: params.fromDate, lte: params.toDate }
+    
+    // Only add date filter if dates are provided
+    if (params.fromDate || params.toDate) {
+      where.loggedAt = {};
+      if (params.fromDate) where.loggedAt.gte = params.fromDate;
+      if (params.toDate) where.loggedAt.lte = params.toDate;
+    }
 
     const list = await prisma.contractLogs.findMany({
       where,

@@ -10,6 +10,7 @@ import { ContractType } from "@/domain/entities/blockchain-contract";
 import { IContractLister } from "@/domain/ports/contract-lister";
 import { Transfer1155SingleLog, Transfer721Log } from "@/infrastructure/blockchain/log-reader";
 import { INFTRepository } from "@/domain/repository/nft-repo";
+import { log } from "console";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
@@ -78,7 +79,7 @@ export class SyncContracts {
       try {
 
         console.log(`Start Chain ${chainId} scan blocks ${from}-${to} Until: ${safeTo}`)
-        const resultTo = await this.scanWindow(contractId, contractAddress, contractType, chainId, from, to);
+        const resultTo = await this.scanWindow(contractId, contractAddress, contractType, chainId, from, to, safeTo);
         cursor = resultTo;
 
       } catch (err) {
@@ -86,8 +87,8 @@ export class SyncContracts {
         if (/block range|too many|range|timeout|429|exceeded/i.test(msg)) {
           // halve window (simple backoff): split and keep progress
           const mid = from + (to - from) / 2n;
-          const resultTo_Mid = await this.scanWindow(contractId, contractAddress, contractType, chainId, from, mid);
-          const resultTo = await this.scanWindow(contractId, contractAddress, contractType, chainId, resultTo_Mid + 1n, to);
+          const resultTo_Mid = await this.scanWindow(contractId, contractAddress, contractType, chainId, from, mid, safeTo);
+          const resultTo = await this.scanWindow(contractId, contractAddress, contractType, chainId, resultTo_Mid + 1n, to, safeTo);
 
           cursor = resultTo;
 
@@ -107,7 +108,8 @@ export class SyncContracts {
     contractType: ContractType,
     chainId: number,
     from: bigint,
-    to: bigint
+    to: bigint,
+    safeTo: bigint
   ): Promise<bigint> {
 
     if (to < from) return to;
@@ -250,6 +252,10 @@ export class SyncContracts {
           if (l.blockNumber > maxApplied) maxApplied = l.blockNumber;
         }
         lastBlockToSave = maxApplied;
+      }
+
+      if (usedFallback && logs.length == 0) {
+        lastBlockToSave = safeTo
       }
 
       await this.contractRepo.update({
