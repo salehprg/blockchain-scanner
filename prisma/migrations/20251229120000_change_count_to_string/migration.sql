@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "NFTOwners" ALTER COLUMN "count" SET DATA TYPE TEXT;
+

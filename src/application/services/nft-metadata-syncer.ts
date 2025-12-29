@@ -8,6 +8,7 @@ import { contract_abis as ERC1155_ABI } from "@/application/blockchain-abis/abis
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { ERC721_ABI } from "../blockchain-abis/ERC721";
 import { ContractType } from "@/domain/entities/blockchain-contract";
+import { ChestBuyV2_ABI } from "../blockchain-abis/ChestBuyV2";
 
 
 export class NFTMetadataSyncer {
@@ -24,9 +25,7 @@ export class NFTMetadataSyncer {
     contractAddress: Address;
     contractType: ContractType;
   }): Promise<void> {
-    const addr = (params.contractType === "SOLANA"
-      ? params.contractAddress
-      : (params.contractAddress as string).toLowerCase()) as Address;
+    const addr = params.contractAddress as Address;
 
     const tokenIds = await this.fetchAllTokenIds(params.chainId, addr, params.contractType);
 
@@ -67,11 +66,13 @@ export class NFTMetadataSyncer {
     }
 
     for (const nft of toUpsert) {
-      if (!nft || !nft.tokenUri) continue;
+      if (!nft) continue;
 
       try {
-        const meta = await this.fetchMetadataFromUri(nft.tokenUri).catch(() => null);
-        if (!meta) continue;
+        let meta = {} as any
+        if (nft.tokenUri)
+          meta = await this.fetchMetadataFromUri(nft.tokenUri).catch(() => null);
+
 
         nft.name = meta.name ?? null;
         nft.description = meta.description ?? null;
@@ -92,13 +93,14 @@ export class NFTMetadataSyncer {
     if (type === "ERC1155" || type == "ERC721") {
       // try to infer range from getBaseURICount / getBatchIdAtIndex / TokensLazyMinted pattern
       try {
-        const nextId = await this.reader.readContract<bigint>({ chainId, address: contract, abi: ERC1155_ABI as any, functionName: "nextTokenIdToMint" });
+        const nextId = await this.reader.readContract<bigint>({ chainId, address: contract, abi: ERC721_ABI as any, functionName: "nextTokenIdToMint" });
         const ids: string[] = [];
         for (let i = 0n; i < nextId; i++) ids.push(i.toString());
         return ids;
-      } catch { }
+      } catch (ex: any) {
+        console.log("Failed to fetch token ids via ChestBuyV2 pattern:", ex.message);
+      }
     }
-    // fallback: derive from owners table (observed transfers)
     const owners = await this.ownerRepo.filterOwners({ contractAddress: contract });
     const set = new Set<string>();
     for (const o of owners) set.add(type === "SOLANA" ? o.tokenId : o.tokenId.toLowerCase());
@@ -165,26 +167,26 @@ export class NFTMetadataSyncer {
       await this.nftRepo.upsert(nft);
     }
 
-    if (tokenUri) {
-      try {
-        const meta = await this.fetchMetadataFromUri(tokenUri).catch(() => null);
-        if (!meta) return;
+    try {
+      let meta = {} as any;
+      if (tokenUri)
+        meta = await this.fetchMetadataFromUri(tokenUri).catch(() => null);
 
-        const toUpdate = (await this.nftRepo.filterNFTs({ contractAddress: addr, tokenId }))[0];
-        if (!toUpdate) return;
+      const toUpdate = (await this.nftRepo.filterNFTs({ contractAddress: addr, tokenId }))[0];
+      if (!toUpdate) return;
 
-        toUpdate.name = meta.name ?? null;
-        toUpdate.description = meta.description ?? null;
-        toUpdate.image = meta.image ?? null;
-        toUpdate.externalUrl = meta.external_url ?? null;
-        toUpdate.attributes = Array.isArray(meta.attributes) ? meta.attributes : null;
-        toUpdate.lastMetadataSyncTime = new Date();
-        toUpdate.metadataUpdated = true;
-        toUpdate.raw = meta;
+      toUpdate.name = meta.name ?? null;
+      toUpdate.description = meta.description ?? null;
+      toUpdate.image = meta.image ?? null;
+      toUpdate.externalUrl = meta.external_url ?? null;
+      toUpdate.attributes = Array.isArray(meta.attributes) ? meta.attributes : null;
+      toUpdate.lastMetadataSyncTime = new Date();
+      toUpdate.metadataUpdated = true;
+      toUpdate.raw = meta;
 
-        await this.nftRepo.upsert(toUpdate);
-      } catch {}
-    }
+      await this.nftRepo.upsert(toUpdate);
+    } catch { }
+
   }
 }
 

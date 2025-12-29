@@ -40,7 +40,7 @@ export class SolanaOwnershipUpdater {
 
     const existing = (await this.ownerRepo.filterOwners({ ownerAddress: to, contractAddress: params.programAddress, tokenId: tokenIdStr }))[0];
     if (existing) {
-      existing.count = existing.count + 1;
+      existing.count = BigInt(existing.count) + 1n;
       existing.lastTransactionHash = params.transactionSignature;
       await this.ownerRepo.update(existing);
     } else {
@@ -50,7 +50,7 @@ export class SolanaOwnershipUpdater {
         to,
         params.programAddress,
         tokenIdStr,
-        1,
+        1n,
         params.transactionSignature,
         new Date()
       ));

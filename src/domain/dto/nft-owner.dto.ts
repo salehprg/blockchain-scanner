@@ -6,7 +6,7 @@ export interface NFTOwnerDTO {
   ownerAddress: string;
   contractAddress: string;
   tokenId: string;
-  count: number;
+  count: string;
   lastTransactionHash: string | null;
   lastSyncTime: Date | null;
   nft?: NFTDTO | null;
@@ -19,7 +19,7 @@ export function mapNFTOwnerRecordToDTO(record: any): NFTOwnerDTO {
     ownerAddress: record.ownerAddress,
     contractAddress: record.contractAddress,
     tokenId: record.tokenId,
-    count: Number(record.count ?? 0),
+    count: (record.count ?? "0").toString(),
     lastTransactionHash: record.lastTransactionHash ?? null,
     lastSyncTime: record.lastSyncTime ?? null,
   };

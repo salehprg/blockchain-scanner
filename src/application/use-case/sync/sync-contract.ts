@@ -11,6 +11,8 @@ import { IContractLister } from "@/domain/ports/contract-lister";
 import { Transfer1155SingleLog, Transfer721Log } from "@/infrastructure/blockchain/log-reader";
 import { INFTRepository } from "@/domain/repository/nft-repo";
 import { log } from "console";
+import { ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
+import { NFT } from "@/domain/entities/nft";
 
 const CHUNK = 1_000n;     // blocks per request (tune as needed)
 const CONF = 5n;          // confirmations before considering final (tune)
@@ -194,9 +196,32 @@ export class SyncContracts {
             .filter((l): l is Transfer721Log => "args" in l && "tokenId" in l.args)
             .map(l => l.args.tokenId.toString())
         ));
+
+        // Identify mints in this batch
+        const mintedTokenIds = new Set<string>();
+        for (const l of logs) {
+          if (contractType === "ERC721" && "args" in l && "tokenId" in l.args && l.args.from?.toLowerCase() === ZERO_ADDRESS) {
+            mintedTokenIds.add(l.args.tokenId.toString());
+          }
+        }
+
         for (const tid of uniqueTokenIds) {
           const found = await this.nftRepo.filterNFTs({ contractAddress: contractAddress, tokenId: tid }, { limit: 1 });
-          if (found.length > 0) existingTokenIdSet.add(tid);
+          if (found.length > 0) {
+            existingTokenIdSet.add(tid);
+          } else if (mintedTokenIds.has(tid)) {
+            // Create missing NFT if it was minted in this batch
+            await this.nftRepo.create(new NFT(
+              crypto.randomUUID(),
+              contractId,
+              contractAddress,
+              tid,
+              null,
+              false,
+              null
+            ));
+            existingTokenIdSet.add(tid);
+          }
         }
       } else if (contractType === "ERC1155") {
         const uniqueTokenIds = Array.from(new Set(
@@ -204,9 +229,32 @@ export class SyncContracts {
             .filter((l): l is Transfer1155SingleLog => "args" in l && "id" in l.args)
             .map(l => l.args.id.toString())
         ));
+
+        // Identify mints in this batch
+        const mintedTokenIds = new Set<string>();
+        for (const l of logs) {
+          if (contractType === "ERC1155" && "args" in l && "id" in l.args && l.args.from?.toLowerCase() === ZERO_ADDRESS) {
+            mintedTokenIds.add(l.args.id.toString());
+          }
+        }
+
         for (const tid of uniqueTokenIds) {
           const found = await this.nftRepo.filterNFTs({ contractAddress: contractAddress, tokenId: tid }, { limit: 1 });
-          if (found.length > 0) existingTokenIdSet.add(tid);
+          if (found.length > 0) {
+            existingTokenIdSet.add(tid);
+          } else if (mintedTokenIds.has(tid)) {
+            // Create missing NFT if it was minted in this batch
+            await this.nftRepo.create(new NFT(
+              crypto.randomUUID(),
+              contractId,
+              contractAddress,
+              tid,
+              null,
+              false,
+              null
+            ));
+            existingTokenIdSet.add(tid);
+          }
         }
       }
 

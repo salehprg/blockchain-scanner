@@ -3345,18 +3345,8 @@ export namespace Prisma {
 
   export type AggregateNFTOwners = {
     _count: NFTOwnersCountAggregateOutputType | null
-    _avg: NFTOwnersAvgAggregateOutputType | null
-    _sum: NFTOwnersSumAggregateOutputType | null
     _min: NFTOwnersMinAggregateOutputType | null
     _max: NFTOwnersMaxAggregateOutputType | null
-  }
-
-  export type NFTOwnersAvgAggregateOutputType = {
-    count: number | null
-  }
-
-  export type NFTOwnersSumAggregateOutputType = {
-    count: number | null
   }
 
   export type NFTOwnersMinAggregateOutputType = {
@@ -3365,7 +3355,7 @@ export namespace Prisma {
     ownerAddress: string | null
     contractAddress: string | null
     tokenId: string | null
-    count: number | null
+    count: string | null
     lastTransactionHash: string | null
     lastSyncTime: Date | null
   }
@@ -3376,7 +3366,7 @@ export namespace Prisma {
     ownerAddress: string | null
     contractAddress: string | null
     tokenId: string | null
-    count: number | null
+    count: string | null
     lastTransactionHash: string | null
     lastSyncTime: Date | null
   }
@@ -3393,14 +3383,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type NFTOwnersAvgAggregateInputType = {
-    count?: true
-  }
-
-  export type NFTOwnersSumAggregateInputType = {
-    count?: true
-  }
 
   export type NFTOwnersMinAggregateInputType = {
     id?: true
@@ -3474,18 +3456,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: NFTOwnersAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: NFTOwnersSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: NFTOwnersMinAggregateInputType
@@ -3516,8 +3486,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: NFTOwnersCountAggregateInputType | true
-    _avg?: NFTOwnersAvgAggregateInputType
-    _sum?: NFTOwnersSumAggregateInputType
     _min?: NFTOwnersMinAggregateInputType
     _max?: NFTOwnersMaxAggregateInputType
   }
@@ -3528,12 +3496,10 @@ export namespace Prisma {
     ownerAddress: string
     contractAddress: string
     tokenId: string
-    count: number
+    count: string
     lastTransactionHash: string | null
     lastSyncTime: Date | null
     _count: NFTOwnersCountAggregateOutputType | null
-    _avg: NFTOwnersAvgAggregateOutputType | null
-    _sum: NFTOwnersSumAggregateOutputType | null
     _min: NFTOwnersMinAggregateOutputType | null
     _max: NFTOwnersMaxAggregateOutputType | null
   }
@@ -3621,7 +3587,7 @@ export namespace Prisma {
       ownerAddress: string
       contractAddress: string
       tokenId: string
-      count: number
+      count: string
       lastTransactionHash: string | null
       lastSyncTime: Date | null
     }, ExtArgs["result"]["nFTOwners"]>
@@ -4053,7 +4019,7 @@ export namespace Prisma {
     readonly ownerAddress: FieldRef<"NFTOwners", 'String'>
     readonly contractAddress: FieldRef<"NFTOwners", 'String'>
     readonly tokenId: FieldRef<"NFTOwners", 'String'>
-    readonly count: FieldRef<"NFTOwners", 'Int'>
+    readonly count: FieldRef<"NFTOwners", 'String'>
     readonly lastTransactionHash: FieldRef<"NFTOwners", 'String'>
     readonly lastSyncTime: FieldRef<"NFTOwners", 'DateTime'>
   }
@@ -7149,7 +7115,7 @@ export namespace Prisma {
     ownerAddress?: StringFilter<"NFTOwners"> | string
     contractAddress?: StringFilter<"NFTOwners"> | string
     tokenId?: StringFilter<"NFTOwners"> | string
-    count?: IntFilter<"NFTOwners"> | number
+    count?: StringFilter<"NFTOwners"> | string
     lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
     nft?: XOR<NFTsNullableScalarRelationFilter, NFTsWhereInput> | null
@@ -7176,7 +7142,7 @@ export namespace Prisma {
     ownerAddress?: StringFilter<"NFTOwners"> | string
     contractAddress?: StringFilter<"NFTOwners"> | string
     tokenId?: StringFilter<"NFTOwners"> | string
-    count?: IntFilter<"NFTOwners"> | number
+    count?: StringFilter<"NFTOwners"> | string
     lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
     nft?: XOR<NFTsNullableScalarRelationFilter, NFTsWhereInput> | null
@@ -7192,10 +7158,8 @@ export namespace Prisma {
     lastTransactionHash?: SortOrderInput | SortOrder
     lastSyncTime?: SortOrderInput | SortOrder
     _count?: NFTOwnersCountOrderByAggregateInput
-    _avg?: NFTOwnersAvgOrderByAggregateInput
     _max?: NFTOwnersMaxOrderByAggregateInput
     _min?: NFTOwnersMinOrderByAggregateInput
-    _sum?: NFTOwnersSumOrderByAggregateInput
   }
 
   export type NFTOwnersScalarWhereWithAggregatesInput = {
@@ -7207,7 +7171,7 @@ export namespace Prisma {
     ownerAddress?: StringWithAggregatesFilter<"NFTOwners"> | string
     contractAddress?: StringWithAggregatesFilter<"NFTOwners"> | string
     tokenId?: StringWithAggregatesFilter<"NFTOwners"> | string
-    count?: IntWithAggregatesFilter<"NFTOwners"> | number
+    count?: StringWithAggregatesFilter<"NFTOwners"> | string
     lastTransactionHash?: StringNullableWithAggregatesFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableWithAggregatesFilter<"NFTOwners"> | Date | string | null
   }
@@ -7538,7 +7502,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
     nft?: NFTsCreateNestedOneWithoutNFTOwnersInput
@@ -7550,7 +7514,7 @@ export namespace Prisma {
     ownerAddress: string
     contractAddress: string
     tokenId: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
   }
@@ -7559,7 +7523,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     nft?: NFTsUpdateOneWithoutNFTOwnersNestedInput
@@ -7571,7 +7535,7 @@ export namespace Prisma {
     ownerAddress?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -7582,7 +7546,7 @@ export namespace Prisma {
     ownerAddress: string
     contractAddress: string
     tokenId: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
   }
@@ -7591,7 +7555,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -7602,7 +7566,7 @@ export namespace Prisma {
     ownerAddress?: StringFieldUpdateOperationsInput | string
     contractAddress?: StringFieldUpdateOperationsInput | string
     tokenId?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -8078,10 +8042,6 @@ export namespace Prisma {
     lastSyncTime?: SortOrder
   }
 
-  export type NFTOwnersAvgOrderByAggregateInput = {
-    count?: SortOrder
-  }
-
   export type NFTOwnersMaxOrderByAggregateInput = {
     id?: SortOrder
     contractId?: SortOrder
@@ -8102,10 +8062,6 @@ export namespace Prisma {
     count?: SortOrder
     lastTransactionHash?: SortOrder
     lastSyncTime?: SortOrder
-  }
-
-  export type NFTOwnersSumOrderByAggregateInput = {
-    count?: SortOrder
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -8712,7 +8668,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
   }
@@ -8721,7 +8677,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
   }
@@ -8761,7 +8717,7 @@ export namespace Prisma {
     ownerAddress?: StringFilter<"NFTOwners"> | string
     contractAddress?: StringFilter<"NFTOwners"> | string
     tokenId?: StringFilter<"NFTOwners"> | string
-    count?: IntFilter<"NFTOwners"> | number
+    count?: StringFilter<"NFTOwners"> | string
     lastTransactionHash?: StringNullableFilter<"NFTOwners"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"NFTOwners"> | Date | string | null
   }
@@ -8770,7 +8726,7 @@ export namespace Prisma {
     id?: string
     contractId: string
     ownerAddress: string
-    count: number
+    count: string
     lastTransactionHash?: string | null
     lastSyncTime?: Date | string | null
   }
@@ -8779,7 +8735,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -8788,7 +8744,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -8797,7 +8753,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     contractId?: StringFieldUpdateOperationsInput | string
     ownerAddress?: StringFieldUpdateOperationsInput | string
-    count?: IntFieldUpdateOperationsInput | number
+    count?: StringFieldUpdateOperationsInput | string
     lastTransactionHash?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }

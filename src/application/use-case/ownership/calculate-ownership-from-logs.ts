@@ -76,9 +76,11 @@ export class CalculateOwnershipFromLogs {
         // ERC721: Remove from old owner, add to new owner
         if (!isZero(from)) {
           const existingFrom = ownershipMap.get(fromKey);
-          if (existingFrom && existingFrom.count > 0) {
-            existingFrom.count = Math.max(0, existingFrom.count - 1);
-            if (existingFrom.count === 0) {
+          if (existingFrom && existingFrom.count > 0n) {
+            existingFrom.count = existingFrom.count - 1n;
+            if (existingFrom.count < 0n) existingFrom.count = 0n;
+            
+            if (existingFrom.count === 0n) {
               ownershipMap.delete(fromKey);
             } else {
               ownershipMap.set(fromKey, existingFrom);
@@ -89,7 +91,7 @@ export class CalculateOwnershipFromLogs {
         if (!isZero(to)) {
           const existing = ownershipMap.get(key);
           if (existing) {
-            existing.count = existing.count + 1;
+            existing.count = existing.count + 1n;
             existing.lastTransactionHash = log.transactionHash;
             existing.lastSyncTime = log.loggedAt;
             ownershipMap.set(key, existing);
@@ -102,7 +104,7 @@ export class CalculateOwnershipFromLogs {
                 to,
                 log.contractAddress,
                 tokenId,
-                1,
+                1n,
                 log.transactionHash,
                 log.loggedAt
               )
@@ -114,14 +116,16 @@ export class CalculateOwnershipFromLogs {
         log.eventType === "ERC1155.TransferSingle"
       ) {
         // ERC1155: Decrement from old owner, increment to new owner
-        const value = log.value ? Number(log.value) : 0;
-        if (value === 0) continue;
+        const value = log.value ? BigInt(log.value) : 0n;
+        if (value === 0n) continue;
 
         if (!isZero(from)) {
           const existingFrom = ownershipMap.get(fromKey);
           if (existingFrom) {
-            existingFrom.count = Math.max(0, existingFrom.count - value);
-            if (existingFrom.count === 0) {
+            existingFrom.count = existingFrom.count - value;
+            if (existingFrom.count < 0n) existingFrom.count = 0n;
+
+            if (existingFrom.count === 0n) {
               ownershipMap.delete(fromKey);
             } else {
               ownershipMap.set(fromKey, existingFrom);
@@ -156,7 +160,7 @@ export class CalculateOwnershipFromLogs {
     }
 
     // Return only ownerships with count > 0
-    return Array.from(ownershipMap.values()).filter((owner) => owner.count > 0);
+    return Array.from(ownershipMap.values()).filter((owner) => owner.count > 0n);
   }
 }
 

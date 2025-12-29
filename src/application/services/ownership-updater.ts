@@ -46,7 +46,7 @@ export class OwnershipUpdater {
     // add to new owner
     const existing = (await this.ownerRepo.filterOwners({ ownerAddress: to, contractAddress: params.nftContractAddress, tokenId: tokenIdStr }))[0];
     if (existing) {
-      existing.count = 1;
+      existing.count = 1n;
       existing.lastTransactionHash = params.transactionHash;
 
       await this.ownerRepo.update(existing);
@@ -57,7 +57,7 @@ export class OwnershipUpdater {
         to,
         params.nftContractAddress,
         tokenIdStr,
-        1,
+        1n,
         params.transactionHash,
         new Date()
       ));
@@ -75,8 +75,8 @@ export class OwnershipUpdater {
     value: bigint;
   }): Promise<void> {
     const tokenIdStr = params.id.toString();
-    const amount = Number(params.value);
-    if (amount === 0) return;
+    const amount = params.value;
+    if (amount === 0n) return;
 
     // decrement from "from"
     if (!isZero(params.from)) {

@@ -38,7 +38,7 @@ model NFTOwners {
   ownerAddress        String    @db.VarChar(100)
   contractAddress     String    @db.VarChar(100)
   tokenId             String    @db.Text
-  count               Int
+  count               String    @db.Text
   lastTransactionHash String?   @db.VarChar(100)
   lastSyncTime        DateTime? @db.Timestamptz
 
