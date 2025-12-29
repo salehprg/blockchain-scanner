@@ -1,3 +1,5 @@
+import { NFT } from "./nft";
+
 export class NFTOwner {
   constructor(
     public id: string,
@@ -7,6 +9,7 @@ export class NFTOwner {
     public tokenId: string,          // string (can be large)
     public count: bigint,
     public lastTransactionHash: string | null,
-    public lastSyncTime: Date | null
+    public lastSyncTime: Date | null,
+    public nft?: NFT | null
   ) {}
 }

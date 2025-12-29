@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import type { AppContainer } from "@/main/container";
 import { NFTOwner } from "@/domain/entities/nft-owner";
+import { mapNFTOwnerRecordToDTO } from "@/domain/dto/nft-owner.dto";
 import { randomUUID } from "crypto";
 import { Address } from "viem";
 
 export async function listOwners(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    res.json(await repos.ownerRepo.findAll());
+    const owners = await repos.ownerRepo.findAll();
+    res.json(owners.map(mapNFTOwnerRecordToDTO));
   } catch (e) { next(e); }
 }
 
@@ -21,8 +23,7 @@ export async function filterOwners(req: Request, res: Response, next: NextFuncti
     }
 
     const found = await repos.ownerRepo.filterOwners({ contractAddress, ownerAddress, tokenId });
-    if (!found) return res.status(404).json({ error: "Not found" });
-    res.json(found);
+    res.json(found.map(mapNFTOwnerRecordToDTO));
   } catch (e) { next(e); }
 }
 
@@ -37,13 +38,13 @@ export async function upsertOwner(req: Request, res: Response, next: NextFunctio
       String(body.ownerAddress),
       String(body.contractAddress),
       String(body.tokenId),
-      Number(body.count ?? 0),
+      BigInt(body.count ?? 0),
       body.lastTransactionHash ?? null,
       body.lastSyncTime ? new Date(body.lastSyncTime) : null
     );
 
     const saved = await repos.ownerRepo.upsert(model);
-    res.status(body.id ? 200 : 201).json(saved);
+    res.status(body.id ? 200 : 201).json(mapNFTOwnerRecordToDTO(saved));
   } catch (e) { next(e); }
 }
 

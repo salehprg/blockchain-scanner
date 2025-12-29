@@ -1,5 +1,6 @@
 import { mapNFTOwnerRecordToDTO, NFTOwnerDTO } from "@/domain/dto/nft-owner.dto";
 import { NFTOwner } from "@/domain/entities/nft-owner";
+import { NFT } from "@/domain/entities/nft";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { Prisma } from "@/generated/client";
 import { prisma } from "@/infrastructure/db/prisma";
@@ -8,7 +9,7 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
   constructor() { }
 
   private mapRecordToEntity(e: any): NFTOwner {
-    return new NFTOwner(
+    const owner = new NFTOwner(
       e.id,
       e.contractId,
       e.ownerAddress,
@@ -18,6 +19,26 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
       e.lastTransactionHash ?? null,
       e.lastSyncTime ?? null,
     );
+    
+    if (e.nft) {
+      owner.nft = new NFT(
+        e.nft.id,
+        e.nft.contractId,
+        e.nft.contractAddress,
+        e.nft.tokenId,
+        e.nft.tokenUri ?? null,
+        !!e.nft.metadataUpdated,
+        e.nft.lastMetadataSyncTime ?? null,
+        e.nft.name ?? null,
+        e.nft.description ?? null,
+        e.nft.image ?? null,
+        e.nft.externalUrl ?? null,
+        Array.isArray(e.nft.attributes) ? e.nft.attributes : null,
+        null
+      );
+    }
+    
+    return owner;
   }
 
   async create(entity: NFTOwner): Promise<NFTOwner> {
@@ -60,16 +81,16 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
     });
     return this.mapRecordToEntity(saved);
   }
-  async findById(id: string): Promise<NFTOwnerDTO | null> {
+  async findById(id: string): Promise<NFTOwner | null> {
     const e = await prisma.nFTOwners.findUnique({
       where: { id },
       include: { nft: true },
     });
-    return e ? mapNFTOwnerRecordToDTO(e) : null;
+    return e ? this.mapRecordToEntity(e) : null;
   }
-  async findAll(): Promise<NFTOwnerDTO[]> {
+  async findAll(): Promise<NFTOwner[]> {
     const list = await prisma.nFTOwners.findMany({ include: { nft: true } });
-    return list.map(e => mapNFTOwnerRecordToDTO(e));
+    return list.map(e => this.mapRecordToEntity(e));
   }
   async update(entity: NFTOwner): Promise<NFTOwner> {
     const saved = await prisma.nFTOwners.update({
@@ -90,13 +111,13 @@ export class NFTOwnerRepository implements INFTOwnerRepository {
     await prisma.nFTOwners.delete({ where: { id } });
   }
 
-  async filterOwners(params: { contractAddress?: string; ownerAddress?: string; tokenId?: string }): Promise<NFTOwnerDTO[]> {
+  async filterOwners(params: { contractAddress?: string; ownerAddress?: string; tokenId?: string }): Promise<NFTOwner[]> {
     const where: Prisma.NFTOwnersWhereInput = {};
     if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
     if (params.ownerAddress) where.ownerAddress = { equals: params.ownerAddress, mode: 'insensitive' };
     if (params.tokenId) where.tokenId = { equals: params.tokenId, mode: 'insensitive' };
 
     const list = await prisma.nFTOwners.findMany({ where, include: { nft: true } });
-    return list.map(e => mapNFTOwnerRecordToDTO(e));
+    return list.map(e => this.mapRecordToEntity(e));
   }
 }
