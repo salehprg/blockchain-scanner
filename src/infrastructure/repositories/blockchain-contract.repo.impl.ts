@@ -15,9 +15,11 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
         lastSyncTime: entity.lastSyncTime,
+        contractCreateBlockNumber: entity.contractCreateBlockNumber,
+        contractName: entity.contractName,
       },
     });
-    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime);
+    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime, saved.contractCreateBlockNumber, saved.contractName);
   }
   async upsert(entity: BlockchainContract): Promise<BlockchainContract> {
     const saved = await prisma.blockchainContracts.upsert({
@@ -29,6 +31,8 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
         lastSyncTime: entity.lastSyncTime,
+        contractCreateBlockNumber: entity.contractCreateBlockNumber,
+        contractName: entity.contractName,
       },
       update: {
         contractAddress: entity.contractAddress,
@@ -36,17 +40,19 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
         lastSyncTime: entity.lastSyncTime,
+        contractCreateBlockNumber: entity.contractCreateBlockNumber,
+        contractName: entity.contractName,
       },
     });
-    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime);
+    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime, saved.contractCreateBlockNumber, saved.contractName);
   }
   async findById(id: string): Promise<BlockchainContract | null> {
     const e = await prisma.blockchainContracts.findUnique({ where: { id } });
-    return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime) : null;
+    return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName) : null;
   }
   async findAll(): Promise<BlockchainContract[]> {
     const list = await prisma.blockchainContracts.findMany();
-    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime));
+    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName));
   }
   async filterContracts(params: { id?: string; contractAddress?: string; contractType?: 'ERC721' | 'ERC1155' | 'OTHER'; chainId?: number }): Promise<BlockchainContract[]> {
 
@@ -59,7 +65,7 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     const list = await prisma.blockchainContracts.findMany({
       where,
     });
-    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime));
+    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName));
   }
   async update(entity: BlockchainContract): Promise<BlockchainContract> {
     const saved = await prisma.blockchainContracts.update({
@@ -70,19 +76,21 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
         chainId: entity.chainId,
         lastSyncBlock: entity.lastSyncBlock,
         lastSyncTime: entity.lastSyncTime,
+        contractCreateBlockNumber: entity.contractCreateBlockNumber,
+        contractName: entity.contractName,
       },
     });
-    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime);
+    return new BlockchainContract(saved.id, saved.contractAddress, saved.contractType as any, saved.chainId, saved.lastSyncBlock, saved.lastSyncTime, saved.contractCreateBlockNumber, saved.contractName);
   }
   async delete(id: string): Promise<void> {
     await prisma.blockchainContracts.delete({ where: { id } });
   }
   async findByAddress(address: string): Promise<BlockchainContract | null> {
     const e = await prisma.blockchainContracts.findUnique({ where: { contractAddress: address } });
-    return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime) : null;
+    return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName) : null;
   }
   async findByChainId(chainId: number): Promise<BlockchainContract[]> {
     const list = await prisma.blockchainContracts.findMany({ where: { chainId } });
-    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime));
+    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName));
   }
 }

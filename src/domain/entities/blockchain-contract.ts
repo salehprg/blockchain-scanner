@@ -7,6 +7,8 @@ export class BlockchainContract {
     public contractType: ContractType,
     public chainId: number,
     public lastSyncBlock: string | null,  // use string to hold bigints safely
-    public lastSyncTime: Date | null
+    public lastSyncTime: Date | null,
+    public contractCreateBlockNumber: string | null,  // use string to hold bigints safely
+    public contractName: string | null
   ) { }
 }

@@ -44,7 +44,9 @@ export async function upsertContract(req: Request, res: Response, next: NextFunc
       body.contractType ?? "OTHER",
       Number(body.chainId),
       body.lastSyncBlock ?? null,
-      body.lastSyncTime ? new Date(body.lastSyncTime) : null
+      body.lastSyncTime ? new Date(body.lastSyncTime) : null,
+      body.contractCreateBlockNumber ?? null,
+      body.contractName ?? null
     );
 
     const saved = await repos.contractRepo.upsert(model);

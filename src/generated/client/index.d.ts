@@ -2298,6 +2298,8 @@ export namespace Prisma {
     chainId: number | null
     lastSyncBlock: string | null
     lastSyncTime: Date | null
+    contractCreateBlockNumber: string | null
+    contractName: string | null
   }
 
   export type BlockchainContractsMaxAggregateOutputType = {
@@ -2307,6 +2309,8 @@ export namespace Prisma {
     chainId: number | null
     lastSyncBlock: string | null
     lastSyncTime: Date | null
+    contractCreateBlockNumber: string | null
+    contractName: string | null
   }
 
   export type BlockchainContractsCountAggregateOutputType = {
@@ -2316,6 +2320,8 @@ export namespace Prisma {
     chainId: number
     lastSyncBlock: number
     lastSyncTime: number
+    contractCreateBlockNumber: number
+    contractName: number
     _all: number
   }
 
@@ -2335,6 +2341,8 @@ export namespace Prisma {
     chainId?: true
     lastSyncBlock?: true
     lastSyncTime?: true
+    contractCreateBlockNumber?: true
+    contractName?: true
   }
 
   export type BlockchainContractsMaxAggregateInputType = {
@@ -2344,6 +2352,8 @@ export namespace Prisma {
     chainId?: true
     lastSyncBlock?: true
     lastSyncTime?: true
+    contractCreateBlockNumber?: true
+    contractName?: true
   }
 
   export type BlockchainContractsCountAggregateInputType = {
@@ -2353,6 +2363,8 @@ export namespace Prisma {
     chainId?: true
     lastSyncBlock?: true
     lastSyncTime?: true
+    contractCreateBlockNumber?: true
+    contractName?: true
     _all?: true
   }
 
@@ -2449,6 +2461,8 @@ export namespace Prisma {
     chainId: number
     lastSyncBlock: string | null
     lastSyncTime: Date | null
+    contractCreateBlockNumber: string | null
+    contractName: string | null
     _count: BlockchainContractsCountAggregateOutputType | null
     _avg: BlockchainContractsAvgAggregateOutputType | null
     _sum: BlockchainContractsSumAggregateOutputType | null
@@ -2477,6 +2491,8 @@ export namespace Prisma {
     chainId?: boolean
     lastSyncBlock?: boolean
     lastSyncTime?: boolean
+    contractCreateBlockNumber?: boolean
+    contractName?: boolean
   }, ExtArgs["result"]["blockchainContracts"]>
 
   export type BlockchainContractsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2486,6 +2502,8 @@ export namespace Prisma {
     chainId?: boolean
     lastSyncBlock?: boolean
     lastSyncTime?: boolean
+    contractCreateBlockNumber?: boolean
+    contractName?: boolean
   }, ExtArgs["result"]["blockchainContracts"]>
 
   export type BlockchainContractsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2495,6 +2513,8 @@ export namespace Prisma {
     chainId?: boolean
     lastSyncBlock?: boolean
     lastSyncTime?: boolean
+    contractCreateBlockNumber?: boolean
+    contractName?: boolean
   }, ExtArgs["result"]["blockchainContracts"]>
 
   export type BlockchainContractsSelectScalar = {
@@ -2504,9 +2524,11 @@ export namespace Prisma {
     chainId?: boolean
     lastSyncBlock?: boolean
     lastSyncTime?: boolean
+    contractCreateBlockNumber?: boolean
+    contractName?: boolean
   }
 
-  export type BlockchainContractsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractAddress" | "contractType" | "chainId" | "lastSyncBlock" | "lastSyncTime", ExtArgs["result"]["blockchainContracts"]>
+  export type BlockchainContractsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractAddress" | "contractType" | "chainId" | "lastSyncBlock" | "lastSyncTime" | "contractCreateBlockNumber" | "contractName", ExtArgs["result"]["blockchainContracts"]>
 
   export type $BlockchainContractsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "BlockchainContracts"
@@ -2518,6 +2540,8 @@ export namespace Prisma {
       chainId: number
       lastSyncBlock: string | null
       lastSyncTime: Date | null
+      contractCreateBlockNumber: string | null
+      contractName: string | null
     }, ExtArgs["result"]["blockchainContracts"]>
     composites: {}
   }
@@ -2947,6 +2971,8 @@ export namespace Prisma {
     readonly chainId: FieldRef<"BlockchainContracts", 'Int'>
     readonly lastSyncBlock: FieldRef<"BlockchainContracts", 'String'>
     readonly lastSyncTime: FieldRef<"BlockchainContracts", 'DateTime'>
+    readonly contractCreateBlockNumber: FieldRef<"BlockchainContracts", 'String'>
+    readonly contractName: FieldRef<"BlockchainContracts", 'String'>
   }
     
 
@@ -6809,7 +6835,9 @@ export namespace Prisma {
     contractType: 'contractType',
     chainId: 'chainId',
     lastSyncBlock: 'lastSyncBlock',
-    lastSyncTime: 'lastSyncTime'
+    lastSyncTime: 'lastSyncTime',
+    contractCreateBlockNumber: 'contractCreateBlockNumber',
+    contractName: 'contractName'
   };
 
   export type BlockchainContractsScalarFieldEnum = (typeof BlockchainContractsScalarFieldEnum)[keyof typeof BlockchainContractsScalarFieldEnum]
@@ -7053,6 +7081,8 @@ export namespace Prisma {
     chainId?: IntFilter<"BlockchainContracts"> | number
     lastSyncBlock?: StringNullableFilter<"BlockchainContracts"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"BlockchainContracts"> | Date | string | null
+    contractCreateBlockNumber?: StringNullableFilter<"BlockchainContracts"> | string | null
+    contractName?: StringNullableFilter<"BlockchainContracts"> | string | null
   }
 
   export type BlockchainContractsOrderByWithRelationInput = {
@@ -7062,6 +7092,8 @@ export namespace Prisma {
     chainId?: SortOrder
     lastSyncBlock?: SortOrderInput | SortOrder
     lastSyncTime?: SortOrderInput | SortOrder
+    contractCreateBlockNumber?: SortOrderInput | SortOrder
+    contractName?: SortOrderInput | SortOrder
   }
 
   export type BlockchainContractsWhereUniqueInput = Prisma.AtLeast<{
@@ -7074,6 +7106,8 @@ export namespace Prisma {
     chainId?: IntFilter<"BlockchainContracts"> | number
     lastSyncBlock?: StringNullableFilter<"BlockchainContracts"> | string | null
     lastSyncTime?: DateTimeNullableFilter<"BlockchainContracts"> | Date | string | null
+    contractCreateBlockNumber?: StringNullableFilter<"BlockchainContracts"> | string | null
+    contractName?: StringNullableFilter<"BlockchainContracts"> | string | null
   }, "id" | "contractAddress">
 
   export type BlockchainContractsOrderByWithAggregationInput = {
@@ -7083,6 +7117,8 @@ export namespace Prisma {
     chainId?: SortOrder
     lastSyncBlock?: SortOrderInput | SortOrder
     lastSyncTime?: SortOrderInput | SortOrder
+    contractCreateBlockNumber?: SortOrderInput | SortOrder
+    contractName?: SortOrderInput | SortOrder
     _count?: BlockchainContractsCountOrderByAggregateInput
     _avg?: BlockchainContractsAvgOrderByAggregateInput
     _max?: BlockchainContractsMaxOrderByAggregateInput
@@ -7100,6 +7136,8 @@ export namespace Prisma {
     chainId?: IntWithAggregatesFilter<"BlockchainContracts"> | number
     lastSyncBlock?: StringNullableWithAggregatesFilter<"BlockchainContracts"> | string | null
     lastSyncTime?: DateTimeNullableWithAggregatesFilter<"BlockchainContracts"> | Date | string | null
+    contractCreateBlockNumber?: StringNullableWithAggregatesFilter<"BlockchainContracts"> | string | null
+    contractName?: StringNullableWithAggregatesFilter<"BlockchainContracts"> | string | null
   }
 
   export type NFTOwnersWhereInput = {
@@ -7426,6 +7464,8 @@ export namespace Prisma {
     chainId: number
     lastSyncBlock?: string | null
     lastSyncTime?: Date | string | null
+    contractCreateBlockNumber?: string | null
+    contractName?: string | null
   }
 
   export type BlockchainContractsUncheckedCreateInput = {
@@ -7435,6 +7475,8 @@ export namespace Prisma {
     chainId: number
     lastSyncBlock?: string | null
     lastSyncTime?: Date | string | null
+    contractCreateBlockNumber?: string | null
+    contractName?: string | null
   }
 
   export type BlockchainContractsUpdateInput = {
@@ -7444,6 +7486,8 @@ export namespace Prisma {
     chainId?: IntFieldUpdateOperationsInput | number
     lastSyncBlock?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractCreateBlockNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BlockchainContractsUncheckedUpdateInput = {
@@ -7453,6 +7497,8 @@ export namespace Prisma {
     chainId?: IntFieldUpdateOperationsInput | number
     lastSyncBlock?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractCreateBlockNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BlockchainContractsCreateManyInput = {
@@ -7462,6 +7508,8 @@ export namespace Prisma {
     chainId: number
     lastSyncBlock?: string | null
     lastSyncTime?: Date | string | null
+    contractCreateBlockNumber?: string | null
+    contractName?: string | null
   }
 
   export type BlockchainContractsUpdateManyMutationInput = {
@@ -7471,6 +7519,8 @@ export namespace Prisma {
     chainId?: IntFieldUpdateOperationsInput | number
     lastSyncBlock?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractCreateBlockNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BlockchainContractsUncheckedUpdateManyInput = {
@@ -7480,6 +7530,8 @@ export namespace Prisma {
     chainId?: IntFieldUpdateOperationsInput | number
     lastSyncBlock?: NullableStringFieldUpdateOperationsInput | string | null
     lastSyncTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contractCreateBlockNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    contractName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NFTOwnersCreateInput = {
@@ -7962,6 +8014,8 @@ export namespace Prisma {
     chainId?: SortOrder
     lastSyncBlock?: SortOrder
     lastSyncTime?: SortOrder
+    contractCreateBlockNumber?: SortOrder
+    contractName?: SortOrder
   }
 
   export type BlockchainContractsAvgOrderByAggregateInput = {
@@ -7975,6 +8029,8 @@ export namespace Prisma {
     chainId?: SortOrder
     lastSyncBlock?: SortOrder
     lastSyncTime?: SortOrder
+    contractCreateBlockNumber?: SortOrder
+    contractName?: SortOrder
   }
 
   export type BlockchainContractsMinOrderByAggregateInput = {
@@ -7984,6 +8040,8 @@ export namespace Prisma {
     chainId?: SortOrder
     lastSyncBlock?: SortOrder
     lastSyncTime?: SortOrder
+    contractCreateBlockNumber?: SortOrder
+    contractName?: SortOrder
   }
 
   export type BlockchainContractsSumOrderByAggregateInput = {

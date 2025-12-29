@@ -133,7 +133,9 @@ exports.Prisma.BlockchainContractsScalarFieldEnum = {
   contractType: 'contractType',
   chainId: 'chainId',
   lastSyncBlock: 'lastSyncBlock',
-  lastSyncTime: 'lastSyncTime'
+  lastSyncTime: 'lastSyncTime',
+  contractCreateBlockNumber: 'contractCreateBlockNumber',
+  contractName: 'contractName'
 };
 
 exports.Prisma.NFTOwnersScalarFieldEnum = {
