@@ -93,12 +93,12 @@ export class NFTMetadataSyncer {
     if (type === "ERC1155" || type == "ERC721") {
       // try to infer range from getBaseURICount / getBatchIdAtIndex / TokensLazyMinted pattern
       try {
-        const nextId = await this.reader.readContract<bigint>({ chainId, address: contract, abi: ERC721_ABI as any, functionName: "nextTokenIdToMint" });
+        const nextId = await this.reader.readContract<bigint>({ chainId, address: contract, abi: ERC1155_ABI as any, functionName: "nextTokenIdToMint" });
         const ids: string[] = [];
         for (let i = 0n; i < nextId; i++) ids.push(i.toString());
         return ids;
       } catch (ex: any) {
-        console.log("Failed to fetch token ids via ChestBuyV2 pattern:", ex.message);
+        console.log("Failed to fetch token ids via pattern:", ex.message);
       }
     }
     const owners = await this.ownerRepo.filterOwners({ contractAddress: contract });
