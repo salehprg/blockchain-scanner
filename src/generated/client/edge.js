@@ -199,7 +199,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "K:\\Projects\\Funtoction\\blockchain-scanner\\src\\generated\\client",
+      "value": "G:\\Project\\Funtooction\\blockchain-scanner\\src\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -213,7 +213,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "K:\\Projects\\Funtoction\\blockchain-scanner\\prisma\\schema.prisma",
+    "sourceFilePath": "G:\\Project\\Funtooction\\blockchain-scanner\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
