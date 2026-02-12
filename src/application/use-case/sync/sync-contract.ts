@@ -34,6 +34,33 @@ export class SyncContracts {
     this.metadataSyncer = metadataSyncer;
   }
 
+  async resyncContract(params: {
+    contractAddress: Address;
+    fromBlock: bigint;
+    toBlock: bigint;
+  }): Promise<void> {
+    const contracts = await this.contractRepo.filterContracts({ contractAddress: params.contractAddress });
+    if (contracts.length === 0) {
+      console.warn(`[resync] No contract found for address ${params.contractAddress}`);
+      return;
+    }
+    const c = contracts[0];
+
+    if (c.contractType !== "OTHER") {
+      await this.metadataSyncer.syncContract({
+        chainId: c.chainId,
+        contractId: c.id,
+        contractAddress: c.contractAddress as Address,
+        contractType: c.contractType as any
+      }).catch((e: any) => {
+        console.log(e)
+      });
+    }
+
+    await this.syncOne(c.id, c.contractAddress as Address, c.contractType, c.chainId, (params.fromBlock - 1n).toString(), params.toBlock);
+
+  }
+
   async execute(): Promise<void> {
     const contracts = await this.contractLister.listContracts();
     const ethsContracts = contracts.filter(c => (c.contractType?.toUpperCase?.() ?? c.contractType) !== "SOLANA");
@@ -62,12 +89,17 @@ export class SyncContracts {
     contractAddress: Address,
     contractType: ContractType,
     chainId: number,
-    lastSyncBlock: string | null
+    lastSyncBlock: string | null,
+    toSyncBlock: bigint | null = null
   ) {
     if (contractType === "OTHER") return; // skip unsupported
 
     const latest = await this.logReader.getLatestBlock(chainId);
-    const safeTo = latest > CONF ? latest - CONF : 0n;
+    var safeTo = latest > CONF ? latest - CONF : 0n;
+
+    if (toSyncBlock != null && toSyncBlock < safeTo) {
+      safeTo = toSyncBlock;
+    }
 
     let cursor = BigInt(lastSyncBlock ?? "0");
     if (safeTo <= cursor) return;
@@ -208,8 +240,7 @@ export class SyncContracts {
           if (found.length > 0) {
             existingTokenIdSet.add(tid);
           } else if (mintedTokenIds.has(tid)) {
-            // Create missing NFT if it was minted in this batch
-            await this.nftRepo.create(new NFT(
+            const newNFT = new NFT(
               crypto.randomUUID(),
               contractId,
               contractAddress,
@@ -217,7 +248,8 @@ export class SyncContracts {
               null,
               false,
               null
-            ));
+            );
+            await this.nftRepo.create(newNFT);
             existingTokenIdSet.add(tid);
           }
         }
@@ -316,6 +348,7 @@ export class SyncContracts {
       return lastBlockToSave;
 
     } catch (e) {
+      console.log((e as any).stack)
       throw e;
     }
   }
@@ -492,7 +525,7 @@ export class SyncContracts {
         if (receiver && tokenId && quantity) {
           mapped.push({
             blockHash: tx.hash,
-            logIndex: 0, 
+            logIndex: 0,
             blockNumber: BigInt(tx.block_number),
             args: {
               operator: tx.from?.hash as Address,

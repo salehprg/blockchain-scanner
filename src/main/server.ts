@@ -26,25 +26,7 @@ const PORT = parseInt(envs.PORT);
   const app = createApp();
   app.locals.container = container;
 
-  // start NFT metadata sync job (EVM + Solana support)
-  const metaSyncer = new NFTMetadataSyncer(
-    container.services.blockchainReader,
-    container.repos.nftRepo,
-    container.repos.ownerRepo,
-    container.services.solanaReader
-  );
-
-  const logReader = new BlockchainLogReader(container.services.blockchainReader);
-  const syncUseCase = new SyncContracts(
-    container.services.contractLister,
-    container.repos.contractRepo,
-    container.repos.ownerRepo,
-    logReader,
-    container.repos.contractLogRepo,
-    metaSyncer,
-    container.repos.nftRepo
-  );
-  const job = new ContractSyncJob(syncUseCase, 10_000);
+  const job = new ContractSyncJob(container.services.syncer, 10_000);
   job.start();
   // Start Solana program sync job (ensures NFTs exist + metadata before owners)
   const solSyncUseCase = new SyncSolanaPrograms(
@@ -52,13 +34,13 @@ const PORT = parseInt(envs.PORT);
     container.services.solanaReader,
     container.repos.contractLogRepo,
     container.repos.ownerRepo,
-    metaSyncer
+    container.services.metaSyncer,
   );
   const solJob = new SolanaSyncJob(solSyncUseCase, 15_000);
   solJob.start();
   
   const metaJob = new NFTMetadataSyncJob(
-    metaSyncer,
+    container.services.metaSyncer,
     container.services.contractLister,
     60_000
   );
