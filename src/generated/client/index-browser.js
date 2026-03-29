@@ -163,6 +163,7 @@ exports.Prisma.ContractLogsScalarFieldEnum = {
   operatorAddress: 'operatorAddress',
   tokenId: 'tokenId',
   value: 'value',
+  processed: 'processed',
   loggedAt: 'loggedAt'
 };
 

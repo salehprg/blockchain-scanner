@@ -1,4 +1,4 @@
-export type ContractType = 'ERC721' | 'ERC1155' | "SOLANA" | 'OTHER';
+export type ContractType = 'ERC721' | 'ERC1155' | 'SOLANA' | 'OTHER' | 'PAYMENT';
 
 export class BlockchainContract {
   constructor(

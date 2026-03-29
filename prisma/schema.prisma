@@ -64,6 +64,7 @@ model ContractLogs {
   operatorAddress String?  @db.VarChar(100)
   tokenId         String?  @db.Text
   value           String?  @db.Text
+  processed       Boolean  @default(false)
   loggedAt        DateTime @db.Timestamptz
 
   @@unique([transactionHash, logIndex])

@@ -1,4 +1,4 @@
-import { ContractLog } from "@/domain/entities/contract-log";
+import { ContractLog, ContractLogEventType } from "@/domain/entities/contract-log";
 import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { Prisma } from "@/generated/client";
 import { prisma } from "@/infrastructure/db/prisma";
@@ -22,6 +22,7 @@ export class ContractLogRepository implements IContractLogRepository {
         operatorAddress: entity.operatorAddress,
         tokenId: entity.tokenId,
         value: entity.value,
+        processed: entity.processed,
         loggedAt: entity.loggedAt,
       },
     });
@@ -29,7 +30,7 @@ export class ContractLogRepository implements IContractLogRepository {
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
     );
   }
   async upsert(entity: ContractLog): Promise<ContractLog> {
@@ -65,13 +66,14 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: entity.tokenId,
         value: entity.value,
         loggedAt: entity.loggedAt,
+        processed: entity.processed
       },
     });
     return new ContractLog(
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
     );
   }
   async findById(id: string): Promise<ContractLog | null> {
@@ -80,7 +82,7 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
     ) : null;
   }
   async findAll(): Promise<ContractLog[]> {
@@ -89,15 +91,20 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
     ));
   }
-  async filterLogs(params: { contractId?: string; contractAddress?: string; fromDate?: Date; toDate?: Date; limit?: number; offset?: number }): Promise<ContractLog[]> {
+  async filterLogs(params: {
+    contractId?: string; contractAddress?: string; eventType?: ContractLogEventType;
+    isProcessed?: boolean; fromDate?: Date; toDate?: Date; limit?: number; offset?: number
+  }): Promise<ContractLog[]> {
 
     const where: Prisma.ContractLogsWhereInput = {};
     if (params.contractId) where.contractId = { equals: params.contractId, mode: 'insensitive' };
     if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
-    
+    if (params.isProcessed !== undefined) where.processed = { equals: params.isProcessed };
+    if (params.eventType) where.eventType = { equals: params.eventType, mode: 'insensitive' };
+
     // Only add date filter if dates are provided
     if (params.fromDate || params.toDate) {
       where.loggedAt = {};
@@ -115,7 +122,7 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
     ));
   }
   async update(entity: ContractLog): Promise<ContractLog> {
@@ -135,13 +142,14 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: entity.tokenId,
         value: entity.value,
         loggedAt: entity.loggedAt,
+        processed: entity.processed
       },
     });
     return new ContractLog(
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
     );
   }
   async delete(id: string): Promise<void> {
@@ -153,6 +161,7 @@ export class ContractLogRepository implements IContractLogRepository {
     await prisma.contractLogs.createMany({
       data: logs.map(l => ({
         id: l.id,
+        processed: l.processed,
         contractId: l.contractId,
         chainId: l.chainId,
         contractAddress: l.contractAddress,
@@ -166,12 +175,10 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: l.tokenId,
         value: l.value,
         loggedAt: l.loggedAt,
-      })),
+      } as ContractLog)),
       skipDuplicates: true,
     });
   }
-
-  // deprecated specific filters replaced by filterLogs()
 }
 
 

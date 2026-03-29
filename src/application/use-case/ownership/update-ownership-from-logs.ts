@@ -1,15 +1,16 @@
 import { Address } from "viem";
-import { OwnershipUpdater } from "@/application/services/ownership-updater";
 import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
 import { ContractLog } from "@/domain/entities/contract-log";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
+import { HandlersRegistry } from "@/handlers/HandlerRegistry";
 
 export class UpdateOwnershipFromLogs {
+  
   constructor(
     private readonly contractRepo: IBlockchainContractRepository,
     private readonly logRepo: IContractLogRepository,
-    private readonly ownershipUpdater: OwnershipUpdater
+    private readonly handlerRegistry: HandlersRegistry
   ) {}
 
   async execute(params: {
@@ -93,7 +94,7 @@ export class UpdateOwnershipFromLogs {
     log: ContractLog,
     contract: BlockchainContract
   ): Promise<void> {
-    await this.ownershipUpdater.applyTransfer721({
+    await this.handlerRegistry.GetERC721().applyTransfer721ingle({
       contractId: contract.id,
       nftContractAddress: log.contractAddress as Address,
       from: log.fromAddress as Address,
@@ -110,7 +111,7 @@ export class UpdateOwnershipFromLogs {
     const value = log.value ? BigInt(log.value) : 0n;
     if (value <= 0n) return false;
 
-    await this.ownershipUpdater.applyTransfer1155Single({
+    await this.handlerRegistry.GetERC1155().applyTransfer1155Single({
       contractId: contract.id,
       nftContractAddress: log.contractAddress as Address,
       from: log.fromAddress as Address,

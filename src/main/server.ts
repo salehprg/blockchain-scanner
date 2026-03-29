@@ -4,21 +4,15 @@ dotenv.config();
 import { buildContainer, type AppContainer } from "@/main/container";
 import { createApp } from "./app";
 import { envs } from "@/env";
-import { BlockchainLogReader } from "@/infrastructure/blockchain/log-reader";
-import { SyncContracts } from "@/application/use-case/sync/sync-contract";
 import { ContractSyncJob } from "@/jobs/contract-sync.job";
 import { ensureDatabase } from "@/infrastructure/db/ensure-db";
-import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
-import { NFTMetadataSyncJob } from "@/jobs/nft-metadata-sync.job";
 import { prisma } from "@/infrastructure/db/prisma";
-import { SyncSolanaPrograms } from "@/application/use-case/sync/sync-solana";
-import { SolanaSyncJob } from "@/jobs/solana-sync.job";
 
 const PORT = parseInt(envs.PORT);
 
 (async () => {
-  
-  await ensureDatabase(); 
+
+  await ensureDatabase();
   // Initialize DataSource & repositories
   const container: AppContainer = await buildContainer();
 
@@ -26,25 +20,14 @@ const PORT = parseInt(envs.PORT);
   const app = createApp();
   app.locals.container = container;
 
+  container.services.handlerRegistry.RegisterERC1155(container)
+  container.services.handlerRegistry.RegisterERC721(container)
+  container.services.handlerRegistry.RegisterSolana(container)
+  container.services.handlerRegistry.RegisterPayment(container)
+
   const job = new ContractSyncJob(container.services.syncer, 10_000);
   job.start();
   // Start Solana program sync job (ensures NFTs exist + metadata before owners)
-  const solSyncUseCase = new SyncSolanaPrograms(
-    container.repos.contractRepo,
-    container.services.solanaReader,
-    container.repos.contractLogRepo,
-    container.repos.ownerRepo,
-    container.services.metaSyncer,
-  );
-  const solJob = new SolanaSyncJob(solSyncUseCase, 15_000);
-  solJob.start();
-  
-  const metaJob = new NFTMetadataSyncJob(
-    container.services.metaSyncer,
-    container.services.contractLister,
-    60_000
-  );
-  metaJob.start();
 
   const server = app.listen(PORT, async () => {
     console.log(`HTTP listening on http://localhost:${PORT}`);

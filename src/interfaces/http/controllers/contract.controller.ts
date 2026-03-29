@@ -5,7 +5,6 @@ import { randomUUID } from "crypto";
 import { DeleteBlockchainContract} from "@/application/use-case/blockchain-config/blockchain-contract-config"
 import { UpdateOwnershipFromLogs } from "@/application/use-case/ownership/update-ownership-from-logs";
 import { CalculateOwnershipFromLogs } from "@/application/use-case/ownership/calculate-ownership-from-logs";
-import { OwnershipUpdater } from "@/application/services/ownership-updater";
 
 
 export async function listContracts(req: Request, res: Response, next: NextFunction) {
@@ -82,7 +81,7 @@ export async function getContractLogs(req: Request, res: Response, next: NextFun
 
 export async function updateOwnershipFromLogs(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos } = (req.app.locals.container as AppContainer);
+    const { repos, contractHandler } = (req.app.locals.container as AppContainer);
     const { contractAddress } = req.params;
     const { startDate, endDate } = req.body as { startDate: string; endDate: string };
 
@@ -90,11 +89,10 @@ export async function updateOwnershipFromLogs(req: Request, res: Response, next:
       return res.status(400).json({ error: "startDate and endDate are required" });
     }
 
-    const ownershipUpdater = new OwnershipUpdater(repos.ownerRepo);
     const useCase = new UpdateOwnershipFromLogs(
       repos.contractRepo,
       repos.contractLogRepo,
-      ownershipUpdater
+      contractHandler
     );
 
     const result = await useCase.execute({

@@ -1,4 +1,4 @@
-export type ContractLogEventType = "ERC721.Transfer" | "ERC1155.TransferSingle" | "SOLANA.Log" | "SOLANA.NFTTransfer";
+export type ContractLogEventType = "ERC721.Transfer" | "ERC1155.TransferSingle" | "SOLANA.Log" | "SOLANA.NFTTransfer" | "PAYMENT";
 
 export class ContractLog {
   constructor(
@@ -15,8 +15,9 @@ export class ContractLog {
     public operatorAddress: string | null,
     public tokenId: string | null,
     public value: string | null,
+    public processed: boolean,
     public loggedAt: Date
-  ) {}
+  ) { }
 }
 
 

@@ -4491,6 +4491,7 @@ export namespace Prisma {
     operatorAddress: string | null
     tokenId: string | null
     value: string | null
+    processed: boolean | null
     loggedAt: Date | null
   }
 
@@ -4508,6 +4509,7 @@ export namespace Prisma {
     operatorAddress: string | null
     tokenId: string | null
     value: string | null
+    processed: boolean | null
     loggedAt: Date | null
   }
 
@@ -4525,6 +4527,7 @@ export namespace Prisma {
     operatorAddress: number
     tokenId: number
     value: number
+    processed: number
     loggedAt: number
     _all: number
   }
@@ -4554,6 +4557,7 @@ export namespace Prisma {
     operatorAddress?: true
     tokenId?: true
     value?: true
+    processed?: true
     loggedAt?: true
   }
 
@@ -4571,6 +4575,7 @@ export namespace Prisma {
     operatorAddress?: true
     tokenId?: true
     value?: true
+    processed?: true
     loggedAt?: true
   }
 
@@ -4588,6 +4593,7 @@ export namespace Prisma {
     operatorAddress?: true
     tokenId?: true
     value?: true
+    processed?: true
     loggedAt?: true
     _all?: true
   }
@@ -4692,6 +4698,7 @@ export namespace Prisma {
     operatorAddress: string | null
     tokenId: string | null
     value: string | null
+    processed: boolean
     loggedAt: Date
     _count: ContractLogsCountAggregateOutputType | null
     _avg: ContractLogsAvgAggregateOutputType | null
@@ -4728,6 +4735,7 @@ export namespace Prisma {
     operatorAddress?: boolean
     tokenId?: boolean
     value?: boolean
+    processed?: boolean
     loggedAt?: boolean
   }, ExtArgs["result"]["contractLogs"]>
 
@@ -4745,6 +4753,7 @@ export namespace Prisma {
     operatorAddress?: boolean
     tokenId?: boolean
     value?: boolean
+    processed?: boolean
     loggedAt?: boolean
   }, ExtArgs["result"]["contractLogs"]>
 
@@ -4762,6 +4771,7 @@ export namespace Prisma {
     operatorAddress?: boolean
     tokenId?: boolean
     value?: boolean
+    processed?: boolean
     loggedAt?: boolean
   }, ExtArgs["result"]["contractLogs"]>
 
@@ -4779,10 +4789,11 @@ export namespace Prisma {
     operatorAddress?: boolean
     tokenId?: boolean
     value?: boolean
+    processed?: boolean
     loggedAt?: boolean
   }
 
-  export type ContractLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "loggedAt", ExtArgs["result"]["contractLogs"]>
+  export type ContractLogsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "processed" | "loggedAt", ExtArgs["result"]["contractLogs"]>
 
   export type $ContractLogsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContractLogs"
@@ -4801,6 +4812,7 @@ export namespace Prisma {
       operatorAddress: string | null
       tokenId: string | null
       value: string | null
+      processed: boolean
       loggedAt: Date
     }, ExtArgs["result"]["contractLogs"]>
     composites: {}
@@ -5238,6 +5250,7 @@ export namespace Prisma {
     readonly operatorAddress: FieldRef<"ContractLogs", 'String'>
     readonly tokenId: FieldRef<"ContractLogs", 'String'>
     readonly value: FieldRef<"ContractLogs", 'String'>
+    readonly processed: FieldRef<"ContractLogs", 'Boolean'>
     readonly loggedAt: FieldRef<"ContractLogs", 'DateTime'>
   }
     
@@ -6837,6 +6850,7 @@ export namespace Prisma {
     operatorAddress: 'operatorAddress',
     tokenId: 'tokenId',
     value: 'value',
+    processed: 'processed',
     loggedAt: 'loggedAt'
   };
 
@@ -7193,6 +7207,7 @@ export namespace Prisma {
     operatorAddress?: StringNullableFilter<"ContractLogs"> | string | null
     tokenId?: StringNullableFilter<"ContractLogs"> | string | null
     value?: StringNullableFilter<"ContractLogs"> | string | null
+    processed?: BoolFilter<"ContractLogs"> | boolean
     loggedAt?: DateTimeFilter<"ContractLogs"> | Date | string
   }
 
@@ -7210,6 +7225,7 @@ export namespace Prisma {
     operatorAddress?: SortOrderInput | SortOrder
     tokenId?: SortOrderInput | SortOrder
     value?: SortOrderInput | SortOrder
+    processed?: SortOrder
     loggedAt?: SortOrder
   }
 
@@ -7231,6 +7247,7 @@ export namespace Prisma {
     operatorAddress?: StringNullableFilter<"ContractLogs"> | string | null
     tokenId?: StringNullableFilter<"ContractLogs"> | string | null
     value?: StringNullableFilter<"ContractLogs"> | string | null
+    processed?: BoolFilter<"ContractLogs"> | boolean
     loggedAt?: DateTimeFilter<"ContractLogs"> | Date | string
   }, "id" | "transactionHash_logIndex">
 
@@ -7248,6 +7265,7 @@ export namespace Prisma {
     operatorAddress?: SortOrderInput | SortOrder
     tokenId?: SortOrderInput | SortOrder
     value?: SortOrderInput | SortOrder
+    processed?: SortOrder
     loggedAt?: SortOrder
     _count?: ContractLogsCountOrderByAggregateInput
     _avg?: ContractLogsAvgOrderByAggregateInput
@@ -7273,6 +7291,7 @@ export namespace Prisma {
     operatorAddress?: StringNullableWithAggregatesFilter<"ContractLogs"> | string | null
     tokenId?: StringNullableWithAggregatesFilter<"ContractLogs"> | string | null
     value?: StringNullableWithAggregatesFilter<"ContractLogs"> | string | null
+    processed?: BoolWithAggregatesFilter<"ContractLogs"> | boolean
     loggedAt?: DateTimeWithAggregatesFilter<"ContractLogs"> | Date | string
   }
 
@@ -7585,6 +7604,7 @@ export namespace Prisma {
     operatorAddress?: string | null
     tokenId?: string | null
     value?: string | null
+    processed?: boolean
     loggedAt: Date | string
   }
 
@@ -7602,6 +7622,7 @@ export namespace Prisma {
     operatorAddress?: string | null
     tokenId?: string | null
     value?: string | null
+    processed?: boolean
     loggedAt: Date | string
   }
 
@@ -7619,6 +7640,7 @@ export namespace Prisma {
     operatorAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenId?: NullableStringFieldUpdateOperationsInput | string | null
     value?: NullableStringFieldUpdateOperationsInput | string | null
+    processed?: BoolFieldUpdateOperationsInput | boolean
     loggedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7636,6 +7658,7 @@ export namespace Prisma {
     operatorAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenId?: NullableStringFieldUpdateOperationsInput | string | null
     value?: NullableStringFieldUpdateOperationsInput | string | null
+    processed?: BoolFieldUpdateOperationsInput | boolean
     loggedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7653,6 +7676,7 @@ export namespace Prisma {
     operatorAddress?: string | null
     tokenId?: string | null
     value?: string | null
+    processed?: boolean
     loggedAt: Date | string
   }
 
@@ -7670,6 +7694,7 @@ export namespace Prisma {
     operatorAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenId?: NullableStringFieldUpdateOperationsInput | string | null
     value?: NullableStringFieldUpdateOperationsInput | string | null
+    processed?: BoolFieldUpdateOperationsInput | boolean
     loggedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -7687,6 +7712,7 @@ export namespace Prisma {
     operatorAddress?: NullableStringFieldUpdateOperationsInput | string | null
     tokenId?: NullableStringFieldUpdateOperationsInput | string | null
     value?: NullableStringFieldUpdateOperationsInput | string | null
+    processed?: BoolFieldUpdateOperationsInput | boolean
     loggedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8064,6 +8090,11 @@ export namespace Prisma {
     lastSyncTime?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -8094,6 +8125,7 @@ export namespace Prisma {
     operatorAddress?: SortOrder
     tokenId?: SortOrder
     value?: SortOrder
+    processed?: SortOrder
     loggedAt?: SortOrder
   }
 
@@ -8116,6 +8148,7 @@ export namespace Prisma {
     operatorAddress?: SortOrder
     tokenId?: SortOrder
     value?: SortOrder
+    processed?: SortOrder
     loggedAt?: SortOrder
   }
 
@@ -8133,12 +8166,21 @@ export namespace Prisma {
     operatorAddress?: SortOrder
     tokenId?: SortOrder
     value?: SortOrder
+    processed?: SortOrder
     loggedAt?: SortOrder
   }
 
   export type ContractLogsSumOrderByAggregateInput = {
     chainId?: SortOrder
     logIndex?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -8153,11 +8195,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -8241,14 +8278,6 @@ export namespace Prisma {
     image?: SortOrder
     externalUrl?: SortOrder
   }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -8312,6 +8341,10 @@ export namespace Prisma {
     update?: XOR<XOR<NFTsUpdateToOneWithWhereWithoutNFTOwnersInput, NFTsUpdateWithoutNFTOwnersInput>, NFTsUncheckedUpdateWithoutNFTOwnersInput>
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -8328,10 +8361,6 @@ export namespace Prisma {
     connectOrCreate?: NFTOwnersCreateOrConnectWithoutNftInput | NFTOwnersCreateOrConnectWithoutNftInput[]
     createMany?: NFTOwnersCreateManyNftInputEnvelope
     connect?: NFTOwnersWhereUniqueInput | NFTOwnersWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type NFTOwnersUpdateManyWithoutNftNestedInput = {
@@ -8523,6 +8552,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -8532,6 +8566,14 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -8546,19 +8588,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<

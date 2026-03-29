@@ -4,14 +4,11 @@ import { BlockchainContractRepository } from "@/infrastructure/repositories/bloc
 import { NFTOwnerRepository } from "@/infrastructure/repositories/nft-owner.repo.impl";
 import { ContractLogRepository } from "@/infrastructure/repositories/contract-log.repo.impl";
 import { NFTRepository } from "@/infrastructure/repositories/nft.repo.impl";
-import { ViemPublicClientProvider } from "@/infrastructure/blockchain/BlochchainClient";
 import { PrismaClient } from "@/generated/client";
-import { SolanaReader } from "@/infrastructure/blockchain/solana-reader";
-import { RpcUrlResolver } from "@/application/services/rpc-url-resolver";
-import { ContractLister } from "@/application/services/contract-lister";
-import { BlockchainLogReader } from "@/infrastructure/blockchain/log-reader";
 import { SyncContracts } from "@/application/use-case/sync/sync-contract";
-import { NFTMetadataSyncer } from "@/application/services/nft-metadata-syncer";
+import { HandlersRegistry } from "@/handlers/HandlerRegistry";
+import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
+import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
 
 export interface AppContainer {
   dataSource: PrismaClient;
@@ -23,13 +20,9 @@ export interface AppContainer {
     nftRepo: NFTRepository;
   };
   services: {
-    blockchainReader: ViemPublicClientProvider;
-    solanaReader: SolanaReader;
-    rpcUrlResolver: RpcUrlResolver;
-    contractLister: ContractLister;
-    logReader: BlockchainLogReader;
     syncer: SyncContracts;
-    metaSyncer: NFTMetadataSyncer;
+    logRecorder: ContractLogRecorder
+    handlerRegistry: HandlersRegistry
   };
 }
 
@@ -41,34 +34,20 @@ export async function buildContainer(): Promise<AppContainer> {
   const nftRepo = new NFTRepository();
 
   // services
-  const rpcUrlResolver = new RpcUrlResolver(configRepo);
-  const contractLister = new ContractLister(contractRepo);
-
-  const blockchainReader = new ViemPublicClientProvider(chainId => rpcUrlResolver.resolve(chainId));
-  const solanaReader = new SolanaReader(chainId => rpcUrlResolver.resolve(chainId));
-
-  const logReader = new BlockchainLogReader(blockchainReader);
-
-  const metaSyncer = new NFTMetadataSyncer(
-    blockchainReader,
-    nftRepo,
-    ownerRepo,
-    solanaReader
-  );
+  const logRecorder = new ContractLogRecorder(contractLogRepo);
+  const adapterRegsitry = new AdapterRegistery();
+  const handlerRegistry = new HandlersRegistry(adapterRegsitry);
 
   const syncUseCase = new SyncContracts(
-    contractLister,
     contractRepo,
-    ownerRepo,
-    logReader,
-    contractLogRepo,
-    metaSyncer,
-    nftRepo
+    handlerRegistry
   );
 
-  return {
+  const appContainer = {
     dataSource: prisma,
     repos: { configRepo, contractRepo, ownerRepo, contractLogRepo, nftRepo },
-    services: { blockchainReader, solanaReader, rpcUrlResolver, contractLister, logReader, syncer: syncUseCase, metaSyncer }
-  };
+    services: { syncer: syncUseCase, logRecorder, handlerRegistry }
+  } as AppContainer
+
+  return appContainer;
 }
