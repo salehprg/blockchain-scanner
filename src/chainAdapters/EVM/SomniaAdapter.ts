@@ -51,7 +51,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
     }
 
 
-    async GetERC721TransferLogs(address: `0x${string}`,
+    override async getERC721TransferLogs(address: `0x${string}`,
         fromBlock: bigint,
         toBlock: bigint | null = null,
         chunkSize: bigint = 1_000n,
@@ -61,7 +61,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
             var logs = await this.getLogs(address, ERC721_TRANSFER_EVENT, fromBlock, toBlock, chunkSize, confBlock)
             return logs
         } catch (error) {
-            var fallBackLogs = this.fetchSomniaERC721Transfers(address, fromBlock)
+            var fallBackLogs = await this.fetchSomniaERC721Transfers(address, fromBlock)
             return fallBackLogs
         }
     }
@@ -76,7 +76,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
             var logs = await super.getERC1155TransferLogs(address, fromBlock, toBlock, chunkSize, confBlock)
             return logs
         } catch (error) {
-            var fallBackLogs = this.fetchSomniaERC1155Transactions(address, fromBlock)
+            var fallBackLogs = await this.fetchSomniaERC1155Transactions(address, fromBlock)
             return fallBackLogs
         }
     }
@@ -136,7 +136,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
                 index = next.index;
             } catch (error) {
                 console.warn(`[sync] Somnia API fetch error: ${(error as Error).message}`);
-                throw error;
+                break
             }
         }
 
@@ -220,7 +220,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
                 index = next.index;
             } catch (error) {
                 console.warn(`[sync] Somnia API fetch error: ${(error as Error).message}`);
-                throw error;
+                break
             }
         }
 

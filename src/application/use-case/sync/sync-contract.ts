@@ -1,14 +1,5 @@
 import { Address } from "viem";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
-import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
-import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
-import { INFTRepository } from "@/domain/repository/nft-repo";
-import { ERC1155_Handler } from '../../../handlers/NFT/ERC1155_handler';
-import { ERC721_Handler } from "@/handlers/NFT/ERC721_handler";
-import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
-import { BaseEVMAdapter } from "@/chainAdapters/EVM/BaseEVMAdapter";
-import { SolanaAdapter } from "@/chainAdapters/Solana/SolanaAdapter";
-import { Solana_Handler } from "@/handlers/NFT/Solana_handler";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
 import { HandlersRegistry } from '../../../handlers/HandlerRegistry';
 
@@ -44,7 +35,7 @@ export class SyncContracts {
     const contracts = await this.contractRepo.findAll()
     for (const c of contracts) {
       try {
-        this.contractRouting(c)
+        await this.contractRouting(c)
       } catch (error) {
         console.log(error)
       }

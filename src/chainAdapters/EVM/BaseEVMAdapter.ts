@@ -52,7 +52,7 @@ export abstract class BaseEVMAdapter {
                 console.warn(`[sync] window ${from}-${to} failed: ${msg}`);
                 // brief pause to avoid hot loop
                 await new Promise(r => setTimeout(r, 2_000));
-                break;
+                throw new Error("RPC GetLog failed")
             }
         }
 

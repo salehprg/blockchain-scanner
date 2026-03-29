@@ -1,5 +1,6 @@
-import { PrismaClient } from "@/generated/client";
 import { envs } from "@/env";
+import { PrismaClient } from "@/generated/client";
+import { PrismaPg } from '@prisma/adapter-pg';
 
 function buildDatabaseUrl(): string {
   const host = envs.DB_HOST;
@@ -10,12 +11,9 @@ function buildDatabaseUrl(): string {
   return `postgresql://${user}:${pass}@${host}:${port}/${db}`;
 }
 
-const url = process.env.DATABASE_URL || buildDatabaseUrl();
+const connectionString = process.env.DATABASE_URL || buildDatabaseUrl();
 
-export const prisma = new PrismaClient({
-  datasources: {
-    db: { url },
-  },
-});
-
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
+export { prisma };
 

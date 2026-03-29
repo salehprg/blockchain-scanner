@@ -1,13 +1,12 @@
 // Prisma schema to mirror existing database tables (no migrations generated here).
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/client"
+  provider = "prisma-client"
+  output   = "../src/generated"
 }
 
 datasource db {
   provider     = "postgresql"
-  url          = env("DATABASE_URL")
 }
 
 model BlockchainConfigs {
