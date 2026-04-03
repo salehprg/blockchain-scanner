@@ -88,6 +88,7 @@ export type ContractLogsCountAggregateOutputType = {
   value: number
   processed: number
   loggedAt: number
+  args: number
   _all: number
 }
 
@@ -154,6 +155,7 @@ export type ContractLogsCountAggregateInputType = {
   value?: true
   processed?: true
   loggedAt?: true
+  args?: true
   _all?: true
 }
 
@@ -259,6 +261,7 @@ export type ContractLogsGroupByOutputType = {
   value: string | null
   processed: boolean
   loggedAt: Date
+  args: runtime.JsonValue | null
   _count: ContractLogsCountAggregateOutputType | null
   _avg: ContractLogsAvgAggregateOutputType | null
   _sum: ContractLogsSumAggregateOutputType | null
@@ -300,6 +303,7 @@ export type ContractLogsWhereInput = {
   value?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
   processed?: Prisma.BoolFilter<"ContractLogs"> | boolean
   loggedAt?: Prisma.DateTimeFilter<"ContractLogs"> | Date | string
+  args?: Prisma.JsonNullableFilter<"ContractLogs">
 }
 
 export type ContractLogsOrderByWithRelationInput = {
@@ -318,6 +322,7 @@ export type ContractLogsOrderByWithRelationInput = {
   value?: Prisma.SortOrderInput | Prisma.SortOrder
   processed?: Prisma.SortOrder
   loggedAt?: Prisma.SortOrder
+  args?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type ContractLogsWhereUniqueInput = Prisma.AtLeast<{
@@ -340,6 +345,7 @@ export type ContractLogsWhereUniqueInput = Prisma.AtLeast<{
   value?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
   processed?: Prisma.BoolFilter<"ContractLogs"> | boolean
   loggedAt?: Prisma.DateTimeFilter<"ContractLogs"> | Date | string
+  args?: Prisma.JsonNullableFilter<"ContractLogs">
 }, "id" | "transactionHash_logIndex">
 
 export type ContractLogsOrderByWithAggregationInput = {
@@ -358,6 +364,7 @@ export type ContractLogsOrderByWithAggregationInput = {
   value?: Prisma.SortOrderInput | Prisma.SortOrder
   processed?: Prisma.SortOrder
   loggedAt?: Prisma.SortOrder
+  args?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ContractLogsCountOrderByAggregateInput
   _avg?: Prisma.ContractLogsAvgOrderByAggregateInput
   _max?: Prisma.ContractLogsMaxOrderByAggregateInput
@@ -384,6 +391,7 @@ export type ContractLogsScalarWhereWithAggregatesInput = {
   value?: Prisma.StringNullableWithAggregatesFilter<"ContractLogs"> | string | null
   processed?: Prisma.BoolWithAggregatesFilter<"ContractLogs"> | boolean
   loggedAt?: Prisma.DateTimeWithAggregatesFilter<"ContractLogs"> | Date | string
+  args?: Prisma.JsonNullableWithAggregatesFilter<"ContractLogs">
 }
 
 export type ContractLogsCreateInput = {
@@ -402,6 +410,7 @@ export type ContractLogsCreateInput = {
   value?: string | null
   processed?: boolean
   loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsUncheckedCreateInput = {
@@ -420,6 +429,7 @@ export type ContractLogsUncheckedCreateInput = {
   value?: string | null
   processed?: boolean
   loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsUpdateInput = {
@@ -438,6 +448,7 @@ export type ContractLogsUpdateInput = {
   value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsUncheckedUpdateInput = {
@@ -456,6 +467,7 @@ export type ContractLogsUncheckedUpdateInput = {
   value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsCreateManyInput = {
@@ -474,6 +486,7 @@ export type ContractLogsCreateManyInput = {
   value?: string | null
   processed?: boolean
   loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsUpdateManyMutationInput = {
@@ -492,6 +505,7 @@ export type ContractLogsUpdateManyMutationInput = {
   value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsUncheckedUpdateManyInput = {
@@ -510,6 +524,7 @@ export type ContractLogsUncheckedUpdateManyInput = {
   value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ContractLogsTransactionHashLogIndexCompoundUniqueInput = {
@@ -533,6 +548,7 @@ export type ContractLogsCountOrderByAggregateInput = {
   value?: Prisma.SortOrder
   processed?: Prisma.SortOrder
   loggedAt?: Prisma.SortOrder
+  args?: Prisma.SortOrder
 }
 
 export type ContractLogsAvgOrderByAggregateInput = {
@@ -607,6 +623,7 @@ export type ContractLogsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   value?: boolean
   processed?: boolean
   loggedAt?: boolean
+  args?: boolean
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -625,6 +642,7 @@ export type ContractLogsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   value?: boolean
   processed?: boolean
   loggedAt?: boolean
+  args?: boolean
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -643,6 +661,7 @@ export type ContractLogsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   value?: boolean
   processed?: boolean
   loggedAt?: boolean
+  args?: boolean
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectScalar = {
@@ -661,9 +680,10 @@ export type ContractLogsSelectScalar = {
   value?: boolean
   processed?: boolean
   loggedAt?: boolean
+  args?: boolean
 }
 
-export type ContractLogsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "processed" | "loggedAt", ExtArgs["result"]["contractLogs"]>
+export type ContractLogsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "processed" | "loggedAt" | "args", ExtArgs["result"]["contractLogs"]>
 
 export type $ContractLogsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContractLogs"
@@ -684,6 +704,7 @@ export type $ContractLogsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     value: string | null
     processed: boolean
     loggedAt: Date
+    args: runtime.JsonValue | null
   }, ExtArgs["result"]["contractLogs"]>
   composites: {}
 }
@@ -1122,6 +1143,7 @@ export interface ContractLogsFieldRefs {
   readonly value: Prisma.FieldRef<"ContractLogs", 'String'>
   readonly processed: Prisma.FieldRef<"ContractLogs", 'Boolean'>
   readonly loggedAt: Prisma.FieldRef<"ContractLogs", 'DateTime'>
+  readonly args: Prisma.FieldRef<"ContractLogs", 'Json'>
 }
     
 

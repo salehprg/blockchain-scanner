@@ -65,6 +65,7 @@ model ContractLogs {
   value           String?  @db.Text
   processed       Boolean  @default(false)
   loggedAt        DateTime @db.Timestamptz
+  args            Json?    @db.JsonB
 
   @@unique([transactionHash, logIndex])
   @@index([contractId, blockNumber])

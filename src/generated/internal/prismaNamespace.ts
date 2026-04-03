@@ -870,7 +870,8 @@ export const ContractLogsScalarFieldEnum = {
   tokenId: 'tokenId',
   value: 'value',
   processed: 'processed',
-  loggedAt: 'loggedAt'
+  loggedAt: 'loggedAt',
+  args: 'args'
 } as const
 
 export type ContractLogsScalarFieldEnum = (typeof ContractLogsScalarFieldEnum)[keyof typeof ContractLogsScalarFieldEnum]

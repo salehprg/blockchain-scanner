@@ -10,22 +10,12 @@ import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { INFTRepository } from "@/domain/repository/nft-repo";
 import { ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
 import { randomUUID } from "crypto";
-import { Address, formatUnits, getAddress } from "viem";
+import { Abi, AbiEvent, Address, formatUnits, getAbiItem, getAddress } from "viem";
 import { BaseHandler } from "../BaseHandler";
 import { AppContainer } from "@/main/container";
 import { IBlockchainConfigRepository } from "@/domain/repository/blockchain-config-repo";
-
-export const PAYMENT_RECEIVED_EVENT = {
-    type: "event",
-    name: "PaymentReceived",
-    inputs: [
-        { indexed: true, name: "user", type: "address" },
-        { indexed: false, name: "amount", type: "uint256" },
-        { indexed: true, name: "productId", type: "uint256" },
-        { indexed: false, name: "externalId", type: "string" },
-    ]
-} as const;
-
+import payment_abi from "./ABIs/payment_abi.json"
+import { serializeBigIntToJSON } from "@/infrastructure/db/utils/json-helper";
 export class Payment_Handler extends BaseHandler {
     private readonly logRecorder: ContractLogRecorder;
     private readonly blockchainRepo: IBlockchainConfigRepository;
@@ -57,6 +47,11 @@ export class Payment_Handler extends BaseHandler {
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
+        const PAYMENT_RECEIVED_EVENT = getAbiItem({
+            abi: payment_abi as Abi,
+            name: "PurchasedComplete",
+        }) as AbiEvent;
+
         const logs = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`, PAYMENT_RECEIVED_EVENT, BigInt(contractEntity.lastSyncBlock ?? "0"), null, 1000n, 0n)
 
         const con_logs = await this.logRecorder.recordBatch({
@@ -69,12 +64,13 @@ export class Payment_Handler extends BaseHandler {
                     logIndex: l.logIndex,
                     blockNumber: l.blockNumber,
                     type: "PAYMENT" as const,
-                    from: l.args.user,
-                    to: l.args.user,
+                    from: l.args.buyer ,
+                    to: null,
                     operator: null,
-                    tokenId: l.args.externalId.toString(),
-                    value: l.args.amount,
-                    processed: false
+                    tokenId: null,
+                    value: l.args.price,
+                    processed: false,
+                    args: serializeBigIntToJSON(l.args)
                 };
             })
         });

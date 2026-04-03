@@ -29,6 +29,7 @@ export class ContractLogRecorder {
       operator?: Address | null;
       tokenId?: string | null;
       value?: bigint | null;
+      args: any
     }>;
   }): Promise<ContractLog[]> {
     const now = new Date();
@@ -48,6 +49,7 @@ export class ContractLogRecorder {
       l.value != null ? l.value.toString() : null,
       l.processed,
       now,
+      l.args
     ));
 
     await this.repo.bulkInsert(toPersist);

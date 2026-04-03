@@ -24,13 +24,14 @@ export class ContractLogRepository implements IContractLogRepository {
         value: entity.value,
         processed: entity.processed,
         loggedAt: entity.loggedAt,
+        args: entity.args
       },
     });
     return new ContractLog(
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt, saved.args
     );
   }
   async upsert(entity: ContractLog): Promise<ContractLog> {
@@ -51,6 +52,7 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: entity.tokenId,
         value: entity.value,
         loggedAt: entity.loggedAt,
+        args: entity.args
       },
       update: {
         contractId: entity.contractId,
@@ -66,14 +68,15 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: entity.tokenId,
         value: entity.value,
         loggedAt: entity.loggedAt,
-        processed: entity.processed
+        processed: entity.processed,
+        args: entity.args
       },
     });
     return new ContractLog(
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt, saved.args
     );
   }
   async findById(id: string): Promise<ContractLog | null> {
@@ -82,7 +85,7 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt, e.args
     ) : null;
   }
   async findAll(): Promise<ContractLog[]> {
@@ -91,7 +94,7 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt, e.args
     ));
   }
   async filterLogs(params: {
@@ -122,7 +125,7 @@ export class ContractLogRepository implements IContractLogRepository {
       e.id, e.contractId, e.chainId, e.contractAddress,
       e.blockNumber, e.transactionHash, e.logIndex,
       e.eventType as any, e.fromAddress, e.toAddress,
-      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt
+      e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt, e.args
     ));
   }
   async update(entity: ContractLog): Promise<ContractLog> {
@@ -149,7 +152,7 @@ export class ContractLogRepository implements IContractLogRepository {
       saved.id, saved.contractId, saved.chainId, saved.contractAddress,
       saved.blockNumber, saved.transactionHash, saved.logIndex,
       saved.eventType as any, saved.fromAddress, saved.toAddress,
-      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt
+      saved.operatorAddress, saved.tokenId, saved.value, saved.processed, saved.loggedAt, saved.args
     );
   }
   async delete(id: string): Promise<void> {
@@ -175,6 +178,7 @@ export class ContractLogRepository implements IContractLogRepository {
         tokenId: l.tokenId,
         value: l.value,
         loggedAt: l.loggedAt,
+        args: l.args
       } as ContractLog)),
       skipDuplicates: true,
     });

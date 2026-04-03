@@ -16,7 +16,8 @@ export class ContractLog {
     public tokenId: string | null,
     public value: string | null,
     public processed: boolean,
-    public loggedAt: Date
+    public loggedAt: Date,
+    public args: any
   ) { }
 }
 
