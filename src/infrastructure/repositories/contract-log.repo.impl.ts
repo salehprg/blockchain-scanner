@@ -1,7 +1,8 @@
 import { ContractLog, ContractLogEventType } from "@/domain/entities/contract-log";
-import { IContractLogRepository } from "@/domain/repository/contract-log-repo";
+import { ContractFilterParams, IContractLogRepository } from "@/domain/repository/contract-log-repo";
 import { Prisma } from "@/generated/client";
 import { prisma } from "@/infrastructure/db/prisma";
+
 
 export class ContractLogRepository implements IContractLogRepository {
   constructor() { }
@@ -97,22 +98,22 @@ export class ContractLogRepository implements IContractLogRepository {
       e.operatorAddress, e.tokenId, e.value, e.processed, e.loggedAt, e.args
     ));
   }
-  async filterLogs(params: {
-    contractId?: string; contractAddress?: string; eventType?: ContractLogEventType;
-    isProcessed?: boolean; fromDate?: Date; toDate?: Date; limit?: number; offset?: number
-  }): Promise<ContractLog[]> {
+  async filterLogs(params: ContractFilterParams): Promise<ContractLog[]> {
 
     const where: Prisma.ContractLogsWhereInput = {};
     if (params.contractId) where.contractId = { equals: params.contractId, mode: 'insensitive' };
     if (params.contractAddress) where.contractAddress = { equals: params.contractAddress, mode: 'insensitive' };
     if (params.isProcessed !== undefined) where.processed = { equals: params.isProcessed };
     if (params.eventType) where.eventType = { equals: params.eventType, mode: 'insensitive' };
+    if (params.chainId) where.chainId = { equals: params.chainId };
+    if (params.fromAddress) where.fromAddress = { equals: params.fromAddress, mode: 'insensitive' };
+    if (params.toAddress) where.toAddress = { equals: params.toAddress, mode: 'insensitive' };
 
     // Only add date filter if dates are provided
     if (params.fromDate || params.toDate) {
       where.loggedAt = {};
-      if (params.fromDate) where.loggedAt.gte = params.fromDate;
-      if (params.toDate) where.loggedAt.lte = params.toDate;
+      if (params.fromDate) where.loggedAt.gt = params.fromDate;
+      if (params.toDate) where.loggedAt.lt = params.toDate;
     }
 
     const list = await prisma.contractLogs.findMany({

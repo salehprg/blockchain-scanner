@@ -5,6 +5,7 @@ const r = Router();
 
 r.get("/", ctrl.listContracts);
 r.get("/by-address/:address", ctrl.getByAddress);
+r.get("/filter", ctrl.filterContractLogs);
 r.get("/:id", ctrl.getById);
 r.get("/:contractAddress/logs", ctrl.getContractLogs);
 r.post("/", ctrl.upsertContract);  // upsert for simplicity

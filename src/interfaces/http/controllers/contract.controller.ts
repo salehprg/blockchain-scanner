@@ -2,9 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import type { AppContainer } from "@/main/container";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
 import { randomUUID } from "crypto";
-import { DeleteBlockchainContract} from "@/application/use-case/blockchain-config/blockchain-contract-config"
+import { DeleteBlockchainContract } from "@/application/use-case/blockchain-config/blockchain-contract-config"
 import { UpdateOwnershipFromLogs } from "@/application/use-case/ownership/update-ownership-from-logs";
 import { CalculateOwnershipFromLogs } from "@/application/use-case/ownership/calculate-ownership-from-logs";
+import { ContractFilterParams } from "@/domain/repository/contract-log-repo";
+import { ContractLogEventType } from "@/domain/entities/contract-log";
 
 
 export async function listContracts(req: Request, res: Response, next: NextFunction) {
@@ -17,7 +19,7 @@ export async function listContracts(req: Request, res: Response, next: NextFunct
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    const data = await repos.contractRepo.findById(req.params.id);
+    const data = await repos.contractRepo.findById(req.params.id as string);
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
@@ -26,7 +28,7 @@ export async function getById(req: Request, res: Response, next: NextFunction) {
 export async function getByAddress(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    const data = await repos.contractRepo.findByAddress(req.params.address);
+    const data = await repos.contractRepo.findByAddress(req.params.address as string);
     if (!data) return res.status(404).json({ error: "Not found" });
     res.json(data);
   } catch (e) { next(e); }
@@ -57,8 +59,34 @@ export async function deleteContract(req: Request, res: Response, next: NextFunc
   try {
     const { repos } = (req.app.locals.container as AppContainer);
     const useCase = new DeleteBlockchainContract(repos.contractRepo);
-    await useCase.execute(req.params.id);
+    await useCase.execute(req.params.id as string);
     res.status(204).send();
+  } catch (e) { next(e); }
+}
+
+export async function filterContractLogs(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { repos } = (req.app.locals.container as AppContainer);
+    const { chainId, contractAddress,
+      fromBlockNumber, toBlockNumber,
+      fromAddress, toAddress, eventType,
+      fromDate, toDate, limit, offset } = req.query as Record<string, string>;
+
+    const filters: ContractFilterParams = {};
+    if (fromDate) filters.fromDate = new Date(fromDate);
+    if (toDate) filters.toDate = new Date(toDate);
+    if (limit) filters.limit = Number(limit);
+    if (offset) filters.offset = Number(offset);
+    if (chainId) filters.chainId = Number(chainId);
+    if (contractAddress) filters.contractAddress = contractAddress;
+    if (fromBlockNumber) filters.fromBlockNumber = Number(fromBlockNumber);
+    if (toBlockNumber) filters.toBlockNumber = Number(toBlockNumber);
+    if (fromAddress) filters.fromAddress = fromAddress;
+    if (toAddress) filters.toAddress = toAddress;
+    if (eventType) filters.eventType = eventType as ContractLogEventType;
+
+    const logs = await repos.contractLogRepo.filterLogs(filters);
+    res.json(logs);
   } catch (e) { next(e); }
 }
 
@@ -74,14 +102,14 @@ export async function getContractLogs(req: Request, res: Response, next: NextFun
     if (limit) options.limit = Number(limit);
     if (offset) options.offset = Number(offset);
 
-    const logs = await repos.contractLogRepo.filterLogs({...options, contractAddress: contractAddress});
+    const logs = await repos.contractLogRepo.filterLogs({ ...options, contractAddress: contractAddress });
     res.json(logs);
   } catch (e) { next(e); }
 }
 
 export async function updateOwnershipFromLogs(req: Request, res: Response, next: NextFunction) {
   try {
-    const { repos, contractHandler } = (req.app.locals.container as AppContainer);
+    const { repos, services } = (req.app.locals.container as AppContainer);
     const { contractAddress } = req.params;
     const { startDate, endDate } = req.body as { startDate: string; endDate: string };
 
@@ -92,11 +120,11 @@ export async function updateOwnershipFromLogs(req: Request, res: Response, next:
     const useCase = new UpdateOwnershipFromLogs(
       repos.contractRepo,
       repos.contractLogRepo,
-      contractHandler
+      services.handlerRegistry
     );
 
     const result = await useCase.execute({
-      contractAddress,
+      contractAddress: contractAddress as string,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
     });
@@ -128,7 +156,7 @@ export async function calculateOwnershipFromLogs(req: Request, res: Response, ne
     );
 
     const ownerships = await useCase.execute({
-      contractAddress,
+      contractAddress: contractAddress as string,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
     });

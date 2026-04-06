@@ -2,13 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import type { AppContainer } from "@/main/container";
 import { prisma } from "@/infrastructure/db/prisma";
 
-export async function listByContract(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { repos } = (req.app.locals.container as AppContainer);
-    const { contractAddress } = req.params;
-    res.json(await repos.nftRepo.filterNFTs({ contractAddress: contractAddress }));
-  } catch (e) { next(e); }
-}
 
 export async function filterNFTs(req: Request, res: Response, next: NextFunction) {
   try {
