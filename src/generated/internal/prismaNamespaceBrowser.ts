@@ -92,7 +92,8 @@ export const BlockchainContractsScalarFieldEnum = {
   lastSyncBlock: 'lastSyncBlock',
   lastSyncTime: 'lastSyncTime',
   contractCreateBlockNumber: 'contractCreateBlockNumber',
-  contractName: 'contractName'
+  contractName: 'contractName',
+  isActive: 'isActive'
 } as const
 
 export type BlockchainContractsScalarFieldEnum = (typeof BlockchainContractsScalarFieldEnum)[keyof typeof BlockchainContractsScalarFieldEnum]

@@ -8,12 +8,13 @@ import { NFTOwner } from "@/domain/entities/nft-owner";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { INFTRepository } from "@/domain/repository/nft-repo";
-import { ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
+import { ERC721_TRANSFER_EVENT, ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
 import { randomUUID } from "crypto";
 import { Address, getAddress } from "viem";
 import { BaseHandler } from "../BaseHandler";
 import { AppContainer } from "@/main/container";
 import { ChestBuyV2_ABI } from "@/application/blockchain-abis/ChestBuyV2";
+import { AdapterTransaction } from "@/chainAdapters/AdapterTransaction";
 
 export class ERC721_Handler extends BaseHandler {
     private readonly nftRepo: INFTRepository;
@@ -177,13 +178,43 @@ export class ERC721_Handler extends BaseHandler {
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
-        const result = await evm_adapter.getERC721TransferLogs(contractEntity.contractAddress as `0x${string}`, BigInt(contractEntity.lastSyncBlock ?? "0"))
+        const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
+            ERC721_TRANSFER_EVENT, BigInt(contractEntity.lastSyncBlock ?? contractEntity.contractCreateBlockNumber ?? "0"), null, 1000n)
+
+
+        const filteredlogs: AdapterTransaction[] = []
+
+        for (const tx of result.logs) {
+            if (tx.source == "api" && tx.args) {
+                if (!(tx.args.method_call as string).startsWith(ERC721_TRANSFER_EVENT.name)) continue;
+
+                const getVal = (n: string) => tx.args.parameters.find((p: any) => p.name === n)?.value;
+                const from = getVal("from")
+                const to = getVal("to")
+                const tokenId = getVal("tokenId")
+
+                filteredlogs.push({
+                    transactionHash: tx.transactionHash,
+                    logIndex: tx.logIndex,
+                    blockNumber: BigInt(tx.blockNumber ?? 0),
+                    address: tx.address,
+                    value: tx.value,
+                    eventName: tx.args.method_call,
+                    args: {
+                        from: from as Address,
+                        to: to as Address,
+                        tokenId: BigInt(tokenId),
+                    },
+                    source: "api",
+                });
+            }
+        }
 
         const con_logs = await this.logRecorder.recordBatch({
             contractId: contractEntity.id,
             chainId: contractEntity.chainId,
             nftContractAddress: contractEntity.contractAddress as Address,
-            logs: result.logs.map(l => {
+            logs: filteredlogs.map(l => {
                 return {
                     transactionHash: l.transactionHash,
                     logIndex: l.logIndex,
@@ -198,7 +229,7 @@ export class ERC721_Handler extends BaseHandler {
                     args: {}
                 };
             })
-        }); 
+        });
 
         await super.updateLastSync(contractEntity, result.nextLastBlockNumber)
 

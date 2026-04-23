@@ -32,7 +32,7 @@ export class SyncContracts {
   }
 
   async execute(): Promise<void> {
-    const contracts = await this.contractRepo.findAll()
+    const contracts = await this.contractRepo.filterActiveContracts()
     for (const c of contracts) {
       try {
         await this.contractRouting(c)

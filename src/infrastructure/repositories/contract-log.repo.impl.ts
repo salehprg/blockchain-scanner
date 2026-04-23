@@ -118,7 +118,7 @@ export class ContractLogRepository implements IContractLogRepository {
 
     const list = await prisma.contractLogs.findMany({
       where,
-      orderBy: { loggedAt: "desc" },
+      orderBy: { blockNumber: "asc" },
       take: params.limit,
       skip: params.offset,
     });

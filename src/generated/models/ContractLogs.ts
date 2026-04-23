@@ -304,6 +304,7 @@ export type ContractLogsWhereInput = {
   processed?: Prisma.BoolFilter<"ContractLogs"> | boolean
   loggedAt?: Prisma.DateTimeFilter<"ContractLogs"> | Date | string
   args?: Prisma.JsonNullableFilter<"ContractLogs">
+  contract?: Prisma.XOR<Prisma.BlockchainContractsScalarRelationFilter, Prisma.BlockchainContractsWhereInput>
 }
 
 export type ContractLogsOrderByWithRelationInput = {
@@ -323,6 +324,7 @@ export type ContractLogsOrderByWithRelationInput = {
   processed?: Prisma.SortOrder
   loggedAt?: Prisma.SortOrder
   args?: Prisma.SortOrderInput | Prisma.SortOrder
+  contract?: Prisma.BlockchainContractsOrderByWithRelationInput
 }
 
 export type ContractLogsWhereUniqueInput = Prisma.AtLeast<{
@@ -346,6 +348,7 @@ export type ContractLogsWhereUniqueInput = Prisma.AtLeast<{
   processed?: Prisma.BoolFilter<"ContractLogs"> | boolean
   loggedAt?: Prisma.DateTimeFilter<"ContractLogs"> | Date | string
   args?: Prisma.JsonNullableFilter<"ContractLogs">
+  contract?: Prisma.XOR<Prisma.BlockchainContractsScalarRelationFilter, Prisma.BlockchainContractsWhereInput>
 }, "id" | "transactionHash_logIndex">
 
 export type ContractLogsOrderByWithAggregationInput = {
@@ -396,7 +399,6 @@ export type ContractLogsScalarWhereWithAggregatesInput = {
 
 export type ContractLogsCreateInput = {
   id?: string
-  contractId: string
   chainId: number
   contractAddress: string
   blockNumber: string
@@ -411,6 +413,7 @@ export type ContractLogsCreateInput = {
   processed?: boolean
   loggedAt: Date | string
   args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contract: Prisma.BlockchainContractsCreateNestedOneWithoutContractLogsInput
 }
 
 export type ContractLogsUncheckedCreateInput = {
@@ -434,7 +437,6 @@ export type ContractLogsUncheckedCreateInput = {
 
 export type ContractLogsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractId?: Prisma.StringFieldUpdateOperationsInput | string
   chainId?: Prisma.IntFieldUpdateOperationsInput | number
   contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -449,6 +451,7 @@ export type ContractLogsUpdateInput = {
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contract?: Prisma.BlockchainContractsUpdateOneRequiredWithoutContractLogsNestedInput
 }
 
 export type ContractLogsUncheckedUpdateInput = {
@@ -491,7 +494,6 @@ export type ContractLogsCreateManyInput = {
 
 export type ContractLogsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractId?: Prisma.StringFieldUpdateOperationsInput | string
   chainId?: Prisma.IntFieldUpdateOperationsInput | number
   contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
   blockNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -525,6 +527,16 @@ export type ContractLogsUncheckedUpdateManyInput = {
   processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsListRelationFilter = {
+  every?: Prisma.ContractLogsWhereInput
+  some?: Prisma.ContractLogsWhereInput
+  none?: Prisma.ContractLogsWhereInput
+}
+
+export type ContractLogsOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ContractLogsTransactionHashLogIndexCompoundUniqueInput = {
@@ -597,12 +609,206 @@ export type ContractLogsSumOrderByAggregateInput = {
   logIndex?: Prisma.SortOrder
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type ContractLogsCreateNestedManyWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput> | Prisma.ContractLogsCreateWithoutContractInput[] | Prisma.ContractLogsUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.ContractLogsCreateOrConnectWithoutContractInput | Prisma.ContractLogsCreateOrConnectWithoutContractInput[]
+  createMany?: Prisma.ContractLogsCreateManyContractInputEnvelope
+  connect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+}
+
+export type ContractLogsUncheckedCreateNestedManyWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput> | Prisma.ContractLogsCreateWithoutContractInput[] | Prisma.ContractLogsUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.ContractLogsCreateOrConnectWithoutContractInput | Prisma.ContractLogsCreateOrConnectWithoutContractInput[]
+  createMany?: Prisma.ContractLogsCreateManyContractInputEnvelope
+  connect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+}
+
+export type ContractLogsUpdateManyWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput> | Prisma.ContractLogsCreateWithoutContractInput[] | Prisma.ContractLogsUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.ContractLogsCreateOrConnectWithoutContractInput | Prisma.ContractLogsCreateOrConnectWithoutContractInput[]
+  upsert?: Prisma.ContractLogsUpsertWithWhereUniqueWithoutContractInput | Prisma.ContractLogsUpsertWithWhereUniqueWithoutContractInput[]
+  createMany?: Prisma.ContractLogsCreateManyContractInputEnvelope
+  set?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  disconnect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  delete?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  connect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  update?: Prisma.ContractLogsUpdateWithWhereUniqueWithoutContractInput | Prisma.ContractLogsUpdateWithWhereUniqueWithoutContractInput[]
+  updateMany?: Prisma.ContractLogsUpdateManyWithWhereWithoutContractInput | Prisma.ContractLogsUpdateManyWithWhereWithoutContractInput[]
+  deleteMany?: Prisma.ContractLogsScalarWhereInput | Prisma.ContractLogsScalarWhereInput[]
+}
+
+export type ContractLogsUncheckedUpdateManyWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput> | Prisma.ContractLogsCreateWithoutContractInput[] | Prisma.ContractLogsUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.ContractLogsCreateOrConnectWithoutContractInput | Prisma.ContractLogsCreateOrConnectWithoutContractInput[]
+  upsert?: Prisma.ContractLogsUpsertWithWhereUniqueWithoutContractInput | Prisma.ContractLogsUpsertWithWhereUniqueWithoutContractInput[]
+  createMany?: Prisma.ContractLogsCreateManyContractInputEnvelope
+  set?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  disconnect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  delete?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  connect?: Prisma.ContractLogsWhereUniqueInput | Prisma.ContractLogsWhereUniqueInput[]
+  update?: Prisma.ContractLogsUpdateWithWhereUniqueWithoutContractInput | Prisma.ContractLogsUpdateWithWhereUniqueWithoutContractInput[]
+  updateMany?: Prisma.ContractLogsUpdateManyWithWhereWithoutContractInput | Prisma.ContractLogsUpdateManyWithWhereWithoutContractInput[]
+  deleteMany?: Prisma.ContractLogsScalarWhereInput | Prisma.ContractLogsScalarWhereInput[]
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type ContractLogsCreateWithoutContractInput = {
+  id?: string
+  chainId: number
+  contractAddress: string
+  blockNumber: string
+  transactionHash: string
+  logIndex: number
+  eventType: string
+  fromAddress?: string | null
+  toAddress?: string | null
+  operatorAddress?: string | null
+  tokenId?: string | null
+  value?: string | null
+  processed?: boolean
+  loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsUncheckedCreateWithoutContractInput = {
+  id?: string
+  chainId: number
+  contractAddress: string
+  blockNumber: string
+  transactionHash: string
+  logIndex: number
+  eventType: string
+  fromAddress?: string | null
+  toAddress?: string | null
+  operatorAddress?: string | null
+  tokenId?: string | null
+  value?: string | null
+  processed?: boolean
+  loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsCreateOrConnectWithoutContractInput = {
+  where: Prisma.ContractLogsWhereUniqueInput
+  create: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput>
+}
+
+export type ContractLogsCreateManyContractInputEnvelope = {
+  data: Prisma.ContractLogsCreateManyContractInput | Prisma.ContractLogsCreateManyContractInput[]
+  skipDuplicates?: boolean
+}
+
+export type ContractLogsUpsertWithWhereUniqueWithoutContractInput = {
+  where: Prisma.ContractLogsWhereUniqueInput
+  update: Prisma.XOR<Prisma.ContractLogsUpdateWithoutContractInput, Prisma.ContractLogsUncheckedUpdateWithoutContractInput>
+  create: Prisma.XOR<Prisma.ContractLogsCreateWithoutContractInput, Prisma.ContractLogsUncheckedCreateWithoutContractInput>
+}
+
+export type ContractLogsUpdateWithWhereUniqueWithoutContractInput = {
+  where: Prisma.ContractLogsWhereUniqueInput
+  data: Prisma.XOR<Prisma.ContractLogsUpdateWithoutContractInput, Prisma.ContractLogsUncheckedUpdateWithoutContractInput>
+}
+
+export type ContractLogsUpdateManyWithWhereWithoutContractInput = {
+  where: Prisma.ContractLogsScalarWhereInput
+  data: Prisma.XOR<Prisma.ContractLogsUpdateManyMutationInput, Prisma.ContractLogsUncheckedUpdateManyWithoutContractInput>
+}
+
+export type ContractLogsScalarWhereInput = {
+  AND?: Prisma.ContractLogsScalarWhereInput | Prisma.ContractLogsScalarWhereInput[]
+  OR?: Prisma.ContractLogsScalarWhereInput[]
+  NOT?: Prisma.ContractLogsScalarWhereInput | Prisma.ContractLogsScalarWhereInput[]
+  id?: Prisma.UuidFilter<"ContractLogs"> | string
+  contractId?: Prisma.UuidFilter<"ContractLogs"> | string
+  chainId?: Prisma.IntFilter<"ContractLogs"> | number
+  contractAddress?: Prisma.StringFilter<"ContractLogs"> | string
+  blockNumber?: Prisma.StringFilter<"ContractLogs"> | string
+  transactionHash?: Prisma.StringFilter<"ContractLogs"> | string
+  logIndex?: Prisma.IntFilter<"ContractLogs"> | number
+  eventType?: Prisma.StringFilter<"ContractLogs"> | string
+  fromAddress?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
+  toAddress?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
+  operatorAddress?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
+  tokenId?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
+  value?: Prisma.StringNullableFilter<"ContractLogs"> | string | null
+  processed?: Prisma.BoolFilter<"ContractLogs"> | boolean
+  loggedAt?: Prisma.DateTimeFilter<"ContractLogs"> | Date | string
+  args?: Prisma.JsonNullableFilter<"ContractLogs">
+}
+
+export type ContractLogsCreateManyContractInput = {
+  id?: string
+  chainId: number
+  contractAddress: string
+  blockNumber: string
+  transactionHash: string
+  logIndex: number
+  eventType: string
+  fromAddress?: string | null
+  toAddress?: string | null
+  operatorAddress?: string | null
+  tokenId?: string | null
+  value?: string | null
+  processed?: boolean
+  loggedAt: Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  blockNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionHash?: Prisma.StringFieldUpdateOperationsInput | string
+  logIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsUncheckedUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  blockNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionHash?: Prisma.StringFieldUpdateOperationsInput | string
+  logIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+}
+
+export type ContractLogsUncheckedUpdateManyWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  blockNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  transactionHash?: Prisma.StringFieldUpdateOperationsInput | string
+  logIndex?: Prisma.IntFieldUpdateOperationsInput | number
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operatorAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  value?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  processed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loggedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  args?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -624,6 +830,7 @@ export type ContractLogsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   processed?: boolean
   loggedAt?: boolean
   args?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -643,6 +850,7 @@ export type ContractLogsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   processed?: boolean
   loggedAt?: boolean
   args?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -662,6 +870,7 @@ export type ContractLogsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   processed?: boolean
   loggedAt?: boolean
   args?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contractLogs"]>
 
 export type ContractLogsSelectScalar = {
@@ -684,10 +893,21 @@ export type ContractLogsSelectScalar = {
 }
 
 export type ContractLogsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "chainId" | "contractAddress" | "blockNumber" | "transactionHash" | "logIndex" | "eventType" | "fromAddress" | "toAddress" | "operatorAddress" | "tokenId" | "value" | "processed" | "loggedAt" | "args", ExtArgs["result"]["contractLogs"]>
+export type ContractLogsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
+}
+export type ContractLogsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
+}
+export type ContractLogsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
+}
 
 export type $ContractLogsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContractLogs"
-  objects: {}
+  objects: {
+    contract: Prisma.$BlockchainContractsPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     contractId: string
@@ -1099,6 +1319,7 @@ readonly fields: ContractLogsFieldRefs;
  */
 export interface Prisma__ContractLogsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  contract<T extends Prisma.BlockchainContractsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlockchainContractsDefaultArgs<ExtArgs>>): Prisma.Prisma__BlockchainContractsClient<runtime.Types.Result.GetResult<Prisma.$BlockchainContractsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1161,6 +1382,10 @@ export type ContractLogsFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
+  /**
    * Filter, which ContractLogs to fetch.
    */
   where: Prisma.ContractLogsWhereUniqueInput
@@ -1179,6 +1404,10 @@ export type ContractLogsFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
+  /**
    * Filter, which ContractLogs to fetch.
    */
   where: Prisma.ContractLogsWhereUniqueInput
@@ -1196,6 +1425,10 @@ export type ContractLogsFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
   /**
    * Filter, which ContractLogs to fetch.
    */
@@ -1245,6 +1478,10 @@ export type ContractLogsFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
+  /**
    * Filter, which ContractLogs to fetch.
    */
   where?: Prisma.ContractLogsWhereInput
@@ -1292,6 +1529,10 @@ export type ContractLogsFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
   /**
    * Filter, which ContractLogs to fetch.
    */
@@ -1341,6 +1582,10 @@ export type ContractLogsCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
+  /**
    * The data needed to create a ContractLogs.
    */
   data: Prisma.XOR<Prisma.ContractLogsCreateInput, Prisma.ContractLogsUncheckedCreateInput>
@@ -1374,6 +1619,10 @@ export type ContractLogsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.ContractLogsCreateManyInput | Prisma.ContractLogsCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1388,6 +1637,10 @@ export type ContractLogsUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
   /**
    * The data needed to update a ContractLogs.
    */
@@ -1440,6 +1693,10 @@ export type ContractLogsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many ContractLogs to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1454,6 +1711,10 @@ export type ContractLogsUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
   /**
    * The filter to search for the ContractLogs to update in case it exists.
    */
@@ -1480,6 +1741,10 @@ export type ContractLogsDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
   /**
    * Filter which ContractLogs to delete.
    */
@@ -1512,4 +1777,8 @@ export type ContractLogsDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the ContractLogs
    */
   omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
 }

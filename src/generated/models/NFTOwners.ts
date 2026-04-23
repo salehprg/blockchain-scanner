@@ -206,6 +206,7 @@ export type NFTOwnersWhereInput = {
   count?: Prisma.StringFilter<"NFTOwners"> | string
   lastTransactionHash?: Prisma.StringNullableFilter<"NFTOwners"> | string | null
   lastSyncTime?: Prisma.DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+  contract?: Prisma.XOR<Prisma.BlockchainContractsScalarRelationFilter, Prisma.BlockchainContractsWhereInput>
   nft?: Prisma.XOR<Prisma.NFTsNullableScalarRelationFilter, Prisma.NFTsWhereInput> | null
 }
 
@@ -218,6 +219,7 @@ export type NFTOwnersOrderByWithRelationInput = {
   count?: Prisma.SortOrder
   lastTransactionHash?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSyncTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  contract?: Prisma.BlockchainContractsOrderByWithRelationInput
   nft?: Prisma.NFTsOrderByWithRelationInput
 }
 
@@ -233,6 +235,7 @@ export type NFTOwnersWhereUniqueInput = Prisma.AtLeast<{
   count?: Prisma.StringFilter<"NFTOwners"> | string
   lastTransactionHash?: Prisma.StringNullableFilter<"NFTOwners"> | string | null
   lastSyncTime?: Prisma.DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+  contract?: Prisma.XOR<Prisma.BlockchainContractsScalarRelationFilter, Prisma.BlockchainContractsWhereInput>
   nft?: Prisma.XOR<Prisma.NFTsNullableScalarRelationFilter, Prisma.NFTsWhereInput> | null
 }, "id">
 
@@ -266,11 +269,11 @@ export type NFTOwnersScalarWhereWithAggregatesInput = {
 
 export type NFTOwnersCreateInput = {
   id?: string
-  contractId: string
   ownerAddress: string
   count: string
   lastTransactionHash?: string | null
   lastSyncTime?: Date | string | null
+  contract: Prisma.BlockchainContractsCreateNestedOneWithoutNftownersInput
   nft?: Prisma.NFTsCreateNestedOneWithoutNFTOwnersInput
 }
 
@@ -287,11 +290,11 @@ export type NFTOwnersUncheckedCreateInput = {
 
 export type NFTOwnersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
   count?: Prisma.StringFieldUpdateOperationsInput | string
   lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contract?: Prisma.BlockchainContractsUpdateOneRequiredWithoutNftownersNestedInput
   nft?: Prisma.NFTsUpdateOneWithoutNFTOwnersNestedInput
 }
 
@@ -319,7 +322,6 @@ export type NFTOwnersCreateManyInput = {
 
 export type NFTOwnersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
   count?: Prisma.StringFieldUpdateOperationsInput | string
   lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -335,6 +337,16 @@ export type NFTOwnersUncheckedUpdateManyInput = {
   count?: Prisma.StringFieldUpdateOperationsInput | string
   lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type NFTOwnersListRelationFilter = {
+  every?: Prisma.NFTOwnersWhereInput
+  some?: Prisma.NFTOwnersWhereInput
+  none?: Prisma.NFTOwnersWhereInput
+}
+
+export type NFTOwnersOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type NFTOwnersCountOrderByAggregateInput = {
@@ -370,14 +382,46 @@ export type NFTOwnersMinOrderByAggregateInput = {
   lastSyncTime?: Prisma.SortOrder
 }
 
-export type NFTOwnersListRelationFilter = {
-  every?: Prisma.NFTOwnersWhereInput
-  some?: Prisma.NFTOwnersWhereInput
-  none?: Prisma.NFTOwnersWhereInput
+export type NFTOwnersCreateNestedManyWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput> | Prisma.NFTOwnersCreateWithoutContractInput[] | Prisma.NFTOwnersUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.NFTOwnersCreateOrConnectWithoutContractInput | Prisma.NFTOwnersCreateOrConnectWithoutContractInput[]
+  createMany?: Prisma.NFTOwnersCreateManyContractInputEnvelope
+  connect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
 }
 
-export type NFTOwnersOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type NFTOwnersUncheckedCreateNestedManyWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput> | Prisma.NFTOwnersCreateWithoutContractInput[] | Prisma.NFTOwnersUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.NFTOwnersCreateOrConnectWithoutContractInput | Prisma.NFTOwnersCreateOrConnectWithoutContractInput[]
+  createMany?: Prisma.NFTOwnersCreateManyContractInputEnvelope
+  connect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+}
+
+export type NFTOwnersUpdateManyWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput> | Prisma.NFTOwnersCreateWithoutContractInput[] | Prisma.NFTOwnersUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.NFTOwnersCreateOrConnectWithoutContractInput | Prisma.NFTOwnersCreateOrConnectWithoutContractInput[]
+  upsert?: Prisma.NFTOwnersUpsertWithWhereUniqueWithoutContractInput | Prisma.NFTOwnersUpsertWithWhereUniqueWithoutContractInput[]
+  createMany?: Prisma.NFTOwnersCreateManyContractInputEnvelope
+  set?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  disconnect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  delete?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  connect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  update?: Prisma.NFTOwnersUpdateWithWhereUniqueWithoutContractInput | Prisma.NFTOwnersUpdateWithWhereUniqueWithoutContractInput[]
+  updateMany?: Prisma.NFTOwnersUpdateManyWithWhereWithoutContractInput | Prisma.NFTOwnersUpdateManyWithWhereWithoutContractInput[]
+  deleteMany?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
+}
+
+export type NFTOwnersUncheckedUpdateManyWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput> | Prisma.NFTOwnersCreateWithoutContractInput[] | Prisma.NFTOwnersUncheckedCreateWithoutContractInput[]
+  connectOrCreate?: Prisma.NFTOwnersCreateOrConnectWithoutContractInput | Prisma.NFTOwnersCreateOrConnectWithoutContractInput[]
+  upsert?: Prisma.NFTOwnersUpsertWithWhereUniqueWithoutContractInput | Prisma.NFTOwnersUpsertWithWhereUniqueWithoutContractInput[]
+  createMany?: Prisma.NFTOwnersCreateManyContractInputEnvelope
+  set?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  disconnect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  delete?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  connect?: Prisma.NFTOwnersWhereUniqueInput | Prisma.NFTOwnersWhereUniqueInput[]
+  update?: Prisma.NFTOwnersUpdateWithWhereUniqueWithoutContractInput | Prisma.NFTOwnersUpdateWithWhereUniqueWithoutContractInput[]
+  updateMany?: Prisma.NFTOwnersUpdateManyWithWhereWithoutContractInput | Prisma.NFTOwnersUpdateManyWithWhereWithoutContractInput[]
+  deleteMany?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
 }
 
 export type NFTOwnersCreateNestedManyWithoutNftInput = {
@@ -422,13 +466,72 @@ export type NFTOwnersUncheckedUpdateManyWithoutNftNestedInput = {
   deleteMany?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
 }
 
-export type NFTOwnersCreateWithoutNftInput = {
+export type NFTOwnersCreateWithoutContractInput = {
   id?: string
-  contractId: string
   ownerAddress: string
   count: string
   lastTransactionHash?: string | null
   lastSyncTime?: Date | string | null
+  nft?: Prisma.NFTsCreateNestedOneWithoutNFTOwnersInput
+}
+
+export type NFTOwnersUncheckedCreateWithoutContractInput = {
+  id?: string
+  ownerAddress: string
+  contractAddress: string
+  tokenId: string
+  count: string
+  lastTransactionHash?: string | null
+  lastSyncTime?: Date | string | null
+}
+
+export type NFTOwnersCreateOrConnectWithoutContractInput = {
+  where: Prisma.NFTOwnersWhereUniqueInput
+  create: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput>
+}
+
+export type NFTOwnersCreateManyContractInputEnvelope = {
+  data: Prisma.NFTOwnersCreateManyContractInput | Prisma.NFTOwnersCreateManyContractInput[]
+  skipDuplicates?: boolean
+}
+
+export type NFTOwnersUpsertWithWhereUniqueWithoutContractInput = {
+  where: Prisma.NFTOwnersWhereUniqueInput
+  update: Prisma.XOR<Prisma.NFTOwnersUpdateWithoutContractInput, Prisma.NFTOwnersUncheckedUpdateWithoutContractInput>
+  create: Prisma.XOR<Prisma.NFTOwnersCreateWithoutContractInput, Prisma.NFTOwnersUncheckedCreateWithoutContractInput>
+}
+
+export type NFTOwnersUpdateWithWhereUniqueWithoutContractInput = {
+  where: Prisma.NFTOwnersWhereUniqueInput
+  data: Prisma.XOR<Prisma.NFTOwnersUpdateWithoutContractInput, Prisma.NFTOwnersUncheckedUpdateWithoutContractInput>
+}
+
+export type NFTOwnersUpdateManyWithWhereWithoutContractInput = {
+  where: Prisma.NFTOwnersScalarWhereInput
+  data: Prisma.XOR<Prisma.NFTOwnersUpdateManyMutationInput, Prisma.NFTOwnersUncheckedUpdateManyWithoutContractInput>
+}
+
+export type NFTOwnersScalarWhereInput = {
+  AND?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
+  OR?: Prisma.NFTOwnersScalarWhereInput[]
+  NOT?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
+  id?: Prisma.UuidFilter<"NFTOwners"> | string
+  contractId?: Prisma.UuidFilter<"NFTOwners"> | string
+  ownerAddress?: Prisma.StringFilter<"NFTOwners"> | string
+  contractAddress?: Prisma.StringFilter<"NFTOwners"> | string
+  tokenId?: Prisma.StringFilter<"NFTOwners"> | string
+  count?: Prisma.StringFilter<"NFTOwners"> | string
+  lastTransactionHash?: Prisma.StringNullableFilter<"NFTOwners"> | string | null
+  lastSyncTime?: Prisma.DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+}
+
+export type NFTOwnersCreateWithoutNftInput = {
+  id?: string
+  ownerAddress: string
+  count: string
+  lastTransactionHash?: string | null
+  lastSyncTime?: Date | string | null
+  contract: Prisma.BlockchainContractsCreateNestedOneWithoutNftownersInput
 }
 
 export type NFTOwnersUncheckedCreateWithoutNftInput = {
@@ -466,18 +569,43 @@ export type NFTOwnersUpdateManyWithWhereWithoutNftInput = {
   data: Prisma.XOR<Prisma.NFTOwnersUpdateManyMutationInput, Prisma.NFTOwnersUncheckedUpdateManyWithoutNftInput>
 }
 
-export type NFTOwnersScalarWhereInput = {
-  AND?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
-  OR?: Prisma.NFTOwnersScalarWhereInput[]
-  NOT?: Prisma.NFTOwnersScalarWhereInput | Prisma.NFTOwnersScalarWhereInput[]
-  id?: Prisma.UuidFilter<"NFTOwners"> | string
-  contractId?: Prisma.UuidFilter<"NFTOwners"> | string
-  ownerAddress?: Prisma.StringFilter<"NFTOwners"> | string
-  contractAddress?: Prisma.StringFilter<"NFTOwners"> | string
-  tokenId?: Prisma.StringFilter<"NFTOwners"> | string
-  count?: Prisma.StringFilter<"NFTOwners"> | string
-  lastTransactionHash?: Prisma.StringNullableFilter<"NFTOwners"> | string | null
-  lastSyncTime?: Prisma.DateTimeNullableFilter<"NFTOwners"> | Date | string | null
+export type NFTOwnersCreateManyContractInput = {
+  id?: string
+  ownerAddress: string
+  contractAddress: string
+  tokenId: string
+  count: string
+  lastTransactionHash?: string | null
+  lastSyncTime?: Date | string | null
+}
+
+export type NFTOwnersUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.StringFieldUpdateOperationsInput | string
+  lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nft?: Prisma.NFTsUpdateOneWithoutNFTOwnersNestedInput
+}
+
+export type NFTOwnersUncheckedUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  tokenId?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.StringFieldUpdateOperationsInput | string
+  lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type NFTOwnersUncheckedUpdateManyWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  tokenId?: Prisma.StringFieldUpdateOperationsInput | string
+  count?: Prisma.StringFieldUpdateOperationsInput | string
+  lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type NFTOwnersCreateManyNftInput = {
@@ -491,11 +619,11 @@ export type NFTOwnersCreateManyNftInput = {
 
 export type NFTOwnersUpdateWithoutNftInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerAddress?: Prisma.StringFieldUpdateOperationsInput | string
   count?: Prisma.StringFieldUpdateOperationsInput | string
   lastTransactionHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contract?: Prisma.BlockchainContractsUpdateOneRequiredWithoutNftownersNestedInput
 }
 
 export type NFTOwnersUncheckedUpdateWithoutNftInput = {
@@ -527,6 +655,7 @@ export type NFTOwnersSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   count?: boolean
   lastTransactionHash?: boolean
   lastSyncTime?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }, ExtArgs["result"]["nFTOwners"]>
 
@@ -539,6 +668,7 @@ export type NFTOwnersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   count?: boolean
   lastTransactionHash?: boolean
   lastSyncTime?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }, ExtArgs["result"]["nFTOwners"]>
 
@@ -551,6 +681,7 @@ export type NFTOwnersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   count?: boolean
   lastTransactionHash?: boolean
   lastSyncTime?: boolean
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }, ExtArgs["result"]["nFTOwners"]>
 
@@ -567,18 +698,22 @@ export type NFTOwnersSelectScalar = {
 
 export type NFTOwnersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractId" | "ownerAddress" | "contractAddress" | "tokenId" | "count" | "lastTransactionHash" | "lastSyncTime", ExtArgs["result"]["nFTOwners"]>
 export type NFTOwnersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }
 export type NFTOwnersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }
 export type NFTOwnersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contract?: boolean | Prisma.BlockchainContractsDefaultArgs<ExtArgs>
   nft?: boolean | Prisma.NFTOwners$nftArgs<ExtArgs>
 }
 
 export type $NFTOwnersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NFTOwners"
   objects: {
+    contract: Prisma.$BlockchainContractsPayload<ExtArgs>
     nft: Prisma.$NFTsPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -984,6 +1119,7 @@ readonly fields: NFTOwnersFieldRefs;
  */
 export interface Prisma__NFTOwnersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  contract<T extends Prisma.BlockchainContractsDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlockchainContractsDefaultArgs<ExtArgs>>): Prisma.Prisma__BlockchainContractsClient<runtime.Types.Result.GetResult<Prisma.$BlockchainContractsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   nft<T extends Prisma.NFTOwners$nftArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NFTOwners$nftArgs<ExtArgs>>): Prisma.Prisma__NFTsClient<runtime.Types.Result.GetResult<Prisma.$NFTsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

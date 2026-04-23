@@ -11,9 +11,9 @@ export type AdapterTransaction = {
     args: any
     value: bigint
     source: AdapterTransactionSource
-    eventName: string
-
+    
     // Optional metadata (best-effort; may be missing for API fallback)
+    eventName?: string
     blockHash?: string
     topics?: string[]
     data?: string

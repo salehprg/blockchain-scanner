@@ -3,13 +3,6 @@ import { ContractLogRecorder } from "@/application/services/contract-log-recorde
 import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
 import { BaseEVMAdapter, GetLogsResult } from "@/chainAdapters/EVM/BaseEVMAdapter";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
-import { NFT } from "@/domain/entities/nft";
-import { NFTOwner } from "@/domain/entities/nft-owner";
-import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
-import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
-import { INFTRepository } from "@/domain/repository/nft-repo";
-import { ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
-import { randomUUID } from "crypto";
 import { Abi, AbiEvent, Address, formatUnits, getAbiItem, getAddress } from "viem";
 import { BaseHandler } from "../BaseHandler";
 import { AppContainer } from "@/main/container";
@@ -51,27 +44,39 @@ export class Payment_Handler extends BaseHandler {
 
         const filteredlogs: AdapterTransaction[] = []
 
-        result.logs.forEach((l, index) => {
-            if (l.source == "rpc") {
-                l.value = l.args.price
-                filteredlogs.push(l)
+        for (const tx of result.logs) {
+            if (tx.source == "rpc") {
+                tx.value = tx.args.price
+                filteredlogs.push(tx)
             }
 
-            if (l.source == "api") {
-                if (l.eventName == "purchaseWithSignature" && l.args && l.args.decoded_input) {
-                    const reqFuncParams = l.args.decoded_input.parameters.find((p: any) => p.name === "_req")?.value
-                    l.args.buyer = reqFuncParams[0]
-                    l.args.itemId = reqFuncParams[1]
-                    l.args.itemType = reqFuncParams[2]
-                    l.args.price = reqFuncParams[3]
-                    l.args.currency = reqFuncParams[4]
-                    l.args.validityStartTimestamp = reqFuncParams[5]
-                    l.args.validityEndTimestamp = reqFuncParams[6]
-                    l.args.uid = reqFuncParams[7]
-                    filteredlogs.push(l)
-                }
+            if (tx.source == "api" && tx.args) {
+                if (!(tx.args.method_call as string).startsWith(PAYMENT_RECEIVED_EVENT.name)) continue;
+                const getVal = (n: string) => tx.args.parameters.find((p: any) => p.name === n)?.value;
+                const buyer = getVal("buyer")
+                const itemId = getVal("itemId")
+                const itemType = getVal("itemType")
+                const price = getVal("price")
+                const currency = getVal("currency")
+
+                filteredlogs.push({
+                    transactionHash: tx.transactionHash,
+                    logIndex: tx.logIndex,
+                    blockNumber: BigInt(tx.blockNumber ?? 0),
+                    address: tx.address,
+                    value: tx.value,
+                    eventName: tx.eventName,
+                    args: {
+                        buyer: buyer,
+                        itemId: itemId,
+                        itemType: itemType,
+                        price: price,
+                        currency: currency
+                    },
+                    source: "api",
+                });
             }
-        });
+        }
 
         nextBlock = result.nextLastBlockNumber
 

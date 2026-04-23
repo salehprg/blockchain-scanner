@@ -92,26 +92,4 @@ export abstract class BaseEVMAdapter {
 
         return logs
     }
-
-    async getERC721TransferLogs(address: `0x${string}`,
-        fromBlock: bigint,
-        toBlock: bigint | null = null,
-        chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
-
-        var result = await this.getLogs(address, ERC721_TRANSFER_EVENT, fromBlock, toBlock, chunkSize, confBlock)
-
-        return result
-    }
-
-    async getERC1155TransferLogs(address: `0x${string}`,
-        fromBlock: bigint,
-        toBlock: bigint | null = null,
-        chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
-
-        var result = await this.getLogs(address, ERC1155_TRANSFER_SINGLE_EVENT, fromBlock, toBlock, chunkSize, confBlock)
-        return result
-    }
-
 }

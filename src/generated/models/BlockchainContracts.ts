@@ -43,6 +43,7 @@ export type BlockchainContractsMinAggregateOutputType = {
   lastSyncTime: Date | null
   contractCreateBlockNumber: string | null
   contractName: string | null
+  isActive: boolean | null
 }
 
 export type BlockchainContractsMaxAggregateOutputType = {
@@ -54,6 +55,7 @@ export type BlockchainContractsMaxAggregateOutputType = {
   lastSyncTime: Date | null
   contractCreateBlockNumber: string | null
   contractName: string | null
+  isActive: boolean | null
 }
 
 export type BlockchainContractsCountAggregateOutputType = {
@@ -65,6 +67,7 @@ export type BlockchainContractsCountAggregateOutputType = {
   lastSyncTime: number
   contractCreateBlockNumber: number
   contractName: number
+  isActive: number
   _all: number
 }
 
@@ -86,6 +89,7 @@ export type BlockchainContractsMinAggregateInputType = {
   lastSyncTime?: true
   contractCreateBlockNumber?: true
   contractName?: true
+  isActive?: true
 }
 
 export type BlockchainContractsMaxAggregateInputType = {
@@ -97,6 +101,7 @@ export type BlockchainContractsMaxAggregateInputType = {
   lastSyncTime?: true
   contractCreateBlockNumber?: true
   contractName?: true
+  isActive?: true
 }
 
 export type BlockchainContractsCountAggregateInputType = {
@@ -108,6 +113,7 @@ export type BlockchainContractsCountAggregateInputType = {
   lastSyncTime?: true
   contractCreateBlockNumber?: true
   contractName?: true
+  isActive?: true
   _all?: true
 }
 
@@ -206,6 +212,7 @@ export type BlockchainContractsGroupByOutputType = {
   lastSyncTime: Date | null
   contractCreateBlockNumber: string | null
   contractName: string | null
+  isActive: boolean
   _count: BlockchainContractsCountAggregateOutputType | null
   _avg: BlockchainContractsAvgAggregateOutputType | null
   _sum: BlockchainContractsSumAggregateOutputType | null
@@ -240,6 +247,9 @@ export type BlockchainContractsWhereInput = {
   lastSyncTime?: Prisma.DateTimeNullableFilter<"BlockchainContracts"> | Date | string | null
   contractCreateBlockNumber?: Prisma.StringNullableFilter<"BlockchainContracts"> | string | null
   contractName?: Prisma.StringNullableFilter<"BlockchainContracts"> | string | null
+  isActive?: Prisma.BoolFilter<"BlockchainContracts"> | boolean
+  nftowners?: Prisma.NFTOwnersListRelationFilter
+  contractLogs?: Prisma.ContractLogsListRelationFilter
 }
 
 export type BlockchainContractsOrderByWithRelationInput = {
@@ -251,6 +261,9 @@ export type BlockchainContractsOrderByWithRelationInput = {
   lastSyncTime?: Prisma.SortOrderInput | Prisma.SortOrder
   contractCreateBlockNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   contractName?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
+  nftowners?: Prisma.NFTOwnersOrderByRelationAggregateInput
+  contractLogs?: Prisma.ContractLogsOrderByRelationAggregateInput
 }
 
 export type BlockchainContractsWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +278,9 @@ export type BlockchainContractsWhereUniqueInput = Prisma.AtLeast<{
   lastSyncTime?: Prisma.DateTimeNullableFilter<"BlockchainContracts"> | Date | string | null
   contractCreateBlockNumber?: Prisma.StringNullableFilter<"BlockchainContracts"> | string | null
   contractName?: Prisma.StringNullableFilter<"BlockchainContracts"> | string | null
+  isActive?: Prisma.BoolFilter<"BlockchainContracts"> | boolean
+  nftowners?: Prisma.NFTOwnersListRelationFilter
+  contractLogs?: Prisma.ContractLogsListRelationFilter
 }, "id" | "contractAddress">
 
 export type BlockchainContractsOrderByWithAggregationInput = {
@@ -276,6 +292,7 @@ export type BlockchainContractsOrderByWithAggregationInput = {
   lastSyncTime?: Prisma.SortOrderInput | Prisma.SortOrder
   contractCreateBlockNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   contractName?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   _count?: Prisma.BlockchainContractsCountOrderByAggregateInput
   _avg?: Prisma.BlockchainContractsAvgOrderByAggregateInput
   _max?: Prisma.BlockchainContractsMaxOrderByAggregateInput
@@ -295,6 +312,7 @@ export type BlockchainContractsScalarWhereWithAggregatesInput = {
   lastSyncTime?: Prisma.DateTimeNullableWithAggregatesFilter<"BlockchainContracts"> | Date | string | null
   contractCreateBlockNumber?: Prisma.StringNullableWithAggregatesFilter<"BlockchainContracts"> | string | null
   contractName?: Prisma.StringNullableWithAggregatesFilter<"BlockchainContracts"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"BlockchainContracts"> | boolean
 }
 
 export type BlockchainContractsCreateInput = {
@@ -306,6 +324,9 @@ export type BlockchainContractsCreateInput = {
   lastSyncTime?: Date | string | null
   contractCreateBlockNumber?: string | null
   contractName?: string | null
+  isActive?: boolean
+  nftowners?: Prisma.NFTOwnersCreateNestedManyWithoutContractInput
+  contractLogs?: Prisma.ContractLogsCreateNestedManyWithoutContractInput
 }
 
 export type BlockchainContractsUncheckedCreateInput = {
@@ -317,6 +338,9 @@ export type BlockchainContractsUncheckedCreateInput = {
   lastSyncTime?: Date | string | null
   contractCreateBlockNumber?: string | null
   contractName?: string | null
+  isActive?: boolean
+  nftowners?: Prisma.NFTOwnersUncheckedCreateNestedManyWithoutContractInput
+  contractLogs?: Prisma.ContractLogsUncheckedCreateNestedManyWithoutContractInput
 }
 
 export type BlockchainContractsUpdateInput = {
@@ -328,6 +352,9 @@ export type BlockchainContractsUpdateInput = {
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nftowners?: Prisma.NFTOwnersUpdateManyWithoutContractNestedInput
+  contractLogs?: Prisma.ContractLogsUpdateManyWithoutContractNestedInput
 }
 
 export type BlockchainContractsUncheckedUpdateInput = {
@@ -339,6 +366,9 @@ export type BlockchainContractsUncheckedUpdateInput = {
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nftowners?: Prisma.NFTOwnersUncheckedUpdateManyWithoutContractNestedInput
+  contractLogs?: Prisma.ContractLogsUncheckedUpdateManyWithoutContractNestedInput
 }
 
 export type BlockchainContractsCreateManyInput = {
@@ -350,6 +380,7 @@ export type BlockchainContractsCreateManyInput = {
   lastSyncTime?: Date | string | null
   contractCreateBlockNumber?: string | null
   contractName?: string | null
+  isActive?: boolean
 }
 
 export type BlockchainContractsUpdateManyMutationInput = {
@@ -361,6 +392,7 @@ export type BlockchainContractsUpdateManyMutationInput = {
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlockchainContractsUncheckedUpdateManyInput = {
@@ -372,6 +404,7 @@ export type BlockchainContractsUncheckedUpdateManyInput = {
   lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type BlockchainContractsCountOrderByAggregateInput = {
@@ -383,6 +416,7 @@ export type BlockchainContractsCountOrderByAggregateInput = {
   lastSyncTime?: Prisma.SortOrder
   contractCreateBlockNumber?: Prisma.SortOrder
   contractName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type BlockchainContractsAvgOrderByAggregateInput = {
@@ -398,6 +432,7 @@ export type BlockchainContractsMaxOrderByAggregateInput = {
   lastSyncTime?: Prisma.SortOrder
   contractCreateBlockNumber?: Prisma.SortOrder
   contractName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type BlockchainContractsMinOrderByAggregateInput = {
@@ -409,16 +444,228 @@ export type BlockchainContractsMinOrderByAggregateInput = {
   lastSyncTime?: Prisma.SortOrder
   contractCreateBlockNumber?: Prisma.SortOrder
   contractName?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type BlockchainContractsSumOrderByAggregateInput = {
   chainId?: Prisma.SortOrder
 }
 
+export type BlockchainContractsScalarRelationFilter = {
+  is?: Prisma.BlockchainContractsWhereInput
+  isNot?: Prisma.BlockchainContractsWhereInput
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type BlockchainContractsCreateNestedOneWithoutNftownersInput = {
+  create?: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedCreateWithoutNftownersInput>
+  connectOrCreate?: Prisma.BlockchainContractsCreateOrConnectWithoutNftownersInput
+  connect?: Prisma.BlockchainContractsWhereUniqueInput
+}
+
+export type BlockchainContractsUpdateOneRequiredWithoutNftownersNestedInput = {
+  create?: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedCreateWithoutNftownersInput>
+  connectOrCreate?: Prisma.BlockchainContractsCreateOrConnectWithoutNftownersInput
+  upsert?: Prisma.BlockchainContractsUpsertWithoutNftownersInput
+  connect?: Prisma.BlockchainContractsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlockchainContractsUpdateToOneWithWhereWithoutNftownersInput, Prisma.BlockchainContractsUpdateWithoutNftownersInput>, Prisma.BlockchainContractsUncheckedUpdateWithoutNftownersInput>
+}
+
+export type BlockchainContractsCreateNestedOneWithoutContractLogsInput = {
+  create?: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedCreateWithoutContractLogsInput>
+  connectOrCreate?: Prisma.BlockchainContractsCreateOrConnectWithoutContractLogsInput
+  connect?: Prisma.BlockchainContractsWhereUniqueInput
+}
+
+export type BlockchainContractsUpdateOneRequiredWithoutContractLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedCreateWithoutContractLogsInput>
+  connectOrCreate?: Prisma.BlockchainContractsCreateOrConnectWithoutContractLogsInput
+  upsert?: Prisma.BlockchainContractsUpsertWithoutContractLogsInput
+  connect?: Prisma.BlockchainContractsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BlockchainContractsUpdateToOneWithWhereWithoutContractLogsInput, Prisma.BlockchainContractsUpdateWithoutContractLogsInput>, Prisma.BlockchainContractsUncheckedUpdateWithoutContractLogsInput>
+}
+
+export type BlockchainContractsCreateWithoutNftownersInput = {
+  id?: string
+  contractAddress: string
+  contractType: string
+  chainId: number
+  lastSyncBlock?: string | null
+  lastSyncTime?: Date | string | null
+  contractCreateBlockNumber?: string | null
+  contractName?: string | null
+  isActive?: boolean
+  contractLogs?: Prisma.ContractLogsCreateNestedManyWithoutContractInput
+}
+
+export type BlockchainContractsUncheckedCreateWithoutNftownersInput = {
+  id?: string
+  contractAddress: string
+  contractType: string
+  chainId: number
+  lastSyncBlock?: string | null
+  lastSyncTime?: Date | string | null
+  contractCreateBlockNumber?: string | null
+  contractName?: string | null
+  isActive?: boolean
+  contractLogs?: Prisma.ContractLogsUncheckedCreateNestedManyWithoutContractInput
+}
+
+export type BlockchainContractsCreateOrConnectWithoutNftownersInput = {
+  where: Prisma.BlockchainContractsWhereUniqueInput
+  create: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedCreateWithoutNftownersInput>
+}
+
+export type BlockchainContractsUpsertWithoutNftownersInput = {
+  update: Prisma.XOR<Prisma.BlockchainContractsUpdateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedUpdateWithoutNftownersInput>
+  create: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedCreateWithoutNftownersInput>
+  where?: Prisma.BlockchainContractsWhereInput
+}
+
+export type BlockchainContractsUpdateToOneWithWhereWithoutNftownersInput = {
+  where?: Prisma.BlockchainContractsWhereInput
+  data: Prisma.XOR<Prisma.BlockchainContractsUpdateWithoutNftownersInput, Prisma.BlockchainContractsUncheckedUpdateWithoutNftownersInput>
+}
+
+export type BlockchainContractsUpdateWithoutNftownersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractType?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncBlock?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contractLogs?: Prisma.ContractLogsUpdateManyWithoutContractNestedInput
+}
+
+export type BlockchainContractsUncheckedUpdateWithoutNftownersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractType?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncBlock?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contractLogs?: Prisma.ContractLogsUncheckedUpdateManyWithoutContractNestedInput
+}
+
+export type BlockchainContractsCreateWithoutContractLogsInput = {
+  id?: string
+  contractAddress: string
+  contractType: string
+  chainId: number
+  lastSyncBlock?: string | null
+  lastSyncTime?: Date | string | null
+  contractCreateBlockNumber?: string | null
+  contractName?: string | null
+  isActive?: boolean
+  nftowners?: Prisma.NFTOwnersCreateNestedManyWithoutContractInput
+}
+
+export type BlockchainContractsUncheckedCreateWithoutContractLogsInput = {
+  id?: string
+  contractAddress: string
+  contractType: string
+  chainId: number
+  lastSyncBlock?: string | null
+  lastSyncTime?: Date | string | null
+  contractCreateBlockNumber?: string | null
+  contractName?: string | null
+  isActive?: boolean
+  nftowners?: Prisma.NFTOwnersUncheckedCreateNestedManyWithoutContractInput
+}
+
+export type BlockchainContractsCreateOrConnectWithoutContractLogsInput = {
+  where: Prisma.BlockchainContractsWhereUniqueInput
+  create: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedCreateWithoutContractLogsInput>
+}
+
+export type BlockchainContractsUpsertWithoutContractLogsInput = {
+  update: Prisma.XOR<Prisma.BlockchainContractsUpdateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedUpdateWithoutContractLogsInput>
+  create: Prisma.XOR<Prisma.BlockchainContractsCreateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedCreateWithoutContractLogsInput>
+  where?: Prisma.BlockchainContractsWhereInput
+}
+
+export type BlockchainContractsUpdateToOneWithWhereWithoutContractLogsInput = {
+  where?: Prisma.BlockchainContractsWhereInput
+  data: Prisma.XOR<Prisma.BlockchainContractsUpdateWithoutContractLogsInput, Prisma.BlockchainContractsUncheckedUpdateWithoutContractLogsInput>
+}
+
+export type BlockchainContractsUpdateWithoutContractLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractType?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncBlock?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nftowners?: Prisma.NFTOwnersUpdateManyWithoutContractNestedInput
+}
+
+export type BlockchainContractsUncheckedUpdateWithoutContractLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contractAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  contractType?: Prisma.StringFieldUpdateOperationsInput | string
+  chainId?: Prisma.IntFieldUpdateOperationsInput | number
+  lastSyncBlock?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSyncTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contractCreateBlockNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  nftowners?: Prisma.NFTOwnersUncheckedUpdateManyWithoutContractNestedInput
+}
+
+
+/**
+ * Count Type BlockchainContractsCountOutputType
+ */
+
+export type BlockchainContractsCountOutputType = {
+  nftowners: number
+  contractLogs: number
+}
+
+export type BlockchainContractsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  nftowners?: boolean | BlockchainContractsCountOutputTypeCountNftownersArgs
+  contractLogs?: boolean | BlockchainContractsCountOutputTypeCountContractLogsArgs
+}
+
+/**
+ * BlockchainContractsCountOutputType without action
+ */
+export type BlockchainContractsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockchainContractsCountOutputType
+   */
+  select?: Prisma.BlockchainContractsCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BlockchainContractsCountOutputType without action
+ */
+export type BlockchainContractsCountOutputTypeCountNftownersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NFTOwnersWhereInput
+}
+
+/**
+ * BlockchainContractsCountOutputType without action
+ */
+export type BlockchainContractsCountOutputTypeCountContractLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContractLogsWhereInput
+}
 
 
 export type BlockchainContractsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -430,6 +677,10 @@ export type BlockchainContractsSelect<ExtArgs extends runtime.Types.Extensions.I
   lastSyncTime?: boolean
   contractCreateBlockNumber?: boolean
   contractName?: boolean
+  isActive?: boolean
+  nftowners?: boolean | Prisma.BlockchainContracts$nftownersArgs<ExtArgs>
+  contractLogs?: boolean | Prisma.BlockchainContracts$contractLogsArgs<ExtArgs>
+  _count?: boolean | Prisma.BlockchainContractsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blockchainContracts"]>
 
 export type BlockchainContractsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -441,6 +692,7 @@ export type BlockchainContractsSelectCreateManyAndReturn<ExtArgs extends runtime
   lastSyncTime?: boolean
   contractCreateBlockNumber?: boolean
   contractName?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["blockchainContracts"]>
 
 export type BlockchainContractsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -452,6 +704,7 @@ export type BlockchainContractsSelectUpdateManyAndReturn<ExtArgs extends runtime
   lastSyncTime?: boolean
   contractCreateBlockNumber?: boolean
   contractName?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["blockchainContracts"]>
 
 export type BlockchainContractsSelectScalar = {
@@ -463,13 +716,24 @@ export type BlockchainContractsSelectScalar = {
   lastSyncTime?: boolean
   contractCreateBlockNumber?: boolean
   contractName?: boolean
+  isActive?: boolean
 }
 
-export type BlockchainContractsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractAddress" | "contractType" | "chainId" | "lastSyncBlock" | "lastSyncTime" | "contractCreateBlockNumber" | "contractName", ExtArgs["result"]["blockchainContracts"]>
+export type BlockchainContractsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contractAddress" | "contractType" | "chainId" | "lastSyncBlock" | "lastSyncTime" | "contractCreateBlockNumber" | "contractName" | "isActive", ExtArgs["result"]["blockchainContracts"]>
+export type BlockchainContractsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  nftowners?: boolean | Prisma.BlockchainContracts$nftownersArgs<ExtArgs>
+  contractLogs?: boolean | Prisma.BlockchainContracts$contractLogsArgs<ExtArgs>
+  _count?: boolean | Prisma.BlockchainContractsCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type BlockchainContractsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type BlockchainContractsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $BlockchainContractsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BlockchainContracts"
-  objects: {}
+  objects: {
+    nftowners: Prisma.$NFTOwnersPayload<ExtArgs>[]
+    contractLogs: Prisma.$ContractLogsPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     contractAddress: string
@@ -479,6 +743,7 @@ export type $BlockchainContractsPayload<ExtArgs extends runtime.Types.Extensions
     lastSyncTime: Date | null
     contractCreateBlockNumber: string | null
     contractName: string | null
+    isActive: boolean
   }, ExtArgs["result"]["blockchainContracts"]>
   composites: {}
 }
@@ -873,6 +1138,8 @@ readonly fields: BlockchainContractsFieldRefs;
  */
 export interface Prisma__BlockchainContractsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  nftowners<T extends Prisma.BlockchainContracts$nftownersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlockchainContracts$nftownersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NFTOwnersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contractLogs<T extends Prisma.BlockchainContracts$contractLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BlockchainContracts$contractLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -910,6 +1177,7 @@ export interface BlockchainContractsFieldRefs {
   readonly lastSyncTime: Prisma.FieldRef<"BlockchainContracts", 'DateTime'>
   readonly contractCreateBlockNumber: Prisma.FieldRef<"BlockchainContracts", 'String'>
   readonly contractName: Prisma.FieldRef<"BlockchainContracts", 'String'>
+  readonly isActive: Prisma.FieldRef<"BlockchainContracts", 'Boolean'>
 }
     
 
@@ -926,6 +1194,10 @@ export type BlockchainContractsFindUniqueArgs<ExtArgs extends runtime.Types.Exte
    * Omit specific fields from the BlockchainContracts
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
   /**
    * Filter, which BlockchainContracts to fetch.
    */
@@ -945,6 +1217,10 @@ export type BlockchainContractsFindUniqueOrThrowArgs<ExtArgs extends runtime.Typ
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
+  /**
    * Filter, which BlockchainContracts to fetch.
    */
   where: Prisma.BlockchainContractsWhereUniqueInput
@@ -962,6 +1238,10 @@ export type BlockchainContractsFindFirstArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the BlockchainContracts
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
   /**
    * Filter, which BlockchainContracts to fetch.
    */
@@ -1011,6 +1291,10 @@ export type BlockchainContractsFindFirstOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
+  /**
    * Filter, which BlockchainContracts to fetch.
    */
   where?: Prisma.BlockchainContractsWhereInput
@@ -1058,6 +1342,10 @@ export type BlockchainContractsFindManyArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the BlockchainContracts
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
   /**
    * Filter, which BlockchainContracts to fetch.
    */
@@ -1107,6 +1395,10 @@ export type BlockchainContractsCreateArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
+  /**
    * The data needed to create a BlockchainContracts.
    */
   data: Prisma.XOR<Prisma.BlockchainContractsCreateInput, Prisma.BlockchainContractsUncheckedCreateInput>
@@ -1154,6 +1446,10 @@ export type BlockchainContractsUpdateArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the BlockchainContracts
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
   /**
    * The data needed to update a BlockchainContracts.
    */
@@ -1221,6 +1517,10 @@ export type BlockchainContractsUpsertArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
+  /**
    * The filter to search for the BlockchainContracts to update in case it exists.
    */
   where: Prisma.BlockchainContractsWhereUniqueInput
@@ -1247,6 +1547,10 @@ export type BlockchainContractsDeleteArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
+  /**
    * Filter which BlockchainContracts to delete.
    */
   where: Prisma.BlockchainContractsWhereUniqueInput
@@ -1267,6 +1571,54 @@ export type BlockchainContractsDeleteManyArgs<ExtArgs extends runtime.Types.Exte
 }
 
 /**
+ * BlockchainContracts.nftowners
+ */
+export type BlockchainContracts$nftownersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NFTOwners
+   */
+  select?: Prisma.NFTOwnersSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NFTOwners
+   */
+  omit?: Prisma.NFTOwnersOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NFTOwnersInclude<ExtArgs> | null
+  where?: Prisma.NFTOwnersWhereInput
+  orderBy?: Prisma.NFTOwnersOrderByWithRelationInput | Prisma.NFTOwnersOrderByWithRelationInput[]
+  cursor?: Prisma.NFTOwnersWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NFTOwnersScalarFieldEnum | Prisma.NFTOwnersScalarFieldEnum[]
+}
+
+/**
+ * BlockchainContracts.contractLogs
+ */
+export type BlockchainContracts$contractLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContractLogs
+   */
+  select?: Prisma.ContractLogsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContractLogs
+   */
+  omit?: Prisma.ContractLogsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractLogsInclude<ExtArgs> | null
+  where?: Prisma.ContractLogsWhereInput
+  orderBy?: Prisma.ContractLogsOrderByWithRelationInput | Prisma.ContractLogsOrderByWithRelationInput[]
+  cursor?: Prisma.ContractLogsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContractLogsScalarFieldEnum | Prisma.ContractLogsScalarFieldEnum[]
+}
+
+/**
  * BlockchainContracts without action
  */
 export type BlockchainContractsDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1278,4 +1630,8 @@ export type BlockchainContractsDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the BlockchainContracts
    */
   omit?: Prisma.BlockchainContractsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockchainContractsInclude<ExtArgs> | null
 }

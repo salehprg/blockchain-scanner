@@ -6,13 +6,14 @@ import { NFTOwner } from "@/domain/entities/nft-owner";
 import { IBlockchainContractRepository } from "@/domain/repository/blockchain-contract-repo.ts";
 import { INFTOwnerRepository } from "@/domain/repository/nft-owner-repo.ts";
 import { INFTRepository } from "@/domain/repository/nft-repo";
-import { ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
+import { ERC1155_TRANSFER_SINGLE_EVENT, ZERO_ADDRESS } from "@/infrastructure/blockchain/evm-events";
 import { Address, getAddress } from "viem";
 import { randomUUID } from "crypto";
 import { ERC1155_ABI } from "@/application/blockchain-abis/ERC1155";
 import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
 import { BaseHandler } from "../BaseHandler";
 import { AppContainer } from "@/main/container";
+import { AdapterTransaction } from "@/chainAdapters/AdapterTransaction";
 
 export class ERC1155_Handler extends BaseHandler {
     private readonly nftRepo: INFTRepository;
@@ -99,7 +100,7 @@ export class ERC1155_Handler extends BaseHandler {
         const ids: string[] = [];
         const nextId = await evm_adapter.readContract<bigint>(contractEntity.contractAddress as Address, ERC1155_ABI, "nextTokenIdToMint");
         for (let i = 0n; i < nextId; i++) ids.push(i.toString());
-        
+
         const existing = await this.nftRepo.filterNFTs({ contractAddress: contractEntity.contractAddress });
         const toUpsert: NFT[] = [];
 
@@ -160,13 +161,49 @@ export class ERC1155_Handler extends BaseHandler {
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
-        const result = await evm_adapter.getERC1155TransferLogs(contractEntity.contractAddress as `0x${string}`, BigInt(contractEntity.lastSyncBlock ?? "0"))
+        const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
+            ERC1155_TRANSFER_SINGLE_EVENT,
+            BigInt(contractEntity.lastSyncBlock ?? contractEntity.contractCreateBlockNumber ?? "0"),
+            null, 1000n)
+
+        const filteredlogs: AdapterTransaction[] = []
+
+        for (const tx of result.logs) {
+            if (tx.source == "api" && tx.args) {
+                if (!(tx.args.method_call as string).startsWith(ERC1155_TRANSFER_SINGLE_EVENT.name)) continue;
+
+                const getVal = (n: string) => tx.args.parameters.find((p: any) => p.name === n)?.value;
+                const operator = getVal("operator")
+                const from = getVal("from")
+                const to = getVal("to")
+                const id = getVal("id")
+                const value = getVal("value")
+                
+                filteredlogs.push({
+                    transactionHash: tx.transactionHash,
+                    logIndex: tx.logIndex,
+                    blockNumber: BigInt(tx.blockNumber ?? 0),
+                    address: tx.address,
+                    value: tx.value,
+                    eventName: tx.eventName,
+                    args: {
+                        operator: operator,
+                        from: from as Address,
+                        to: to as Address,
+                        id: BigInt(id),
+                        value: BigInt(value)
+                    },
+                    source: "api",
+                });
+
+            }
+        }
 
         const con_logs = await this.logRecorder.recordBatch({
             contractId: contractEntity.id,
             chainId: contractEntity.chainId,
             nftContractAddress: contractEntity.contractAddress as Address,
-            logs: result.logs.map(l => {
+            logs: filteredlogs.map(l => {
                 return {
                     transactionHash: l.transactionHash,
                     logIndex: l.logIndex,
@@ -189,7 +226,7 @@ export class ERC1155_Handler extends BaseHandler {
         return con_logs
     }
     private async syncOwnerShips(contractEntity: BlockchainContract) {
-        var logs = await this.logRecorder.getLogs(contractEntity.id, "ERC1155.TransferSingle", false)
+        var logs = await this.logRecorder.getLogs(contractEntity.contractAddress, "ERC1155.TransferSingle", false)
 
         const uniqueTokenIds = new Set<string>();
         const mintedTokenIds = new Set<string>();

@@ -6,6 +6,7 @@ import { prisma } from "@/infrastructure/db/prisma";
 export class BlockchainContractRepository implements IBlockchainContractRepository {
   constructor() { }
 
+
   async create(entity: BlockchainContract): Promise<BlockchainContract> {
     const saved = await prisma.blockchainContracts.create({
       data: {
@@ -50,6 +51,15 @@ export class BlockchainContractRepository implements IBlockchainContractReposito
     const e = await prisma.blockchainContracts.findUnique({ where: { id } });
     return e ? new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName) : null;
   }
+  async filterActiveContracts(): Promise<BlockchainContract[]> {
+    const list = await prisma.blockchainContracts.findMany({
+      where: {
+        isActive: true
+      }
+    });
+    return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName));
+  }
+
   async findAll(): Promise<BlockchainContract[]> {
     const list = await prisma.blockchainContracts.findMany();
     return list.map(e => new BlockchainContract(e.id, e.contractAddress, e.contractType as any, e.chainId, e.lastSyncBlock, e.lastSyncTime, e.contractCreateBlockNumber, e.contractName));

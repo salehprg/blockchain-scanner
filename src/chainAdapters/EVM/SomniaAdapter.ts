@@ -14,7 +14,7 @@ const somnia = defineChain({
     },
     rpcUrls: {
         default: {
-            http: ['https://somnia-rpc.publicnode.com/'],
+            http: ['https://api.infra.mainnet.somnia.network/'],
         },
     },
     blockExplorers: {
@@ -57,71 +57,10 @@ export class SomniaAdapter extends BaseEVMAdapter {
         }
         catch (error) {
             var lastBlock = await this.getLastBlockNumber()
-            var apiLogs = await this.getLogsViaAPI(address, `https://mainnet.somnia.w3us.site/api/v2/addresses/${address}/transactions`, fromBlock)
+            var apiLogs = await this.getLogsViaAPI(address, `https://mainnet.somnia.w3us.site/api/v2/addresses/${address}/logs`, fromBlock)
 
             return {
                 logs: apiLogs,
-                nextLastBlockNumber: lastBlock,
-                success: true
-            }
-        }
-    }
-
-    override async getERC721TransferLogs(address: `0x${string}`,
-        fromBlock: bigint,
-        toBlock: bigint | null = null,
-        chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
-
-        var result = await this.getLogs(address, ERC721_TRANSFER_EVENT, fromBlock, toBlock, chunkSize, confBlock)
-        return result
-    }
-
-    override async getERC1155TransferLogs(address: `0x${string}`,
-        fromBlock: bigint,
-        toBlock: bigint | null = null,
-        chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
-
-        try {
-            var result = await super.getERC1155TransferLogs(address, fromBlock, toBlock, chunkSize, confBlock)
-            return result
-        } catch (error) {
-            var lastBlock = await this.getLastBlockNumber()
-            var apilogs = await this.getLogsViaAPI(address, `https://mainnet.somnia.w3us.site/api/v2/addresses/${address}/transactions`, fromBlock)
-
-            const mapped: AdapterTransaction[] = [];
-
-            for (const tx of apilogs) {
-                if ((tx as any).method === "claim" && (tx as any).decoded_input?.parameters) {
-                    const getVal = (n: string) => (tx as any).decoded_input.parameters.find((p: any) => p.name === n)?.value;
-                    const receiver = getVal("_receiver");
-                    const tokenId = getVal("_tokenId");
-                    const quantity = getVal("_quantity");
-
-                    if (receiver && tokenId && quantity) {
-                        mapped.push({
-                            transactionHash: (tx as any).hash,
-                            logIndex: Number((tx as any).log_index ?? 0),
-                            blockNumber: BigInt((tx as any).block_number ?? 0),
-                            address: address as Address,
-                            value: tx.value,
-                            eventName: tx.eventName,
-                            args: {
-                                operator: (tx as any).from?.hash as Address,
-                                from: ZERO_ADDRESS as Address,
-                                to: receiver as Address,
-                                id: BigInt(tokenId),
-                                value: BigInt(quantity)
-                            },
-                            source: "api",
-                        });
-                    }
-                }
-            }
-
-            return {
-                logs: mapped,
                 nextLastBlockNumber: lastBlock,
                 success: true
             }
@@ -147,7 +86,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
         };
 
         const sleep = async (ms: number) => new Promise(r => setTimeout(r, ms));
-        const jitterMs = () => 5_000 + Math.floor(Math.random() * 5_000);
+        const jitterMs = () => 1_000 + Math.floor(Math.random() * 1_000);
 
         let block_number: number | undefined = undefined;
         let index: number | undefined = undefined;
@@ -178,31 +117,29 @@ export class SomniaAdapter extends BaseEVMAdapter {
                     break;
                 }
 
-                await sleep(jitterMs());
+                const sleepSec = jitterMs()
+                console.log(`[api sync] Fetch Somnia Logs ${sleepSec / 1000}s.  BlockNumber: ${block_number}`)
+                await sleep(sleepSec);
 
                 block_number = next.block_number;
                 index = next.index;
             } catch (error) {
                 console.warn(`[sync] Somnia API fetch error: ${(error as Error).message}`);
-                break
+                throw error
             }
         }
 
         const filtered = allItems.filter(i => {
             const bn = BigInt(i?.block_number ?? 0);
-            return bn >= fromBlock && i?.result === "success";
+            return bn >= fromBlock;
         });
 
         // Normalize API tx-like items into event/log-like objects.
         // Low-fidelity: args are best-effort, logIndex may be synthetic if missing.
         return filtered.map((i, idx) => {
-            const txHash = String(i?.hash ?? i?.transaction_hash ?? "");
-            const logIndex = Number(i?.log_index ?? i?.logIndex ?? idx);
+            const txHash = String(i?.transaction_hash ?? "");
+            const logIndex = Number(i?.index ?? i?.logIndex ?? idx);
             const blockNumber = BigInt(i?.block_number ?? i?.blockNumber ?? 0);
-
-            const fromAddr: string = i?.from?.hash ?? i?.from_address ?? ZERO_ADDRESS;
-            const toAddr: string = i?.to?.hash ?? i?.to_address ?? ZERO_ADDRESS;
-            const tokenIdStr: string = i?.total?.token_id ?? i?.token_id ?? "0";
 
             return {
                 transactionHash: txHash,
@@ -211,13 +148,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
                 address: contractAddress as Address,
                 blockHash: i?.block_hash ?? undefined,
                 value: i.value,
-                args: {
-                    from: fromAddr as Address,
-                    to: toAddr as Address,
-                    tokenId: BigInt(tokenIdStr),
-                    decoded_input: i.decoded_input
-                },
-                eventName: i.method,
+                args: i.decoded ?? i.decoded_input,
                 source: "api",
             } satisfies AdapterTransaction;
         });
