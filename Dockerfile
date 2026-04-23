@@ -10,7 +10,6 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY src ./src
 COPY prisma ./prisma
-RUN npx prisma generate
 RUN npm run build
 
 # ========= runtime =========
@@ -25,7 +24,9 @@ RUN corepack enable || true
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml* /app/package-lock.json* ./
 
-RUN npm ci --omit=dev
+# Install production dependencies, but keep tsconfig-paths available
+# because the container starts node with `-r tsconfig-paths/register`.
+RUN npm ci --omit=dev && npm install --no-save tsconfig-paths
 
 COPY --from=builder /app/dist ./dist
 # Ensure path aliases work at runtime and Prisma client is available
@@ -34,4 +35,4 @@ COPY --from=builder /app/src/generated ./src/generated
 EXPOSE 3000
 
 # Start with path alias + env
-CMD ["node", "-r", "tsconfig-paths/register", "-r", "dotenv/config", "dist/main/server.js"]
+CMD ["node", "-r", "dotenv/config", "dist/main/server.js"]
