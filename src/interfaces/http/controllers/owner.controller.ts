@@ -51,7 +51,7 @@ export async function upsertOwner(req: Request, res: Response, next: NextFunctio
 export async function deleteOwner(req: Request, res: Response, next: NextFunction) {
   try {
     const { repos } = (req.app.locals.container as AppContainer);
-    await repos.ownerRepo.delete(req.params.id);
+    await repos.ownerRepo.delete(req.params.id as string);
     res.status(204).send();
   } catch (e) { next(e); }
 }

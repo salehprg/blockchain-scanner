@@ -152,6 +152,7 @@ export class Solana_Handler extends BaseHandler {
         }
 
     }
+
     async scanAndRecord(contractEntity: BlockchainContract) {
         const solana_adapter = this.adapterRegistry.Get(contractEntity.chainId) as SolanaAdapter;
 
@@ -183,7 +184,8 @@ export class Solana_Handler extends BaseHandler {
                         operator: null,
                         tokenId: null,
                         value: null,
-                        processed: true
+                        processed: true,
+                        args: {}
                     }
                 ]
             });
@@ -214,12 +216,15 @@ export class Solana_Handler extends BaseHandler {
                             operator: null,
                             tokenId: nftAction.tokenAddress!,
                             value: BigInt(nftAction.amount ?? 1),
-                            processed: false
+                            processed: false,
+                            args: {}
                         }
                     ]
                 });
             }
         }
+
+        await super.updateLastSync(contractEntity, BigInt(lastSignature.slot))
 
         return result_logs
     }

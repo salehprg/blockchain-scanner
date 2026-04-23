@@ -22,7 +22,7 @@ export class AdapterRegistery {
             case 5777:
                 return this.hardHat
             default:
-                throw new Error("ChainID not found in Adapter registry");
+                throw new Error(`${chainId} ChainID not found in Adapter registry`);
         }
     }
 

@@ -3,287 +3,185 @@ import { Abi } from "viem";
 export const ERC721_ABI = [
 	{
 		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "target",
-				"type": "address"
-			}
-		],
-		"name": "AddressEmptyCode",
+		"name": "AlreadyInitialized",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "ECDSAInvalidSignature",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "length",
-				"type": "uint256"
-			}
-		],
-		"name": "ECDSAInvalidSignatureLength",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "s",
-				"type": "bytes32"
-			}
-		],
-		"name": "ECDSAInvalidSignatureS",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "implementation",
-				"type": "address"
-			}
-		],
-		"name": "ERC1967InvalidImplementation",
+		"name": "ApprovalCallerNotOwnerNorApproved",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "ERC1967NonPayable",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "numerator",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "denominator",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC2981InvalidDefaultRoyalty",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC2981InvalidDefaultRoyaltyReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "numerator",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "denominator",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC2981InvalidTokenRoyalty",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC2981InvalidTokenRoyaltyReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "ERC721IncorrectOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC721InsufficientApproval",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "approver",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidApprover",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidOperator",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "ERC721InvalidSender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC721NonexistentToken",
+		"name": "ApprovalQueryForNonexistentToken",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "FailedCall",
-		"type": "error"
-	},
-	{
-		"inputs": [],
-		"name": "InvalidInitialization",
-		"type": "error"
-	},
-	{
-		"inputs": [],
-		"name": "NotInitializing",
+		"name": "BalanceQueryForZeroAddress",
 		"type": "error"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "newMaxSupply",
+				"type": "uint256"
 			}
 		],
-		"name": "OwnableInvalidOwner",
+		"name": "CannotExceedMaxSupplyOfUint64",
 		"type": "error"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "basisPoints",
+				"type": "uint256"
 			}
 		],
-		"name": "OwnableUnauthorizedAccount",
+		"name": "InvalidRoyaltyBasisPoints",
 		"type": "error"
 	},
 	{
 		"inputs": [],
-		"name": "ReentrancyGuardReentrantCall",
-		"type": "error"
-	},
-	{
-		"inputs": [],
-		"name": "UUPSUnauthorizedCallContext",
+		"name": "MintERC2309QuantityExceedsLimit",
 		"type": "error"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "slot",
-				"type": "bytes32"
+				"internalType": "uint256",
+				"name": "total",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maxSupply",
+				"type": "uint256"
 			}
 		],
-		"name": "UUPSUnsupportedProxiableUUID",
+		"name": "MintQuantityExceedsMaxSupply",
 		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "MintToZeroAddress",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "MintZeroQuantity",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "got",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "totalMinted",
+				"type": "uint256"
+			}
+		],
+		"name": "NewMaxSupplyCannotBeLessThenTotalMinted",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "NewOwnerIsZeroAddress",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "NotNextOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "OnlyAllowedSeaDrop",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "OnlyOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "OwnerQueryForNonexistentToken",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "OwnershipNotInitializedForExtraData",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "ProvenanceHashCannotBeSetAfterMintStarted",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "RoyaltyAddressCannotBeZeroAddress",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "SameTransferValidator",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "SignersMismatch",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "TokenGatedMismatch",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "TransferCallerNotOwnerNorApproved",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "TransferFromIncorrectOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "TransferToNonERC721ReceiverImplementer",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "TransferToZeroAddress",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "URIQueryForNonexistentToken",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address[]",
+				"name": "allowedSeaDrop",
+				"type": "address[]"
+			}
+		],
+		"name": "AllowedSeaDropUpdated",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -356,8 +254,33 @@ export const ERC721_ABI = [
 	},
 	{
 		"anonymous": false,
-		"inputs": [],
-		"name": "EIP712DomainChanged",
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "fromTokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "toTokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			}
+		],
+		"name": "ConsecutiveTransfer",
 		"type": "event"
 	},
 	{
@@ -365,9 +288,22 @@ export const ERC721_ABI = [
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint64",
+				"internalType": "string",
+				"name": "newContractURI",
+				"type": "string"
+			}
+		],
+		"name": "ContractURIUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint8",
 				"name": "version",
-				"type": "uint64"
+				"type": "uint8"
 			}
 		],
 		"name": "Initialized",
@@ -379,11 +315,11 @@ export const ERC721_ABI = [
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "_tokenId",
+				"name": "newMaxSupply",
 				"type": "uint256"
 			}
 		],
-		"name": "MetadataUpdate",
+		"name": "MaxSupplyUpdated",
 		"type": "event"
 	},
 	{
@@ -409,73 +345,57 @@ export const ERC721_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "signer",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "uri",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "pricePerToken",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "currency",
-						"type": "address"
-					},
-					{
-						"internalType": "uint128",
-						"name": "validityStartTimestamp",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint128",
-						"name": "validityEndTimestamp",
-						"type": "uint128"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "uid",
-						"type": "bytes32"
-					}
-				],
 				"indexed": false,
-				"internalType": "struct ChestBuyTest_721.MintRequest",
-				"name": "req",
-				"type": "tuple"
+				"internalType": "address",
+				"name": "newPotentialAdministrator",
+				"type": "address"
 			}
 		],
-		"name": "TokensMintedWithSignature",
+		"name": "PotentialOwnerUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "previousHash",
+				"type": "bytes32"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "newHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "ProvenanceHashUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "bps",
+				"type": "uint256"
+			}
+		],
+		"name": "RoyaltyInfoUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "SeaDropTokenDeployed",
 		"type": "event"
 	},
 	{
@@ -507,26 +427,26 @@ export const ERC721_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
+				"indexed": false,
 				"internalType": "address",
-				"name": "implementation",
+				"name": "oldValidator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "newValidator",
 				"type": "address"
 			}
 		],
-		"name": "Upgraded",
+		"name": "TransferValidatorUpdated",
 		"type": "event"
 	},
 	{
 		"inputs": [],
-		"name": "UPGRADE_INTERFACE_VERSION",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
+		"name": "acceptOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -568,6 +488,39 @@ export const ERC721_ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "baseURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "burn",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "cancelOwnershipTransfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "contractURI",
 		"outputs": [
 			{
@@ -580,46 +533,21 @@ export const ERC721_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "eip712Domain",
-		"outputs": [
-			{
-				"internalType": "bytes1",
-				"name": "fields",
-				"type": "bytes1"
-			},
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "version",
-				"type": "string"
-			},
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "chainId",
+				"name": "fromTokenId",
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "verifyingContract",
-				"type": "address"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "salt",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "extensions",
-				"type": "uint256[]"
+				"internalType": "uint256",
+				"name": "toTokenId",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "emitBatchMetadataUpdate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -645,33 +573,83 @@ export const ERC721_ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_defaultAdmin",
+				"name": "minter",
 				"type": "address"
+			}
+		],
+		"name": "getMintStats",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "minterNumMinted",
+				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "currentTotalSupply",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maxSupply",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTransferValidationFunction",
+		"outputs": [
+			{
+				"internalType": "bytes4",
+				"name": "functionSignature",
+				"type": "bytes4"
+			},
+			{
+				"internalType": "bool",
+				"name": "isViewFunction",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTransferValidator",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "string",
-				"name": "_name",
+				"name": "__name",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "_symbol",
+				"name": "__symbol",
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "_contractURI",
-				"type": "string"
+				"internalType": "address[]",
+				"name": "allowedSeaDrop",
+				"type": "address[]"
 			},
 			{
 				"internalType": "address",
-				"name": "_royaltyRecipient",
+				"name": "initialOwner",
 				"type": "address"
-			},
-			{
-				"internalType": "uint96",
-				"name": "_royaltyBps",
-				"type": "uint96"
 			}
 		],
 		"name": "initialize",
@@ -704,63 +682,272 @@ export const ERC721_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "maxSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "minter",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			}
+		],
+		"name": "mintSeaDrop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"components": [
 					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
-						"name": "tokenId",
+						"name": "maxSupply",
 						"type": "uint256"
 					},
 					{
 						"internalType": "string",
-						"name": "uri",
+						"name": "baseURI",
 						"type": "string"
 					},
 					{
-						"internalType": "uint256",
-						"name": "pricePerToken",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "contractURI",
+						"type": "string"
 					},
 					{
 						"internalType": "address",
-						"name": "currency",
+						"name": "seaDropImpl",
 						"type": "address"
 					},
 					{
-						"internalType": "uint128",
-						"name": "validityStartTimestamp",
-						"type": "uint128"
+						"components": [
+							{
+								"internalType": "uint80",
+								"name": "mintPrice",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint48",
+								"name": "startTime",
+								"type": "uint48"
+							},
+							{
+								"internalType": "uint48",
+								"name": "endTime",
+								"type": "uint48"
+							},
+							{
+								"internalType": "uint16",
+								"name": "maxTotalMintableByWallet",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "feeBps",
+								"type": "uint16"
+							},
+							{
+								"internalType": "bool",
+								"name": "restrictFeeRecipients",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct PublicDrop",
+						"name": "publicDrop",
+						"type": "tuple"
 					},
 					{
-						"internalType": "uint128",
-						"name": "validityEndTimestamp",
-						"type": "uint128"
+						"internalType": "string",
+						"name": "dropURI",
+						"type": "string"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "merkleRoot",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "string[]",
+								"name": "publicKeyURIs",
+								"type": "string[]"
+							},
+							{
+								"internalType": "string",
+								"name": "allowListURI",
+								"type": "string"
+							}
+						],
+						"internalType": "struct AllowListData",
+						"name": "allowListData",
+						"type": "tuple"
+					},
+					{
+						"internalType": "address",
+						"name": "creatorPayoutAddress",
+						"type": "address"
 					},
 					{
 						"internalType": "bytes32",
-						"name": "uid",
+						"name": "provenanceHash",
 						"type": "bytes32"
+					},
+					{
+						"internalType": "address[]",
+						"name": "allowedFeeRecipients",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "disallowedFeeRecipients",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "allowedPayers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "disallowedPayers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "tokenGatedAllowedNftTokens",
+						"type": "address[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint80",
+								"name": "mintPrice",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint16",
+								"name": "maxTotalMintableByWallet",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint48",
+								"name": "startTime",
+								"type": "uint48"
+							},
+							{
+								"internalType": "uint48",
+								"name": "endTime",
+								"type": "uint48"
+							},
+							{
+								"internalType": "uint8",
+								"name": "dropStageIndex",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint32",
+								"name": "maxTokenSupplyForStage",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint16",
+								"name": "feeBps",
+								"type": "uint16"
+							},
+							{
+								"internalType": "bool",
+								"name": "restrictFeeRecipients",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct TokenGatedDropStage[]",
+						"name": "tokenGatedDropStages",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "disallowedTokenGatedAllowedNftTokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "signers",
+						"type": "address[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint80",
+								"name": "minMintPrice",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint24",
+								"name": "maxMaxTotalMintableByWallet",
+								"type": "uint24"
+							},
+							{
+								"internalType": "uint40",
+								"name": "minStartTime",
+								"type": "uint40"
+							},
+							{
+								"internalType": "uint40",
+								"name": "maxEndTime",
+								"type": "uint40"
+							},
+							{
+								"internalType": "uint40",
+								"name": "maxMaxTokenSupplyForStage",
+								"type": "uint40"
+							},
+							{
+								"internalType": "uint16",
+								"name": "minFeeBps",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "maxFeeBps",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct SignedMintValidationParams[]",
+						"name": "signedMintValidationParams",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "disallowedSigners",
+						"type": "address[]"
 					}
 				],
-				"internalType": "struct ChestBuyTest_721.MintRequest",
-				"name": "_req",
+				"internalType": "struct ERC721SeaDropStructsErrorsAndEvents.MultiConfigureStruct",
+				"name": "config",
 				"type": "tuple"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_signature",
-				"type": "bytes"
 			}
 		],
-		"name": "mintWithSignature",
+		"name": "multiConfigure",
 		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -771,32 +958,6 @@ export const ERC721_ABI = [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "nextTokenId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "nextTokenIdToMint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -835,27 +996,8 @@ export const ERC721_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"name": "processedUIDs",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
-		"name": "proxiableUUID",
+		"name": "provenanceHash",
 		"outputs": [
 			{
 				"internalType": "bytes32",
@@ -874,15 +1016,41 @@ export const ERC721_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "royaltyAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "royaltyBasisPoints",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "salePrice",
+				"name": "_salePrice",
 				"type": "uint256"
 			}
 		],
@@ -895,7 +1063,7 @@ export const ERC721_ABI = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "amount",
+				"name": "royaltyAmount",
 				"type": "uint256"
 			}
 		],
@@ -944,7 +1112,7 @@ export const ERC721_ABI = [
 			},
 			{
 				"internalType": "bytes",
-				"name": "data",
+				"name": "_data",
 				"type": "bytes"
 			}
 		],
@@ -975,7 +1143,20 @@ export const ERC721_ABI = [
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "_contractURI",
+				"name": "newBaseURI",
+				"type": "string"
+			}
+		],
+		"name": "setBaseURI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "newContractURI",
 				"type": "string"
 			}
 		],
@@ -987,14 +1168,47 @@ export const ERC721_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_receiver",
-				"type": "address"
-			},
+				"internalType": "uint256",
+				"name": "newMaxSupply",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxSupply",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
-				"internalType": "uint96",
-				"name": "_feeNumerator",
-				"type": "uint96"
+				"internalType": "bytes32",
+				"name": "newProvenanceHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "setProvenanceHash",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "royaltyAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint96",
+						"name": "royaltyBps",
+						"type": "uint96"
+					}
+				],
+				"internalType": "struct ISeaDropTokenContractMetadata.RoyaltyInfo",
+				"name": "newInfo",
+				"type": "tuple"
 			}
 		],
 		"name": "setRoyaltyInfo",
@@ -1005,17 +1219,12 @@ export const ERC721_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_tokenURI",
-				"type": "string"
+				"internalType": "address",
+				"name": "newValidator",
+				"type": "address"
 			}
 		],
-		"name": "setURI",
+		"name": "setTransferValidator",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1072,6 +1281,19 @@ export const ERC721_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1098,7 +1320,7 @@ export const ERC721_ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "newOwner",
+				"name": "newPotentialOwner",
 				"type": "address"
 			}
 		],
@@ -1111,89 +1333,305 @@ export const ERC721_ABI = [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "newImplementation",
+				"name": "seaDropImpl",
 				"type": "address"
 			},
 			{
-				"internalType": "bytes",
-				"name": "data",
-				"type": "bytes"
+				"components": [
+					{
+						"internalType": "bytes32",
+						"name": "merkleRoot",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "string[]",
+						"name": "publicKeyURIs",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "allowListURI",
+						"type": "string"
+					}
+				],
+				"internalType": "struct AllowListData",
+				"name": "allowListData",
+				"type": "tuple"
 			}
 		],
-		"name": "upgradeToAndCall",
+		"name": "updateAllowList",
 		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "uri",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "pricePerToken",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "currency",
-						"type": "address"
-					},
-					{
-						"internalType": "uint128",
-						"name": "validityStartTimestamp",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint128",
-						"name": "validityEndTimestamp",
-						"type": "uint128"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "uid",
-						"type": "bytes32"
-					}
-				],
-				"internalType": "struct ChestBuyTest_721.MintRequest",
-				"name": "_req",
-				"type": "tuple"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_signature",
-				"type": "bytes"
-			}
-		],
-		"name": "verify",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "feeRecipient",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "updateAllowedFeeRecipient",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "allowedSeaDrop",
+				"type": "address[]"
+			}
+		],
+		"name": "updateAllowedSeaDrop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "payoutAddress",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "updateCreatorPayoutAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "dropURI",
+				"type": "string"
+			}
+		],
+		"name": "updateDropURI",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "payer",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "allowed",
+				"type": "bool"
+			}
+		],
+		"name": "updatePayer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint80",
+						"name": "mintPrice",
+						"type": "uint80"
+					},
+					{
+						"internalType": "uint48",
+						"name": "startTime",
+						"type": "uint48"
+					},
+					{
+						"internalType": "uint48",
+						"name": "endTime",
+						"type": "uint48"
+					},
+					{
+						"internalType": "uint16",
+						"name": "maxTotalMintableByWallet",
+						"type": "uint16"
+					},
+					{
+						"internalType": "uint16",
+						"name": "feeBps",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "restrictFeeRecipients",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct PublicDrop",
+				"name": "publicDrop",
+				"type": "tuple"
+			}
+		],
+		"name": "updatePublicDrop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "signer",
+				"type": "address"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint80",
+						"name": "minMintPrice",
+						"type": "uint80"
+					},
+					{
+						"internalType": "uint24",
+						"name": "maxMaxTotalMintableByWallet",
+						"type": "uint24"
+					},
+					{
+						"internalType": "uint40",
+						"name": "minStartTime",
+						"type": "uint40"
+					},
+					{
+						"internalType": "uint40",
+						"name": "maxEndTime",
+						"type": "uint40"
+					},
+					{
+						"internalType": "uint40",
+						"name": "maxMaxTokenSupplyForStage",
+						"type": "uint40"
+					},
+					{
+						"internalType": "uint16",
+						"name": "minFeeBps",
+						"type": "uint16"
+					},
+					{
+						"internalType": "uint16",
+						"name": "maxFeeBps",
+						"type": "uint16"
+					}
+				],
+				"internalType": "struct SignedMintValidationParams",
+				"name": "signedMintValidationParams",
+				"type": "tuple"
+			}
+		],
+		"name": "updateSignedMintValidationParams",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "seaDropImpl",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "allowedNftToken",
+				"type": "address"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint80",
+						"name": "mintPrice",
+						"type": "uint80"
+					},
+					{
+						"internalType": "uint16",
+						"name": "maxTotalMintableByWallet",
+						"type": "uint16"
+					},
+					{
+						"internalType": "uint48",
+						"name": "startTime",
+						"type": "uint48"
+					},
+					{
+						"internalType": "uint48",
+						"name": "endTime",
+						"type": "uint48"
+					},
+					{
+						"internalType": "uint8",
+						"name": "dropStageIndex",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint32",
+						"name": "maxTokenSupplyForStage",
+						"type": "uint32"
+					},
+					{
+						"internalType": "uint16",
+						"name": "feeBps",
+						"type": "uint16"
+					},
+					{
+						"internalType": "bool",
+						"name": "restrictFeeRecipients",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct TokenGatedDropStage",
+				"name": "dropStage",
+				"type": "tuple"
+			}
+		],
+		"name": "updateTokenGatedDrop",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ] as const satisfies Abi;

@@ -1,7 +1,7 @@
 import { ERC721_ABI } from "@/application/blockchain-abis/ERC721";
 import { ContractLogRecorder } from "@/application/services/contract-log-recorder";
 import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
-import { BaseEVMAdapter } from "@/chainAdapters/EVM/BaseEVMAdapter";
+import { BaseEVMAdapter, GetLogsResult } from "@/chainAdapters/EVM/BaseEVMAdapter";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
 import { NFT } from "@/domain/entities/nft";
 import { NFTOwner } from "@/domain/entities/nft-owner";
@@ -16,6 +16,7 @@ import { AppContainer } from "@/main/container";
 import { IBlockchainConfigRepository } from "@/domain/repository/blockchain-config-repo";
 import payment_abi from "./ABIs/payment_abi.json"
 import { serializeBigIntToJSON } from "@/infrastructure/db/utils/json-helper";
+import { AdapterTransaction } from "@/chainAdapters/AdapterTransaction";
 export class Payment_Handler extends BaseHandler {
     private readonly logRecorder: ContractLogRecorder;
     private readonly blockchainRepo: IBlockchainConfigRepository;
@@ -28,22 +29,6 @@ export class Payment_Handler extends BaseHandler {
         this.logRecorder = appContainer.services.logRecorder
     }
 
-    private isZero(addr: string) {
-        return addr.toLowerCase() === ZERO_ADDRESS.toLowerCase();
-    }
-
-    private normalizeTokenUri(uri: string, tokenId: string): string {
-        // ERC1155 may have {id} placeholder which should be hex-32 lowercased
-        if (uri.includes("{id}")) {
-            const idHex = BigInt(tokenId).toString(16).padStart(64, "0");
-            uri = uri.replace("{id}", idHex);
-        }
-        if (uri.startsWith("ipfs://")) {
-            return uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-        }
-        return uri;
-    }
-
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
@@ -52,28 +37,66 @@ export class Payment_Handler extends BaseHandler {
             name: "PurchasedComplete",
         }) as AbiEvent;
 
-        const logs = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`, PAYMENT_RECEIVED_EVENT, BigInt(contractEntity.lastSyncBlock ?? "0"), null, 1000n, 0n)
+        var fromBlock = contractEntity.lastSyncBlock
+        if (fromBlock == undefined || fromBlock == '0') {
+            fromBlock = contractEntity.contractCreateBlockNumber ?? "0"
+        }
+
+        var nextBlock = 0n
+
+        const toBlock = 288364832n
+        // const toBlock = null
+        const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
+            PAYMENT_RECEIVED_EVENT, BigInt(fromBlock), toBlock, 1000n, 0n)
+
+        const filteredlogs: AdapterTransaction[] = []
+
+        result.logs.forEach((l, index) => {
+            if (l.source == "rpc") {
+                l.value = l.args.price
+                filteredlogs.push(l)
+            }
+
+            if (l.source == "api") {
+                if (l.eventName == "purchaseWithSignature" && l.args && l.args.decoded_input) {
+                    const reqFuncParams = l.args.decoded_input.parameters.find((p: any) => p.name === "_req")?.value
+                    l.args.buyer = reqFuncParams[0]
+                    l.args.itemId = reqFuncParams[1]
+                    l.args.itemType = reqFuncParams[2]
+                    l.args.price = reqFuncParams[3]
+                    l.args.currency = reqFuncParams[4]
+                    l.args.validityStartTimestamp = reqFuncParams[5]
+                    l.args.validityEndTimestamp = reqFuncParams[6]
+                    l.args.uid = reqFuncParams[7]
+                    filteredlogs.push(l)
+                }
+            }
+        });
+
+        nextBlock = result.nextLastBlockNumber
 
         const con_logs = await this.logRecorder.recordBatch({
             contractId: contractEntity.id,
             chainId: contractEntity.chainId,
             nftContractAddress: contractEntity.contractAddress as Address,
-            logs: logs.map(l => {
+            logs: filteredlogs.map(l => {
                 return {
-                    transactionHash: l.blockHash,
+                    transactionHash: l.transactionHash,
                     logIndex: l.logIndex,
                     blockNumber: l.blockNumber,
                     type: "PAYMENT" as const,
-                    from: l.args.buyer ,
+                    from: l.args?.buyer ?? l.args?.from ?? null,
                     to: null,
                     operator: null,
                     tokenId: null,
-                    value: l.args.price,
+                    value: l.value ?? null,
                     processed: false,
                     args: serializeBigIntToJSON(l.args)
                 };
             })
         });
+
+        await super.updateLastSync(contractEntity, nextBlock)
 
         return con_logs
     }

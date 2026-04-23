@@ -1,9 +1,13 @@
-import { Transfer1155SingleLog } from '@/handlers/NFT/ERC1155_handler';
-import { Transfer721Log } from '@/handlers/NFT/ERC721_handler';
 import { ERC1155_TRANSFER_SINGLE_EVENT, ERC721_TRANSFER_EVENT, ZERO_ADDRESS } from '@/infrastructure/blockchain/evm-events';
 import { Abi, AbiEvent, Address, createPublicClient, defineChain, http, PublicClient, ExtractAbiItemForArgs } from 'viem';
 import { ERC1155_ABI } from "@/application/blockchain-abis/ERC1155";
+import { AdapterTransaction } from '../AdapterTransaction';
 
+export type GetLogsResult<T> = {
+    success: boolean;
+    logs: T[];
+    nextLastBlockNumber: bigint;
+};
 
 export abstract class BaseEVMAdapter {
     abstract client: PublicClient
@@ -19,54 +23,52 @@ export abstract class BaseEVMAdapter {
         return this.client.getBlockNumber();
     }
 
+    abstract getLogsViaAPI(
+        contractAddress: string,
+        urlRequest: string,
+        fromBlock: bigint
+    ): Promise<AdapterTransaction[]>
+
     async getLogs<TEvent extends AbiEvent>(
         address: `0x${string}`,
-        event: TEvent,
+        event: TEvent | undefined,
         fromBlock: bigint,
         toBlock: bigint | null = null,
         chunkSize: bigint = 1_000n,
         confBlock: bigint = 5n
-    ): Promise<any[]> {
+    ): Promise<GetLogsResult<AdapterTransaction>> {
 
         const latest = await this.getLastBlockNumber();
         var safeTo = latest > confBlock ? latest - confBlock : 0n;
 
-        if (toBlock != null && toBlock > safeTo) {
+        if (toBlock != null) {
             safeTo = toBlock;
         }
 
         let cursor = BigInt(fromBlock ?? "0");
-        var logs: any[] = []
+        var logs: AdapterTransaction[] = []
         while (cursor < safeTo) {
             const from = cursor;
             const to = from + chunkSize - 1n <= safeTo ? from + chunkSize - 1n : safeTo;
 
-            try {
-                console.log(`Start Chain ${this.client.chain?.id} scan blocks ${from}-${to} Until: ${safeTo}`)
-                const resultTo = await this.scanWindow(address, from, to, event);
-                cursor = resultTo.latest_block + 1n;
-                logs = logs.concat(resultTo.logs)
-            } catch (err) {
-                const msg = String((err as Error)?.message ?? err);
-
-                console.warn(`[sync] window ${from}-${to} failed: ${msg}`);
-                // brief pause to avoid hot loop
-                await new Promise(r => setTimeout(r, 2_000));
-                throw new Error("RPC GetLog failed")
-            }
+            console.log(`Start Chain ${this.client.chain?.id} scan blocks ${from}-${to} Until: ${safeTo}`)
+            const results = await this.scanWindow(address, from, to, event);
+            cursor = to + 1n;
+            logs = logs.concat(results)
         }
 
-        return logs
+        return {
+            logs: logs,
+            nextLastBlockNumber: safeTo,
+            success: true
+        }
     }
     private async scanWindow(
         contractAddress: Address,
         fromBlock: bigint,
         to: bigint,
         event: any
-    ): Promise<{
-        latest_block: bigint
-        logs: any[]
-    }> {
+    ): Promise<AdapterTransaction[]> {
         var bc_logs = await this.client.getLogs({
             address: contractAddress,
             fromBlock: fromBlock,
@@ -74,48 +76,42 @@ export abstract class BaseEVMAdapter {
             event: event
         });
 
-        var logs = bc_logs.map((l: any) => ({
-            blockHash: l.transactionHash,
+        var logs: AdapterTransaction[] = bc_logs.map((l: any) => ({
+            transactionHash: l.transactionHash,
+            blockHash: l.blockHash,
+            value: l.value,
             logIndex: Number(l.logIndex ?? -1),
             blockNumber: BigInt(l.blockNumber),
-            args: l.args
+            address: (l.address ?? contractAddress) as Address,
+            topics: Array.isArray(l.topics) ? l.topics : undefined,
+            data: l.data,
+            args: l.args,
+            eventName: l.eventName,
+            source: "rpc",
         }));
 
-        let maxApplied = fromBlock
-        for (const l of logs) {
-            if (l.blockNumber > maxApplied) maxApplied = l.blockNumber;
-        }
-        return {
-            latest_block: maxApplied,
-            logs: logs
-        }
-    }
-
-    async getAllTokenIds(address: `0x${string}`): Promise<string[]> {
-        const nextId = await this.readContract<bigint>(address, ERC1155_ABI, "nextTokenIdToMint");
-        const ids: string[] = [];
-        for (let i = 0n; i < nextId; i++) ids.push(i.toString());
-        return ids;
+        return logs
     }
 
     async getERC721TransferLogs(address: `0x${string}`,
         fromBlock: bigint,
         toBlock: bigint | null = null,
         chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<Transfer721Log[]> {
+        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
 
-        var logs = await this.getLogs(address, ERC721_TRANSFER_EVENT, fromBlock, toBlock, chunkSize, confBlock)
-        return logs
+        var result = await this.getLogs(address, ERC721_TRANSFER_EVENT, fromBlock, toBlock, chunkSize, confBlock)
+
+        return result
     }
 
     async getERC1155TransferLogs(address: `0x${string}`,
         fromBlock: bigint,
         toBlock: bigint | null = null,
         chunkSize: bigint = 1_000n,
-        confBlock: bigint = 5n): Promise<Transfer1155SingleLog[]> {
+        confBlock: bigint = 5n): Promise<GetLogsResult<AdapterTransaction>> {
 
-        var logs = await this.getLogs(address, ERC1155_TRANSFER_SINGLE_EVENT, fromBlock, toBlock, chunkSize, confBlock)
-        return logs
+        var result = await this.getLogs(address, ERC1155_TRANSFER_SINGLE_EVENT, fromBlock, toBlock, chunkSize, confBlock)
+        return result
     }
 
 }

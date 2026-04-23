@@ -1,8 +1,6 @@
-import { Transfer1155SingleLog } from '@/handlers/NFT/ERC1155_handler';
-import { Transfer721Log } from '@/handlers/NFT/ERC721_handler';
-import { ERC1155_TRANSFER_SINGLE_EVENT, ERC721_TRANSFER_EVENT, ZERO_ADDRESS } from '@/infrastructure/blockchain/evm-events';
 import { Abi, Address, createPublicClient, defineChain, http, PublicClient } from 'viem';
 import { BaseEVMAdapter } from './BaseEVMAdapter';
+import { AdapterTransaction } from '../AdapterTransaction';
 
 const hardhat = defineChain({
     id: 5777,
@@ -43,6 +41,14 @@ export class HardhatAdapter extends BaseEVMAdapter {
     constructor() {
         super();
         this.client = createPublicClient({ ...hardhat, chain: { nativeCurrency: hardhat.nativeCurrency, id: hardhat.id, name: hardhat.name, rpcUrls: hardhat.rpcUrls }, transport: http(hardhat.rpcUrls.default.http[0]) });
+    }
+
+    async getLogsViaAPI(
+        _contractAddress: string,
+        _urlRequest: string,
+        _fromBlock: bigint
+    ): Promise<AdapterTransaction[]> {
+        return []
     }
 
 }

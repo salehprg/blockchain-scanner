@@ -22,6 +22,7 @@ const PORT = parseInt(envs.PORT);
 
   container.services.handlerRegistry.RegisterERC1155(container)
   container.services.handlerRegistry.RegisterERC721(container)
+  container.services.handlerRegistry.RegisterChestERC721(container)
   container.services.handlerRegistry.RegisterSolana(container)
   container.services.handlerRegistry.RegisterPayment(container)
 

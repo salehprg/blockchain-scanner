@@ -14,13 +14,6 @@ import { AdapterRegistery } from "@/chainAdapters/AdapterRegistery";
 import { BaseHandler } from "../BaseHandler";
 import { AppContainer } from "@/main/container";
 
-export type Transfer1155SingleLog = {
-    blockHash: string;
-    logIndex: number;
-    blockNumber: bigint;
-    args: { operator: Address; from: Address; to: Address; id: bigint; value: bigint };
-};
-
 export class ERC1155_Handler extends BaseHandler {
     private readonly nftRepo: INFTRepository;
     private readonly ownerRepo: INFTOwnerRepository;
@@ -101,14 +94,22 @@ export class ERC1155_Handler extends BaseHandler {
     }
 
     private async sync1155NFT(contractEntity: BlockchainContract) {
-        const baseEVMAdapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
+        const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
-        const tokenIds = await baseEVMAdapter.getAllTokenIds(contractEntity.contractAddress as Address);
+        const ids: string[] = [];
+        const nextId = await evm_adapter.readContract<bigint>(contractEntity.contractAddress as Address, ERC1155_ABI, "nextTokenIdToMint");
+        for (let i = 0n; i < nextId; i++) ids.push(i.toString());
+        
         const existing = await this.nftRepo.filterNFTs({ contractAddress: contractEntity.contractAddress });
         const toUpsert: NFT[] = [];
 
-        for (const tokenId of tokenIds) {
-            const uri = await baseEVMAdapter.readContract<string>(contractEntity.contractAddress as Address, ERC1155_ABI as any, "uri", [BigInt(tokenId)]);
+        for (const tokenId of ids) {
+            var exist_token = existing.find(x => x.tokenId == tokenId)
+            if (exist_token && exist_token.metadataUpdated) {
+                continue
+            }
+
+            const uri = await evm_adapter.readContract<string>(contractEntity.contractAddress as Address, ERC1155_ABI as any, "uri", [BigInt(tokenId)]);
             const tokenUri = this.normalizeTokenUri(uri, tokenId);
             const tmp_nft = new NFT(
                 randomUUID(),
@@ -119,7 +120,7 @@ export class ERC1155_Handler extends BaseHandler {
                 false,
                 null
             )
-            const exist_token = existing.find(x => x.tokenId == tokenId)
+            exist_token = existing.find(x => x.tokenId == tokenId)
 
             if (exist_token && !exist_token.metadataUpdated) {
                 tmp_nft.id = exist_token.id
@@ -159,27 +160,31 @@ export class ERC1155_Handler extends BaseHandler {
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
-        const logs = await evm_adapter.getERC1155TransferLogs(contractEntity.contractAddress as `0x${string}`, BigInt(contractEntity.lastSyncBlock ?? "0"))
+        const result = await evm_adapter.getERC1155TransferLogs(contractEntity.contractAddress as `0x${string}`, BigInt(contractEntity.lastSyncBlock ?? "0"))
 
         const con_logs = await this.logRecorder.recordBatch({
             contractId: contractEntity.id,
             chainId: contractEntity.chainId,
             nftContractAddress: contractEntity.contractAddress as Address,
-            logs: logs.map(l => {
+            logs: result.logs.map(l => {
                 return {
-                    transactionHash: l.blockHash,
+                    transactionHash: l.transactionHash,
                     logIndex: l.logIndex,
                     blockNumber: l.blockNumber,
                     type: "ERC1155.TransferSingle" as const,
-                    from: l.args.from,
-                    to: l.args.to,
-                    operator: l.args.operator,
-                    tokenId: l.args.id.toString(),
-                    value: l.args.value,
-                    processed: false
+                    from: l.args?.from ?? null,
+                    to: l.args?.to ?? null,
+                    operator: l.args?.operator ?? null,
+                    tokenId: l.args?.id != null ? l.args.id.toString() : null,
+                    value: l.args?.value ?? null,
+                    processed: false,
+                    args: {}
                 };
             })
         });
+
+        await super.updateLastSync(contractEntity, result.nextLastBlockNumber)
+
 
         return con_logs
     }

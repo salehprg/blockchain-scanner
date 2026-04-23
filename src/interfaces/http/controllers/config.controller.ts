@@ -35,11 +35,11 @@ export async function updateConfig(req: Request, res: Response, next: NextFuncti
   try {
     const { repos } = (req.app.locals.container as AppContainer);
     const { id } = req.params;
-    const existing = await repos.configRepo.findById(id);
+    const existing = await repos.configRepo.findById(id as string);
     if (!existing) return res.status(404).json({ error: "Not found" });
 
     const updated = new BlockchainConfig(
-      id,
+      id as string,
       req.body.chainId ?? existing.chainId,
       req.body.rpcUrlBase ?? existing.rpcUrlBase,
       req.body.rpcUrlAlter ?? existing.rpcUrlAlter

@@ -4,14 +4,17 @@ import { IBlockchainContractRepository } from "@/domain/repository/blockchain-co
 import { ContractLog } from "@/domain/entities/contract-log";
 import { BlockchainContract } from "@/domain/entities/blockchain-contract";
 import { HandlersRegistry } from "@/handlers/HandlerRegistry";
+import { BaseEVMAdapter } from "@/chainAdapters/EVM/BaseEVMAdapter";
+import { ERC721_Handler } from "@/handlers/NFT/ERC721_handler";
+import { ERC1155_Handler } from "@/handlers/NFT/ERC1155_handler";
 
 export class UpdateOwnershipFromLogs {
-  
+
   constructor(
     private readonly contractRepo: IBlockchainContractRepository,
     private readonly logRepo: IContractLogRepository,
     private readonly handlerRegistry: HandlersRegistry
-  ) {}
+  ) { }
 
   async execute(params: {
     contractAddress: string;
@@ -94,7 +97,8 @@ export class UpdateOwnershipFromLogs {
     log: ContractLog,
     contract: BlockchainContract
   ): Promise<void> {
-    await this.handlerRegistry.GetERC721().applyTransfer721ingle({
+    const evmHandler = this.handlerRegistry.GetHandler(contract.contractType) as ERC721_Handler
+    await evmHandler.applyTransfer721ingle({
       contractId: contract.id,
       nftContractAddress: log.contractAddress as Address,
       from: log.fromAddress as Address,
@@ -111,7 +115,8 @@ export class UpdateOwnershipFromLogs {
     const value = log.value ? BigInt(log.value) : 0n;
     if (value <= 0n) return false;
 
-    await this.handlerRegistry.GetERC1155().applyTransfer1155Single({
+    const evmHandler = this.handlerRegistry.GetHandler(contract.contractType) as ERC1155_Handler
+    await evmHandler.applyTransfer1155Single({
       contractId: contract.id,
       nftContractAddress: log.contractAddress as Address,
       from: log.fromAddress as Address,

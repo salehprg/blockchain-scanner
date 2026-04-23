@@ -15,23 +15,13 @@ export abstract class BaseHandler {
 
     async scanTransactions(contractEntity: BlockchainContract): Promise<ContractLog[]> {
         const logs = await this.scanAndRecord(contractEntity)
-        await this.updateLastSync(contractEntity, logs)
         return logs
     }
 
-    private async updateLastSync(contractEntity: BlockchainContract, logs: ContractLog[]): Promise<ContractLog[]> {
-        if (logs.length == 0) return logs;
-
-        let maxApplied = 0n
-        for (const log of logs) {
-            if (BigInt(log.blockNumber) > maxApplied) maxApplied = BigInt(log.blockNumber);
-        }
-
+    protected async updateLastSync(contractEntity: BlockchainContract, lastAppliedBlock: bigint) {
         contractEntity.lastSyncTime = new Date()
-        contractEntity.lastSyncBlock = maxApplied.toString()
+        contractEntity.lastSyncBlock = lastAppliedBlock.toString()
         await this.appContainer.repos.contractRepo.update(contractEntity);
-
-        return logs
     }
 
 }

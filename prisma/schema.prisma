@@ -27,6 +27,7 @@ model BlockchainContracts {
   lastSyncTime            DateTime? @db.Timestamptz
   contractCreateBlockNumber String?  @db.Text
   contractName            String?   @db.VarChar(255)
+  isActive Boolean  @default(false)
 
   @@map("BlockchainContracts")
 }

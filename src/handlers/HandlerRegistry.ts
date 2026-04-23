@@ -23,6 +23,9 @@ export class HandlersRegistry {
     RegisterERC721(appContainer: AppContainer) {
         this.registers.set("ERC721", new ERC721_Handler(appContainer, this.adapterRegistry))
     }
+    RegisterChestERC721(appContainer: AppContainer) {
+        this.registers.set("CHEST_ERC721", new ERC721_Handler(appContainer, this.adapterRegistry))
+    }
     RegisterPayment(appContainer: AppContainer) {
         this.registers.set("PAYMENT", new Payment_Handler(appContainer, this.adapterRegistry))
     }
