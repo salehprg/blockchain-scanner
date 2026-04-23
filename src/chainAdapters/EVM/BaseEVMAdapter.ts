@@ -51,7 +51,8 @@ export abstract class BaseEVMAdapter {
             const from = cursor;
             const to = from + chunkSize - 1n <= safeTo ? from + chunkSize - 1n : safeTo;
 
-            console.log(`Start Chain ${this.client.chain?.id} scan blocks ${from}-${to} Until: ${safeTo}`)
+            const chainId = await this.client.getChainId()
+            console.log(`Start Chain ${chainId} scan blocks ${from}-${to} Until: ${safeTo}`)
             const results = await this.scanWindow(address, from, to, event);
             cursor = to + 1n;
             logs = logs.concat(results)

@@ -37,10 +37,9 @@ export class Payment_Handler extends BaseHandler {
 
         var nextBlock = 0n
 
-        const toBlock = 288364832n
-        // const toBlock = null
+
         const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
-            PAYMENT_RECEIVED_EVENT, BigInt(fromBlock), toBlock, 1000n, 0n)
+            PAYMENT_RECEIVED_EVENT, BigInt(fromBlock), null, 1000n, 0n)
 
         const filteredlogs: AdapterTransaction[] = []
 
@@ -64,7 +63,7 @@ export class Payment_Handler extends BaseHandler {
                     logIndex: tx.logIndex,
                     blockNumber: BigInt(tx.blockNumber ?? 0),
                     address: tx.address,
-                    value: tx.value,
+                    value: price,
                     eventName: tx.eventName,
                     args: {
                         buyer: buyer,

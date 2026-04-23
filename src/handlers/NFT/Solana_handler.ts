@@ -224,7 +224,7 @@ export class Solana_Handler extends BaseHandler {
             }
         }
 
-        await super.updateLastSync(contractEntity, BigInt(lastSignature.slot))
+        await super.updateLastSync(contractEntity, BigInt(lastSignature.slot ?? contractEntity.lastSyncBlock ?? "0"))
 
         return result_logs
     }
