@@ -44,6 +44,7 @@ export class HardhatAdapter extends BaseEVMAdapter {
     }
 
     async getLogsViaAPI(
+        conytactAbi: any,
         _contractAddress: string,
         _urlRequest: string,
         _fromBlock: bigint

@@ -178,7 +178,7 @@ export class ERC721_Handler extends BaseHandler {
     async scanAndRecord(contractEntity: BlockchainContract) {
         const evm_adapter = this.adapterRegistry.Get(contractEntity.chainId) as BaseEVMAdapter;
 
-        const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
+        const result = await evm_adapter.getLogs(ERC721_ABI, contractEntity.contractAddress as `0x${string}`,
             ERC721_TRANSFER_EVENT, BigInt(contractEntity.lastSyncBlock ?? contractEntity.contractCreateBlockNumber ?? "0"), null, 1000n)
 
 

@@ -1,30 +1,24 @@
 import { ERC1155_TRANSFER_SINGLE_EVENT, ERC721_TRANSFER_EVENT, ZERO_ADDRESS } from '@/infrastructure/blockchain/evm-events';
-import { Abi, AbiEvent, Address, createPublicClient, defineChain, http, PublicClient } from 'viem';
+import { Abi, AbiEvent, Address, createPublicClient, decodeEventLog, defineChain, http, PublicClient } from 'viem';
 import { BaseEVMAdapter, GetLogsResult } from './BaseEVMAdapter';
 import { bigint } from 'zod';
 import { AdapterTransaction } from '../AdapterTransaction';
 
-const somnia = defineChain({
-    id: 5031,
-    name: 'Somnia',
+const megaeth = defineChain({
+    id: 4326,
+    name: 'Megaeth',
     nativeCurrency: {
         decimals: 18,
-        name: 'Somi',
-        symbol: 'SOMI',
+        name: 'Ether',
+        symbol: 'ETH',
     },
     rpcUrls: {
         default: {
-            http: ['https://api.infra.mainnet.somnia.network/'],
+            http: ['https://mainnet.megaeth.com/rpc'],
         },
     },
     blockExplorers: {
-        default: { name: 'Explorer', url: 'https://explorer.somnia.network/' },
-    },
-    contracts: {
-        multicall3: {
-            address: '0x5e44F178E8cF9B2F5409B6f18ce936aB817C5a11',
-            blockCreated: 38516341,
-        },
+        default: { name: 'Explorer', url: 'https://mega.etherscan.io' },
     },
 })
 
@@ -33,7 +27,7 @@ export type LogReturn = {
     latest_block: bigint
 }
 
-export class SomniaAdapter extends BaseEVMAdapter {
+export class MegaethAdapter extends BaseEVMAdapter {
     client: PublicClient
 
     async readContract<T = unknown>(address: `0x${string}`, abi: Abi, functionName: string, args?: any[]): Promise<T> {
@@ -47,17 +41,43 @@ export class SomniaAdapter extends BaseEVMAdapter {
 
     constructor() {
         super();
-        this.client = createPublicClient({ ...somnia, transport: http(somnia.rpcUrls.default.http[0]) });
+        this.client = createPublicClient({ ...megaeth, transport: http(megaeth.rpcUrls.default.http[0]) });
+    }
+
+    convertToNormilizedLogs(element: any, conytactAbi: any): AdapterTransaction {
+        var decoded = decodeEventLog({
+            abi: conytactAbi,
+            data: element.data,
+            topics: element.topics,
+        }) as AdapterTransaction
+
+        decoded.transactionHash = element.transactionHash
+        decoded.blockNumber = this.hexToBigInt(element.blockNumber)
+        decoded.address = element.address
+        decoded.logIndex = Number(this.hexToBigInt(element.logIndex))
+        decoded.blockHash = element.blockHash
+        decoded.topics = element.topics
+
+        return decoded as AdapterTransaction
     }
 
     override async getLogs<TEvent extends AbiEvent>(conytactAbi: any, address: `0x${string}`, event: TEvent | undefined, fromBlock: bigint, toBlock?: bigint | null, chunkSize?: bigint, confBlock?: bigint): Promise<GetLogsResult<AdapterTransaction>> {
         try {
             const result = await super.getLogs(conytactAbi, address, event, fromBlock, toBlock, chunkSize, confBlock)
+            const resultLogs: AdapterTransaction[] = []
+
+            for (let i = 0; i < result.logs.length; i++) {
+                const decoded = this.convertToNormilizedLogs(result.logs[i], conytactAbi)
+                decoded.source = "rpc"
+                resultLogs.push(decoded)
+            }
+
+            result.logs = resultLogs
             return result
         }
         catch (error) {
             var lastBlock = await this.getLastBlockNumber()
-            var apiLogs = await this.getLogsViaAPI(conytactAbi, address, `https://mainnet.somnia.w3us.site/api/v2/addresses/${address}/logs`, fromBlock)
+            var apiLogs = await this.getLogsViaAPI(conytactAbi, address, `https://api.etherscan.io/v2/api?apikey=87DBX6Q7R48CKTKTYT8XBAS7MQ4XP12RPC&chainid=4326&module=logs&action=getLogs&address=${address}`, fromBlock)
 
             return {
                 logs: apiLogs,
@@ -73,6 +93,7 @@ export class SomniaAdapter extends BaseEVMAdapter {
         urlRequest: string,
         fromBlock: bigint
     ): Promise<AdapterTransaction[]> {
+
         const baseUrl = urlRequest;
 
         const headers: Record<string, string> = {
@@ -105,9 +126,13 @@ export class SomniaAdapter extends BaseEVMAdapter {
                 }
 
                 const body: any = await resp.json();
-                const items: any[] = Array.isArray(body?.items) ? body.items : [];
 
-                allItems.push(...items);
+                for (let i = 0; i < body.result.length; i++) {
+
+                    const decoded = this.convertToNormilizedLogs(body.result[i], conytactAbi)
+                    allItems.push(decoded)
+                }
+
 
                 const next = body?.next_page_params;
                 if (!next || next.block_number == null || next.index == null) {
@@ -131,27 +156,28 @@ export class SomniaAdapter extends BaseEVMAdapter {
         }
 
         const filtered = allItems.filter(i => {
-            const bn = BigInt(i?.block_number ?? 0);
+            const bn = BigInt(i?.blockNumber ?? 0);
             return bn >= fromBlock;
         });
 
         // Normalize API tx-like items into event/log-like objects.
         // Low-fidelity: args are best-effort, logIndex may be synthetic if missing.
         return filtered.map((i, idx) => {
-            const txHash = String(i?.transaction_hash ?? "");
-            const logIndex = Number(i?.index ?? i?.logIndex ?? idx);
-            const blockNumber = BigInt(i?.block_number ?? i?.blockNumber ?? 0);
+            const txHash = String(i?.transactionHash ?? "");
+            const logIndex = Number(i?.logIndex ?? i?.index ?? idx);
+            const blockNumber = BigInt(i?.blockNumber ?? i?.block_number ?? 0);
 
             return {
                 transactionHash: txHash,
                 blockNumber,
                 logIndex,
                 address: contractAddress as Address,
-                blockHash: i?.block_hash ?? undefined,
+                blockHash: i?.blockHash ?? undefined,
                 value: i.value,
-                args: i.decoded ?? i.decoded_input,
+                args: i.args,
                 source: "api",
-                eventName: i.decoded?.method_call ?? i.decoded_input?.method_call ?? undefined
+                eventName: i?.eventName ?? "unknown_event",
+                topics: i?.topics ?? [],
             } satisfies AdapterTransaction;
         });
     }

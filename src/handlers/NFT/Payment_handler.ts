@@ -38,7 +38,7 @@ export class Payment_Handler extends BaseHandler {
         var nextBlock = 0n
 
 
-        const result = await evm_adapter.getLogs(contractEntity.contractAddress as `0x${string}`,
+        const result = await evm_adapter.getLogs(payment_abi, contractEntity.contractAddress as `0x${string}`,
             PAYMENT_RECEIVED_EVENT, BigInt(fromBlock), null, 1000n, 0n)
 
         const filteredlogs: AdapterTransaction[] = []
@@ -50,7 +50,8 @@ export class Payment_Handler extends BaseHandler {
             }
 
             if (tx.source == "api" && tx.args) {
-                if (!(tx.args.method_call as string).startsWith(PAYMENT_RECEIVED_EVENT.name)) continue;
+                if(tx.eventName == undefined) continue;
+                if (!(tx.eventName as string).startsWith(PAYMENT_RECEIVED_EVENT.name)) continue;
                 const getVal = (n: string) => tx.args.parameters.find((p: any) => p.name === n)?.value;
                 const buyer = getVal("buyer")
                 const itemId = getVal("itemId")
@@ -86,7 +87,7 @@ export class Payment_Handler extends BaseHandler {
             logs: filteredlogs.map(l => {
                 return {
                     transactionHash: l.transactionHash,
-                    logIndex: l.logIndex,
+                    logIndex: Number(l.logIndex),
                     blockNumber: l.blockNumber,
                     type: "PAYMENT" as const,
                     from: l.args?.buyer ?? l.args?.from ?? null,

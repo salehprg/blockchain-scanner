@@ -19,17 +19,26 @@ export abstract class BaseEVMAdapter {
         args?: any[],
     ): Promise<T>;
 
-    async getLastBlockNumber(): Promise<bigint> {
-        return this.client.getBlockNumber();
-    }
-
     abstract getLogsViaAPI(
+        conytactAbi: any,
         contractAddress: string,
         urlRequest: string,
         fromBlock: bigint
     ): Promise<AdapterTransaction[]>
 
+    async getLastBlockNumber(): Promise<bigint> {
+        return this.client.getBlockNumber();
+    }
+
+    hexToBigInt = (hex?: string | number | bigint) => {
+        if (!hex) return 0n;
+        if (typeof hex === "bigint") return hex;
+        if (typeof hex === "number") return BigInt(hex);
+        return BigInt(hex); // works directly with 0x...
+    };
+
     async getLogs<TEvent extends AbiEvent>(
+        conytactAbi: any,
         address: `0x${string}`,
         event: TEvent | undefined,
         fromBlock: bigint,
@@ -45,13 +54,14 @@ export abstract class BaseEVMAdapter {
             safeTo = toBlock;
         }
 
+        const chainId = await this.client.getChainId()
         let cursor = BigInt(fromBlock ?? "0");
+        
         var logs: AdapterTransaction[] = []
         while (cursor < safeTo) {
             const from = cursor;
             const to = from + chunkSize - 1n <= safeTo ? from + chunkSize - 1n : safeTo;
 
-            const chainId = await this.client.getChainId()
             console.log(`Start Chain ${chainId} scan blocks ${from}-${to} Until: ${safeTo}`)
             const results = await this.scanWindow(address, from, to, event);
             cursor = to + 1n;
