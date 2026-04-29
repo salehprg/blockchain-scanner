@@ -169,6 +169,9 @@ export class ERC1155_Handler extends BaseHandler {
         const filteredlogs: AdapterTransaction[] = []
 
         for (const tx of result.logs) {
+            if (tx.source == "rpc") {
+                filteredlogs.push(tx)
+            }
             if (tx.source == "api" && tx.args) {
                 if (!(tx.args.method_call as string).startsWith(ERC1155_TRANSFER_SINGLE_EVENT.name)) continue;
 
@@ -178,7 +181,7 @@ export class ERC1155_Handler extends BaseHandler {
                 const to = getVal("to")
                 const id = getVal("id")
                 const value = getVal("value")
-                
+
                 filteredlogs.push({
                     transactionHash: tx.transactionHash,
                     logIndex: tx.logIndex,
