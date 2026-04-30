@@ -131,7 +131,7 @@ export class Solana_Handler extends BaseHandler {
     async syncOwnerShip(contractEntity: BlockchainContract) {
         const solana_adapter = this.adapterRegistry.Get(contractEntity.chainId) as SolanaAdapter;
 
-        var logs = await this.logRecorder.getLogs(contractEntity.id, "SOLANA.NFTTransfer", false)
+        var logs = await this.logRecorder.getLogs(contractEntity.contractAddress, "SOLANA.NFTTransfer", false)
 
         for (const log of logs) {
             if (log.tokenId) {

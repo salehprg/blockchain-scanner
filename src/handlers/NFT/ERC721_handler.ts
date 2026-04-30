@@ -240,7 +240,7 @@ export class ERC721_Handler extends BaseHandler {
     }
 
     private async syncOwnerShips(contractEntity: BlockchainContract) {
-        var logs = await this.logRecorder.getLogs(contractEntity.id, "ERC721.Transfer", false)
+        var logs = await this.logRecorder.getLogs(contractEntity.contractAddress, "ERC721.Transfer", false)
 
         const uniqueTokenIds = new Set<string>();
         const mintedTokenIds = new Set<string>();
@@ -255,10 +255,11 @@ export class ERC721_Handler extends BaseHandler {
         }
 
         const existingTokenIdSet = new Set<string>();
-
+        
+        const contractNFTs = await this.nftRepo.filterNFTs({ contractAddress: contractEntity.contractAddress });
         for (const tid of uniqueTokenIds) {
-            const found = await this.nftRepo.filterNFTs({ contractAddress: contractEntity.contractAddress, tokenId: tid }, { limit: 1 });
-            if (found.length > 0) {
+            const found = contractNFTs.find(n => n.tokenId === tid);
+            if (found) {
                 existingTokenIdSet.add(tid);
             } else if (mintedTokenIds.has(tid)) {
                 // Create missing NFT if it was minted in this batch
